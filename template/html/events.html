@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Events</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <h1 class="navbar-brand">Event Manager</h1>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbarNavDropdown"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar-content">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="events.html">Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.html">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Log out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid full-height-80">
+        <h2 class="mx-5">Event Centers</h2>
+        <div class="row align-items-center m-4 justify-content-center">
+            <div class="col-sm-6 col-md-4 col-md-3">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Center Name</h4>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#listEvent" data-var="Another one">
+                            Show Events
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-md-3">
+                <div class="card text-black bg-light mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Center Name</h4>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#listEvent" data-var="Another two">
+                            Show Events
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Center Name</h4>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#listEvent" data-var="Another three">
+                            Show Events
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="justify-content-center align-content-end">
+        <div class="text-center">
+            <p class="text-white">&copy Jessica Madufor (Andela 2017)</p>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="listEvent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Center Name</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="max-height: calc(100vh - 100px); overflow-y: auto;">
+                    <div class="list-group">
+                        <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Event name</h5>
+                                <small>Date/Time</small>
+                            </div>
+                            <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
+                                blandit.
+                            </p>
+                            <div class="d-flex w-100 justify-content-between p-2">
+                                <small>Organised by user</small>
+                                <button class="btn btn-sm btn-secondary">Attend</button>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Event name</h5>
+                                <small>Date/Time</small>
+                            </div>
+                            <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
+                                blandit.
+                            </p>
+                            <div class="d-flex w-100 justify-content-between p-2">
+                                <small>Organised by user</small>
+                                <button class="btn btn-sm btn-secondary">Attend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

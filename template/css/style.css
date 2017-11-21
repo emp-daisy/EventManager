@@ -1,0 +1,58 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(rgba(126, 0, 128, 1), #c94b4b, rgba(0, 0, 0, 0.8));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.full-height {
+    min-height: 100vh;
+}
+
+.full-height-80 {
+    min-height: 80vh;
+}
+
+.carousel-item img {
+    height: 50vh;
+    width: 100%
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.45);
+    padding: 0;
+}
+
+.container-center {
+    align-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.bg-black {
+    background: #000;
+}
+
+.tab-custom,
+.tab-custom:hover {
+    color: white
+}
+
+.btn-circle-float {
+    width: 20vh;
+    height: 20vh;
+    padding: 0;
+    margin: 40px;
+    border-radius: 10vh;
+    font-size: 10vh;
+    line-height: 1.33;
+}
