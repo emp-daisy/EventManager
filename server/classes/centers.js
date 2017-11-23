@@ -48,7 +48,7 @@ export default class Centers {
     const dataIndex = centerData.findIndex(m => m.centerId === parseInt(id, 10));
     centerData[dataIndex].centerName = data.name;
     centerData[dataIndex].centerLocation = data.location;
-    console.log(centerData[dataIndex]);
+
     this.res.status(200).json(centerData[dataIndex]);
   }
 }

@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "babel-watch app.js",
-    "test": "mocha"
+    "test": "mocha --compilers js:babel-core/register tests/api-test.js"
   },
   "author": "Jessica",
   "license": "ISC",
@@ -21,7 +21,10 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "express": "^4.16.2",
+    "mocha": "^4.0.1",
     "morgan": "^1.9.0"
   }
 }

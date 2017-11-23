@@ -48,7 +48,6 @@ export default class Events {
     const dataIndex = eventData.findIndex(m => m.eventId === parseInt(id, 10));
     eventData[dataIndex].eventName = data.name;
     eventData[dataIndex].eventLocation = data.location;
-    console.log(eventData[dataIndex]);
     this.res.status(200).json(eventData[dataIndex]);
   }
 }

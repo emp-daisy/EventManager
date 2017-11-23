@@ -28,7 +28,8 @@ export const eventData = [{
   eventLocation: 'EPIC Tower',
   eventDate: '20-11-2017 08:30:0',
   createdBy: 1,
-  lastUpdate: null
+  lastUpdate: null,
+  centerId: 222
 },
 {
   eventId: 235,
