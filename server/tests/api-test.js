@@ -13,7 +13,7 @@ describe('API Testing', () => {
     describe('/GET Event URL', () => {
       it('Returns all events as an array of objects', (done) => {
         chai.request(app)
-          .get('/events')
+          .get('/v1/events')
           .end((err, res) => {
             expect(res).to.be.status(200);
             done();
@@ -21,7 +21,7 @@ describe('API Testing', () => {
       });
       it('Returns all events as in array', (done) => {
         chai.request(app)
-          .get('/events/231')
+          .get('/v1/events/231')
           .end((err, res) => {
             expect(res).to.be.status(200);
             done();
@@ -29,7 +29,7 @@ describe('API Testing', () => {
       });
       it('Returns an error status for invalid id', (done) => {
         chai.request(app)
-          .get('/events/123')
+          .get('/v1/events/123')
           .end((err, res) => {
             expect(res).to.be.status(400);
             done();
@@ -40,7 +40,7 @@ describe('API Testing', () => {
     describe('/POST Event URL', () => {
       it('Returns the new event as an object', (done) => {
         chai.request(app)
-          .post('/events')
+          .post('/v1/events')
           .send({
             id: 666,
             name: 'Hosue warming',
@@ -56,7 +56,7 @@ describe('API Testing', () => {
 
       it('Returns an error due to missing field', (done) => {
         chai.request(app)
-          .post('/events')
+          .post('/v1/events')
           .send({
             id: 666,
             name: 'Hosue warming',
@@ -74,7 +74,7 @@ describe('API Testing', () => {
     describe('/PUT Event URL', () => {
       it('Returns the error code due to wrong id', (done) => {
         chai.request(app)
-          .put('/events/222')
+          .put('/v1/events/222')
           .send({
             name: 'Hosue warming',
             location: 'GRA PH',
@@ -88,7 +88,7 @@ describe('API Testing', () => {
       });
       it('Returns error code due to empty field', (done) => {
         chai.request(app)
-          .put('/events/231')
+          .put('/v1/events/231')
           .send({
             name: 'Hosue warming',
             location: 'GRA PH',
@@ -101,7 +101,7 @@ describe('API Testing', () => {
       });
       it('Returns the updated event as an object', (done) => {
         chai.request(app)
-          .put('/events/231')
+          .put('/v1/events/231')
           .send({
             name: 'Hosue warming',
             location: 'GRA PH',
@@ -118,7 +118,7 @@ describe('API Testing', () => {
     describe('/DELETE Event URL', () => {
       it('Returns the message for deleted object', (done) => {
         chai.request(app)
-          .delete('/events/235')
+          .delete('/v1/events/235')
           .end((err, res) => {
             expect(res).to.have.status(200);
             done();
@@ -127,7 +127,7 @@ describe('API Testing', () => {
 
       it('Returns an error for invalid id', (done) => {
         chai.request(app)
-          .delete('/events/333')
+          .delete('/v1/events/333')
           .end((err, res) => {
             expect(res).to.have.status(400);
             done();
@@ -140,7 +140,7 @@ describe('API Testing', () => {
     describe('/GET Center URL', () => {
       it('Returns all centers as an array of objects', (done) => {
         chai.request(app)
-          .get('/centers')
+          .get('/v1/centers')
           .end((err, res) => {
             expect(res).to.be.status(200);
             done();
@@ -148,7 +148,7 @@ describe('API Testing', () => {
       });
       it('Returns all centers as in array', (done) => {
         chai.request(app)
-          .get('/centers/222')
+          .get('/v1/centers/222')
           .end((err, res) => {
             expect(res).to.be.status(200);
             done();
@@ -156,7 +156,7 @@ describe('API Testing', () => {
       });
       it('Returns an error status for invalid id', (done) => {
         chai.request(app)
-          .get('/centers/123')
+          .get('/v1/centers/123')
           .end((err, res) => {
             expect(res).to.be.status(400);
             done();
@@ -167,7 +167,7 @@ describe('API Testing', () => {
     describe('/POST Center URL', () => {
       it('Returns the new center as an object', (done) => {
         chai.request(app)
-          .post('/centers')
+          .post('/v1/centers')
           .send({
             id: 666,
             name: 'Hosue warming',
@@ -181,7 +181,7 @@ describe('API Testing', () => {
 
       it('Returns an error due to missing field', (done) => {
         chai.request(app)
-          .post('/centers')
+          .post('/v1/centers')
           .send({
             id: 666,
             name: 'Hosue warming'
@@ -197,7 +197,7 @@ describe('API Testing', () => {
     describe('/PUT Center URL', () => {
       it('Returns the error code due to wrong id', (done) => {
         chai.request(app)
-          .put('/centers/227')
+          .put('/v1/centers/227')
           .send({
             name: 'Hosue warming',
             location: 'GRA PH'
@@ -209,7 +209,7 @@ describe('API Testing', () => {
       });
       it('Returns error code due to empty field', (done) => {
         chai.request(app)
-          .put('/centers/222')
+          .put('/v1/centers/222')
           .send({
             name: 'Hosue warming'
           })
@@ -220,7 +220,7 @@ describe('API Testing', () => {
       });
       it('Returns the updated center as an object', (done) => {
         chai.request(app)
-          .put('/centers/222')
+          .put('/v1/centers/222')
           .send({
             name: 'Hosue warming',
             location: 'GRA PH'
@@ -235,7 +235,7 @@ describe('API Testing', () => {
     describe('/DELETE Center URL', () => {
       it('Returns the message for deleted object', (done) => {
         chai.request(app)
-          .delete('/centers/222')
+          .delete('/v1/centers/222')
           .end((err, res) => {
             expect(res).to.have.status(200);
             done();
@@ -244,7 +244,7 @@ describe('API Testing', () => {
 
       it('Returns an error for invalid id', (done) => {
         chai.request(app)
-          .delete('/centers/132')
+          .delete('/v1/centers/132')
           .end((err, res) => {
             expect(res).to.have.status(400);
             done();

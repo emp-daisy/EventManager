@@ -14,8 +14,8 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 //= ==================ROUTER=================
-app.use('/', centerRouter);
-app.use('/', eventRouter);
+app.use('/v1/', centerRouter);
+app.use('/v1/', eventRouter);
 
 //= ======== DEFAULT ROUTE==========
 app.use((req, res) => {
