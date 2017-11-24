@@ -12,7 +12,7 @@ GETTING STARTED
 Them template UI (GH_Pages will be accessible from https://emp-daisy.github.io/EventManager/html/index.html)
 
 BADGES
-TRAVIS-CI   -   https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api
+TRAVIS-CI   -   [![Build Status](https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api)](https://travis-ci.org/emp-daisy/EventManager)
 
 COVERALLS   -   <a href='https://coveralls.io/github/emp-daisy/EventManager?branch=master'><img src='https://coveralls.io/repos/github/emp-daisy/EventManager/badge.svg?branch=master' alt='Coverage Status' /></a>
 
