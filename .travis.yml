@@ -3,5 +3,5 @@ node_js:
   - "node"
 before_install: cd server
 after_success:
-- ./node_modules/.bin/jscoverage lib lib-cov
-- ./node_modules/.bin/mocha tests/**.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+  - ./node_modules/.bin/jscoverage lib lib-cov
+  - ./node_modules/.bin/mocha tests/**.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
