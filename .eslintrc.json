@@ -17,9 +17,6 @@
         "import/no-unresolved": [2, {
             "commonjs": true
         }],
-        "linebreak-style": [
-            "error", "windows"
-        ],
         "no-shadow": ["error", {
             "allow": ["req", "res", "err"]
         }],
