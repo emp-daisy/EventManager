@@ -6,8 +6,7 @@
   "scripts": {
     "start": "babel-watch app.js",
     "test": "mocha --compilers js:babel-core/register tests/api-test.js",
-    "coveralls": "./node_modules/.bin/coveralls",
-    "cover": "istanbul cover _mocha"
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "author": "Jessica",
   "license": "ISC",
