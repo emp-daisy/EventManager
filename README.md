@@ -11,6 +11,17 @@ TRAVISCI    - https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-
 GETTING STARTED
 Them template UI (GH_Pages will be accessible from https://emp-daisy.github.io/EventManager/html/index.html)
 
+BADGES
+TRAVIS-CI   -   https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api
+
+COVERALLS   -   <a href='https://coveralls.io/github/emp-daisy/EventManager?branch=master'><img src='https://coveralls.io/repos/github/emp-daisy/EventManager/badge.svg?branch=master' alt='Coverage Status' /></a>
+
+CODE CLIMATE
+
+Maintainability Badge - <a href="https://codeclimate.com/github/emp-daisy/EventManager/maintainability"><img src="https://api.codeclimate.com/v1/badges/bc5842466da22ac5e7f1/maintainability" /></a>
+    
+Test Coverage Badge   -   <a href="https://codeclimate.com/github/emp-daisy/EventManager/test_coverage"><img src="https://api.codeclimate.com/v1/badges/bc5842466da22ac5e7f1/test_coverage" /></a>
+
 SETUP PROJECT
     RUNNING LOCALLY
     --  Clone the repo
