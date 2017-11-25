@@ -9,7 +9,6 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe('API Testing', () => {
-
   describe('Valid Event URL', () => {
     describe('/GET Event URL', () => {
       it('Returns all events as an array of objects', (done) => {
