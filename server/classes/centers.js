@@ -13,7 +13,8 @@ export default class Centers {
 
   findAll() {
     return this.res.status(200).json({
-      val: centerData
+      val: centerData,
+      msg: 'Centers returned'
     });
   }
 
@@ -27,7 +28,8 @@ export default class Centers {
     }
 
     return this.res.status(200).json({
-      val: found
+      val: found,
+      msg: 'Center found'
     });
   }
 
@@ -46,7 +48,8 @@ export default class Centers {
     };
     centerData.push(newCenter);
     return this.res.status(201).json({
-      val: newCenter
+      val: newCenter,
+      msg: 'Center added successfully'
     });
   }
 
@@ -59,11 +62,11 @@ export default class Centers {
     }
     centerData.splice(dataIndex, 1);
     return this.res.status(200).json({
-      msg: 'Deleted'
+      msg: 'Center deleted'
     });
   }
 
-  put(id, data) {
+  update(id, data) {
     const dataIndex = centerData.findIndex(m => m.centerId === parseInt(id, 10));
     if (dataIndex < 0) {
       return this.res.status(400).json({
@@ -80,6 +83,9 @@ export default class Centers {
     centerData[dataIndex].centerName = data.name;
     centerData[dataIndex].centerLocation = data.location;
 
-    return this.res.status(200).json(centerData[dataIndex]);
+    return this.res.status(200).json({
+      result: centerData[dataIndex],
+      msg: 'Center updated successfully'
+    });
   }
 }

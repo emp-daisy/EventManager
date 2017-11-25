@@ -20,7 +20,7 @@ centerRouter.post('/centers', (req, res) => {
 
 // MODIFIES DETAIS OF A CENTER
 centerRouter.put('/centers/:id', (req, res) => {
-  new Centers(req, res).put(req.params.id, req.body);
+  new Centers(req, res).update(req.params.id, req.body);
 });
 
 // DELETE A CENTER

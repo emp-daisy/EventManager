@@ -5,11 +5,11 @@ This system will manage creating of events by differnt users in locations create
 
 BADGES
 
-TRAVISCI    - https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api
+TRAVISCI - https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api
 
 
 GETTING STARTED
-Them template UI (GH_Pages will be accessible from https://emp-daisy.github.io/EventManager/html/index.html)
+The template UI (GH_Pages will be accessible from https://emp-daisy.github.io/EventManager/html/index.html)
 
 BADGES
 TRAVIS-CI   -   [![Build Status](https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api)](https://travis-ci.org/emp-daisy/EventManager)
@@ -18,7 +18,7 @@ COVERALLS   -   <a href='https://coveralls.io/github/emp-daisy/EventManager?bran
 
 CODE CLIMATE
 
-Maintainability Badge - <a href="https://codeclimate.com/github/emp-daisy/EventManager/maintainability"><img src="https://api.codeclimate.com/v1/badges/bc5842466da22ac5e7f1/maintainability" /></a>
+Maintainability Badge - [![Maintainability](https://api.codeclimate.com/v1/badges/bc5842466da22ac5e7f1/maintainability)](https://codeclimate.com/github/emp-daisy/EventManager/maintainability)
     
 Test Coverage Badge   -   <a href="https://codeclimate.com/github/emp-daisy/EventManager/test_coverage"><img src="https://api.codeclimate.com/v1/badges/bc5842466da22ac5e7f1/test_coverage" /></a>
 

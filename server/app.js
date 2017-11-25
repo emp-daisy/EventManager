@@ -14,8 +14,13 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 //= ==================ROUTER=================
+
 app.use('/v1/', centerRouter);
 app.use('/v1/', eventRouter);
+
+app.use('/', (req, res) => {
+  res.status(200).send('Welcome to my Event Manager route');
+});
 
 //= ======== DEFAULT ROUTE==========
 app.use((req, res) => {

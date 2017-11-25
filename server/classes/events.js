@@ -13,7 +13,8 @@ export default class Events {
 
   findAll() {
     return this.res.status(200).json({
-      val: eventData
+      val: eventData,
+      msg: 'Events returned'
     });
   }
   findOne(id) {
@@ -24,7 +25,8 @@ export default class Events {
       });
     }
     return this.res.status(200).json({
-      val: found
+      val: found,
+      msg: 'Event found'
     });
   }
   create(data) {
@@ -45,7 +47,8 @@ export default class Events {
 
     eventData.push(newEvent);
     return this.res.status(201).json({
-      val: newEvent
+      val: newEvent,
+      msg: 'Event added successfully'
     });
   }
 
@@ -58,11 +61,11 @@ export default class Events {
     }
     eventData.splice(dataIndex, 1);
     return this.res.status(200).json({
-      msg: 'Deleted'
+      msg: 'Event deleted'
     });
   }
 
-  put(id, data) {
+  update(id, data) {
     const dataIndex = eventData.findIndex(m => m.eventId === parseInt(id, 10));
     if (dataIndex < 0) {
       return this.res.status(400).json({
@@ -77,6 +80,11 @@ export default class Events {
     }
     eventData[dataIndex].eventName = data.name;
     eventData[dataIndex].eventLocation = data.location;
-    return this.res.status(200).json(eventData[dataIndex]);
+    eventData[dataIndex].eventDate = data.eDate;
+    eventData[dataIndex].createdBy = data.user;
+    return this.res.status(200).json({
+      result: eventData[dataIndex],
+      msg: 'Event updated successfully'
+    });
   }
 }

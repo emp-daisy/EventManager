@@ -20,7 +20,7 @@ eventRouter.post('/events', (req, res) => {
 
 // EDIT AN EVENT
 eventRouter.put('/events/:id', (req, res) => {
-  new Events(req, res).put(req.params.id, req.body);
+  new Events(req, res).update(req.params.id, req.body);
 });
 
 // DELETE AN EVENT
