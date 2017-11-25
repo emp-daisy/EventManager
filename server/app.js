@@ -4,7 +4,7 @@ import logger from 'morgan';
 import eventRouter from './routes/event-routes';
 import centerRouter from './routes/center-routes';
 
-const port = process.env.port || 8088; // port which server runs on
+const port = process.env.PORT || 8088; // port which server runs on
 const app = express(); // init express
 
 //= ========MIDDLEWARE=====================
