@@ -18,9 +18,9 @@ COVERALLS   -   <a href='https://coveralls.io/github/emp-daisy/EventManager?bran
 
 CODE CLIMATE
 
-Maintainability Badge - [![Maintainability](https://api.codeclimate.com/v1/badges/bc5842466da22ac5e7f1/maintainability)](https://codeclimate.com/github/emp-daisy/EventManager/maintainability)
+Maintainability Badge - <a href="https://codeclimate.com/github/emp-daisy/EventManager/maintainability"><img src="https://api.codeclimate.com/v1/badges/1083c8d7f29148c070f9/maintainability" /></a>
     
-Test Coverage Badge   -   [![Test Coverage](https://api.codeclimate.com/v1/badges/bc5842466da22ac5e7f1/test_coverage)](https://codeclimate.com/github/emp-daisy/EventManager/test_coverage)
+Test Coverage Badge   -   <a href="https://codeclimate.com/github/emp-daisy/EventManager/test_coverage"><img src="https://api.codeclimate.com/v1/badges/1083c8d7f29148c070f9/test_coverage" /></a>
 
 SETUP PROJECT
     RUNNING LOCALLY
