@@ -1,7 +1,8 @@
-import {
-  centerData
-} from '../model/data';
+// import sequelize from 'sequelize';
+import model from '../models';
 import Validator from '../middleware/validator';
+
+const centerDb = model.Centers;
 /**
  *
  */
@@ -11,68 +12,140 @@ export default class Centers {
     this.res = res;
   }
 
-  findAll() {
-    return this.res.status(200).json({
-      val: centerData,
-      msg: 'Centers returned'
-    });
+  findAllCenter() {
+    return centerDb
+      .all()
+      .then((result) => {
+        if (result.length === 0) {
+          this.res.status(200).json({
+            msg: 'No center available'
+          });
+        }
+        this.res.status(200).json({
+          val: result,
+          msg: 'Center returned'
+        });
+      })
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 
-  findOne(id) {
-    const found = centerData.filter(m => m.centerId === parseInt(id, 10));
-
-    if (found.length === 0) {
-      return this.res.status(400).json({
-        msg: 'Center not found'
-      });
-    }
-
-    return this.res.status(200).json({
-      val: found,
-      msg: 'Center found'
-    });
+  findOneCenter() {
+    const {
+      id
+    } = this.req.params;
+    return centerDb
+      .findAll({
+        where: {
+          id: parseInt(id, 10)
+        }
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this.res.status(400).json({
+            msg: 'Center not found'
+          });
+        }
+        this.res.status(200).json({
+          val: result,
+          msg: 'Center found'
+        });
+      })
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 
-  create(data) {
+  splitArray(word) {
+    this.word = word;
+    if (!word) return [];
+    const strArr = this.word.split(',')
+      .map(s => s.trim().toLowerCase())
+      .filter(s => s !== '');
+    return strArr;
+  }
+
+  createCenter() {
+    const data = this.req.body;
     const validateRes = Validator.validateCenter(data);
     if (validateRes !== true) {
       return this.res.status(400).json({
         msg: validateRes
       });
     }
-    const id = (centerData[centerData.length - 1].centerId) + 111;
-    const newCenter = {
-      centerId: id,
-      centerName: data.name,
-      centerLocation: data.location
-    };
-    centerData.push(newCenter);
-    return this.res.status(201).json({
-      val: newCenter,
-      msg: 'Center added successfully'
-    });
-  }
-
-  delete(id) {
-    const dataIndex = centerData.findIndex(m => m.centerId === parseInt(id, 10));
-    if (dataIndex < 0) {
-      return this.res.status(400).json({
-        msg: 'Center not found'
+    if (this.req.verified.isAdmin) {
+      return this.res.status(403).json({
+        msg: 'Not logged in as an Admin'
       });
     }
-    centerData.splice(dataIndex, 1);
-    return this.res.status(200).json({
-      msg: 'Center deleted'
-    });
+
+    return centerDb
+      .create({
+        name: data.name,
+        location: data.location,
+        facilities: this.splitArray(data.facilities),
+        states: parseInt(data.states, 10),
+        image: data.image,
+        createdBy: parseInt(this.req.verified.id, 10),
+        updatedBy: parseInt(this.req.verified.id, 10)
+      })
+      .then(result => this.res.status(201).json({
+        val: result,
+        msg: 'Center added successfully'
+      }))
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 
-  update(id, data) {
-    const dataIndex = centerData.findIndex(m => m.centerId === parseInt(id, 10));
-    if (dataIndex < 0) {
-      return this.res.status(400).json({
-        msg: 'Center not found'
-      });
-    }
+  deleteCenter() {
+    const id = parseInt(this.req.params.id, 10);
+    return centerDb
+      .findOne({
+        where: {
+          id
+        }
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this.res.status(400).json({
+            msg: 'Center not found'
+          });
+        }
+        return centerDb
+          .destroy({
+            where: {
+              id
+            }
+          })
+          .then((row) => {
+            if (row < 1) {
+              this.res.status(500).json({
+                msg: 'Error deleting center'
+              });
+            }
+            this.res.status(200).json({
+              msg: 'Center deleted'
+            });
+          })
+          .catch(error => this.res.status(500).send({
+            msg: 'Server Error',
+            error
+          }));
+      })
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
+  }
+
+  updateCenter() {
+    const id = parseInt(this.req.params.id, 10);
+    const data = this.req.body;
 
     const validateRes = Validator.validateCenter(data);
     if (validateRes !== true) {
@@ -80,12 +153,79 @@ export default class Centers {
         msg: validateRes
       });
     }
-    centerData[dataIndex].centerName = data.name;
-    centerData[dataIndex].centerLocation = data.location;
 
-    return this.res.status(200).json({
-      result: centerData[dataIndex],
-      msg: 'Center updated successfully'
-    });
+    if (this.req.verified.isAdmin) {
+      return this.res.status(403).json({
+        msg: 'Not logged in as an Admin'
+      });
+    }
+
+    return centerDb
+      .findOne({
+        where: {
+          id
+        }
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this.res.status(400).json({
+            msg: 'Center not found'
+          });
+        }
+        const resJson = result.toJSON();
+        // if (data.name) {
+        //   centerDb.findOne({
+        //       where: {
+        //         name: data.name,
+        //         [sequelize.Op.not]: {
+        //           id
+        //         },
+        //       }
+        //     })
+        //     .then((doesExist) => {
+        //       if (doesExist.length !== 0) {
+        //         return this.res.status(400).json({
+        //           msg: 'Center name not unique'
+        //         });
+        //       }
+        //     })
+        //     .catch(error => this.res.status(500).send({
+        //       msg: 'Server Error',
+        //       error
+        //     }));
+        // }
+
+        return centerDb
+          .update({
+            name: data.name || resJson.name,
+            location: data.location || resJson.location,
+            facilities: this.splitArray(data.facilities) || resJson.facilities,
+            states: parseInt(data.states, 10) || resJson.states,
+            image: data.image || resJson.image,
+            updatedBy: parseInt(this.req.verified.id, 10)
+          }, {
+            where: {
+              id
+            }
+          })
+          .then((value) => {
+            if (value.length === 0) {
+              return this.res.status(400).json({
+                msg: 'Center update failed'
+              });
+            }
+            this.res.status(200).json({
+              msg: 'Center updated successfully'
+            });
+          })
+          .catch(error => this.res.status(500).send({
+            msg: 'Server Error',
+            error
+          }));
+      })
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 }

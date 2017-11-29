@@ -1,7 +1,8 @@
-import {
-  eventData
-} from '../model/data';
+import moment from 'moment';
+import model from '../models';
 import Validator from '../middleware/validator';
+
+const eventDb = model.Events;
 /**
  *
  */
@@ -11,80 +12,160 @@ export default class Events {
     this.res = res;
   }
 
-  findAll() {
-    return this.res.status(200).json({
-      val: eventData,
-      msg: 'Events returned'
-    });
+  findAllEvent() {
+    return eventDb
+      .all()
+      .then((result) => {
+        if (result.length === 0) {
+          this.res.status(200).json({
+            msg: 'No event available'
+          });
+        }
+        this.res.status(200).json({
+          val: result,
+          msg: 'Event returned'
+        });
+      })
+      .catch(error => this.res.status(500).send(error));
   }
-  findOne(id) {
-    const found = eventData.filter(m => m.eventId === parseInt(id, 10));
-    if (found.length === 0) {
-      return this.res.status(400).json({
-        msg: 'Event not found'
-      });
-    }
-    return this.res.status(200).json({
-      val: found,
-      msg: 'Event found'
-    });
+
+  findOneEvent() {
+    const {
+      id
+    } = this.req.params.id;
+    return eventDb
+      .findAll({
+        where: {
+          id: parseInt(id, 10)
+        }
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this.res.status(400).json({
+            msg: 'Event not found'
+          });
+        }
+        this.res.status(200).json({
+          val: result,
+          msg: 'Event found'
+        });
+      })
+      .catch(error => this.res.status(500).send(error));
   }
-  create(data) {
+
+  createEvent() {
+    const data = this.req.body;
     const validateRes = Validator.validateEvent(data);
     if (validateRes !== true) {
       return this.res.status(400).json({
         msg: validateRes
       });
     }
-    const id = (eventData[eventData.length - 1].eventId) + 1;
-    const newEvent = {
-      eventId: id,
-      eventName: data.name,
-      eventLocation: data.location,
-      eventDate: data.eDate,
-      createdBy: data.user
-    };
-
-    eventData.push(newEvent);
-    return this.res.status(201).json({
-      val: newEvent,
-      msg: 'Event added successfully'
-    });
+    return eventDb
+      .create({
+        name: data.name,
+        location: parseInt(data.location, 10),
+        startDate: moment(data.startDate, 'DD-MM-YYYY'),
+        endDate: moment(data.endDate, 'DD-MM-YYY'),
+        createdBy: parseInt(this.req.verified.id, 10),
+        image: data.image
+      })
+      .then(result => this.res.status(201).json({
+        val: result,
+        msg: 'Event added successfully'
+      }))
+      .catch(error => this.res.status(500).send(error));
   }
 
-  delete(id) {
-    const dataIndex = eventData.findIndex(m => m.eventId === parseInt(id, 10));
-    if (dataIndex < 0) {
-      return this.res.status(400).json({
-        msg: 'Event not found'
-      });
-    }
-    eventData.splice(dataIndex, 1);
-    return this.res.status(200).json({
-      msg: 'Event deleted'
-    });
+  deleteEvent() {
+    const {
+      id
+    } = this.req.params;
+    return eventDb
+      .findAll({
+        where: {
+          id: parseInt(id, 10)
+        }
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this.res.status(400).json({
+            msg: 'Event not found'
+          });
+        }
+        return eventDb
+          .destroy({
+            where: {
+              id
+            }
+          })
+          .then((row) => {
+            if (row < 1) {
+              this.res.status(500).json({
+                msg: 'Error deleting events'
+              });
+            }
+            return this.res.status(200).json({
+              msg: 'Event deleted'
+            });
+          })
+          .catch(error => this.res.status(500).send(error));
+      })
+      .catch(error => this.res.status(500).send(error));
   }
 
-  update(id, data) {
-    const dataIndex = eventData.findIndex(m => m.eventId === parseInt(id, 10));
-    if (dataIndex < 0) {
-      return this.res.status(400).json({
-        msg: 'Event not found'
-      });
-    }
+  updateEvent() {
+    const id = parseInt(this.req.params.id, 10);
+    const data = this.req.body;
+
     const validateRes = Validator.validateEvent(data);
     if (validateRes !== true) {
       return this.res.status(400).json({
         msg: validateRes
       });
     }
-    eventData[dataIndex].eventName = data.name;
-    eventData[dataIndex].eventLocation = data.location;
-    eventData[dataIndex].eventDate = data.eDate;
-    eventData[dataIndex].createdBy = data.user;
-    return this.res.status(200).json({
-      result: eventData[dataIndex],
-      msg: 'Event updated successfully'
-    });
+    return eventDb
+      .findOne({
+        where: {
+          id
+        }
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this.res.status(400).json({
+            msg: 'Event not found'
+          });
+        }
+        const resJson = result.toJSON();
+        const startDate = data.startDate ? moment(data.startDate, 'DD-MM-YYYY HH:mm') : false;
+        const endDate = data.endDate ? moment(data.endDate, 'DD-MM-YYYY HH:mm') : false;
+
+        return eventDb
+          .update({
+            name: data.name || resJson.name,
+            location: parseInt(data.location, 10) || resJson.location,
+            image: data.image || resJson.image,
+            startDate: startDate || resJson.startDate,
+            endDate: endDate || resJson.endDate,
+            createdBy: resJson.createdBy
+          }, {
+            where: {
+              id
+            }
+          })
+          .then((value) => {
+            if (value.length === 0) {
+              return this.res.status(400).json({
+                msg: 'Event update failed'
+              });
+            }
+            this.res.status(200).json({
+              val: value,
+              msg: 'Event updated successfully'
+            });
+          })
+          .catch(error => this.res.status(500).send(error));
+      })
+      .catch(error => this.res.status(500).send(error));
   }
 }

@@ -1,13 +1,19 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
+import path from 'path';
+import dotenv from 'dotenv';
 import eventRouter from './routes/event-routes';
 import centerRouter from './routes/center-routes';
+import userRouter from './routes/user-routes';
 
-const port = process.env.PORT || 8088; // port which server runs on
+const port = process.env.PORT || 3088; // port which server runs on
 const app = express(); // init express
 
+dotenv.config(); // add env file
+
 //= ========MIDDLEWARE=====================
+// Log requests to the console.
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -17,8 +23,10 @@ app.use(bodyParser.urlencoded({
 
 app.use('/v1/', centerRouter);
 app.use('/v1/', eventRouter);
+app.use('/v1/', userRouter);
 
 app.use('/', (req, res) => {
+  // res.sendFile(path.resolve(__dirname, '../template/html/index.html'));
   res.status(200).send('Welcome to my Event Manager route');
 });
 
