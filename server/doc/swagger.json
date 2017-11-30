@@ -20,7 +20,7 @@
           "in": "body",
           "description": "The user to create.",
           "schema": {
-            "$ref": "#/definitions/User",
+            "$ref": "#/definitions/User"
           }
         }],
         "responses": {
@@ -63,7 +63,6 @@
       }
     }
   },
-
   "definitions": {
     "User": {
       "required": [
