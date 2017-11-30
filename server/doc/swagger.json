@@ -1,0 +1,99 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Jess Event Manager",
+    "description": "My event maager API for a Bootcamp project"
+  },
+  "host": "localhost:3088",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/users/login": {
+      "post": {
+        "summary": "Registers a user",
+        "description": "Creates a user and adds to the database.",
+        "parameters": [{
+          "name": "person",
+          "in": "body",
+          "description": "The user to create.",
+          "schema": {
+            "$ref": "#/definitions/User",
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+
+    "/users": {
+      "post": {
+        "summary": "Login a user",
+        "description": "Creates a user and adds to the database.",
+        "parameters": [{
+          "name": "person",
+          "in": "body",
+          "description": "The user to create.",
+          "schema": {
+            "$ref": "#/definitions/User"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "User": {
+      "required": [
+        "email",
+        "surname",
+        "firstName",
+        "password",
+        "confirmPassword"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "surname": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

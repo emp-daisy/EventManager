@@ -1,4 +1,4 @@
-// import sequelize from 'sequelize';
+import sequelize from 'sequelize';
 import model from '../models';
 import Validator from '../middleware/validator';
 
@@ -147,13 +147,6 @@ export default class Centers {
     const id = parseInt(this.req.params.id, 10);
     const data = this.req.body;
 
-    const validateRes = Validator.validateCenter(data);
-    if (validateRes !== true) {
-      return this.res.status(400).json({
-        msg: validateRes
-      });
-    }
-
     if (this.req.verified.isAdmin) {
       return this.res.status(403).json({
         msg: 'Not logged in as an Admin'
@@ -172,36 +165,49 @@ export default class Centers {
             msg: 'Center not found'
           });
         }
+        if (data.name) {
+          centerDb.findOne({
+              where: {
+                name: data.name,
+                [sequelize.Op.not]: {
+                  id
+                },
+              }
+            })
+            .then((doesExist) => {
+              if (doesExist.length !== 0) {
+                return this.res.status(400).json({
+                  msg: 'Center name is not unique'
+                });
+              }
+            })
+            .catch(error => this.res.status(500).send({
+              msg: 'Server Error',
+              error
+            }));
+        }
         const resJson = result.toJSON();
-        // if (data.name) {
-        //   centerDb.findOne({
-        //       where: {
-        //         name: data.name,
-        //         [sequelize.Op.not]: {
-        //           id
-        //         },
-        //       }
-        //     })
-        //     .then((doesExist) => {
-        //       if (doesExist.length !== 0) {
-        //         return this.res.status(400).json({
-        //           msg: 'Center name not unique'
-        //         });
-        //       }
-        //     })
-        //     .catch(error => this.res.status(500).send({
-        //       msg: 'Server Error',
-        //       error
-        //     }));
-        // }
+        const newValues = {
+          name: data.name || resJson.name,
+          location: data.location || resJson.location,
+          facilities: this.splitArray(data.facilities) || resJson.facilities,
+          states: parseInt(data.states, 10) || resJson.states,
+          image: data.image || resJson.image
+        };
 
+        const validateRes = Validator.validateCenter(newValues);
+        if (validateRes !== true) {
+          return this.res.status(400).json({
+            msg: validateRes
+          });
+        }
         return centerDb
           .update({
-            name: data.name || resJson.name,
-            location: data.location || resJson.location,
-            facilities: this.splitArray(data.facilities) || resJson.facilities,
-            states: parseInt(data.states, 10) || resJson.states,
-            image: data.image || resJson.image,
+            name: newValues.name,
+            location: newValues.location,
+            facilities: newValues.facilities,
+            states: newValues.states,
+            image: newValues.image,
             updatedBy: parseInt(this.req.verified.id, 10)
           }, {
             where: {

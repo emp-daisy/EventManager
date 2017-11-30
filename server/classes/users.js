@@ -16,6 +16,13 @@ export default class Users {
 
   register() {
     const data = this.req.body;
+    const validationResponse = Validator.validateUser(data);
+    if (validationResponse !== true) {
+      return this.res.status(400).json({
+        msg: 'Validation failed',
+        errors: validationResponse
+      });
+    }
     return userDb
       .findOne({
         where: {
@@ -79,4 +86,5 @@ export default class Users {
       })
       .catch(error => this.res.status(500).send(error));
   }
+
 }
