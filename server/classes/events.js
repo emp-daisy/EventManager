@@ -64,18 +64,18 @@ export default class Events {
       });
     }
     eventDb.findOne({
-        where: {
-          location: parseInt(data.location, 10),
-          startDate: {
-            [sequelize.Op.lte]: moment(data.startDate, 'DD-MM-YYYY'),
-            [sequelize.Op.lte]: moment(data.endDate, 'DD-MM-YYYY')
-          },
-          endDate: {
-            [sequelize.Op.gte]: moment(data.startDate, 'DD-MM-YYYY'),
-            [sequelize.Op.gte]: moment(data.endDate, 'DD-MM-YYYY')
-          }
+      where: {
+        location: parseInt(data.location, 10),
+        startDate: {
+          [sequelize.Op.lte]: moment(data.startDate, 'DD-MM-YYYY'),
+          [sequelize.Op.lte]: moment(data.endDate, 'DD-MM-YYYY')
+        },
+        endDate: {
+          [sequelize.Op.gte]: moment(data.startDate, 'DD-MM-YYYY'),
+          [sequelize.Op.gte]: moment(data.endDate, 'DD-MM-YYYY')
         }
-      })
+      }
+    })
       .then((doesExist) => {
         console.log(doesExist);
         if (doesExist !== null) {
@@ -84,13 +84,13 @@ export default class Events {
           });
         }
         eventDb.create({
-            name: data.name,
-            location: parseInt(data.location, 10),
-            startDate: moment(data.startDate, 'DD-MM-YYYY'),
-            endDate: moment(data.endDate, 'DD-MM-YYYY'),
-            createdBy: parseInt(this.req.verified.id, 10),
-            image: data.image
-          })
+          name: data.name,
+          location: parseInt(data.location, 10),
+          startDate: moment(data.startDate, 'DD-MM-YYYY'),
+          endDate: moment(data.endDate, 'DD-MM-YYYY'),
+          createdBy: parseInt(this.req.verified.id, 10),
+          image: data.image
+        })
           .then(result => this.res.status(201).json({
             val: result,
             msg: 'Event added successfully'
@@ -157,13 +157,13 @@ export default class Events {
         }
         if (data.name) {
           eventDb.findOne({
-              where: {
-                name: data.name,
-                [sequelize.Op.not]: {
-                  id
-                },
-              }
-            })
+            where: {
+              name: data.name,
+              [sequelize.Op.not]: {
+                id
+              },
+            }
+          })
             .then((doesExist) => {
               if (doesExist.length !== 0) {
                 return this.res.status(400).json({
@@ -192,21 +192,21 @@ export default class Events {
         }
         // CHECK IF THE CENTER IS BOOKED FOR SELECTED DATES
         eventDb.findOne({
-            where: {
-              location: newValues.location,
-              startDate: {
-                [sequelize.Op.lte]: newValues.startDate,
-                [sequelize.Op.lte]: newValues.endDate
-              },
-              endDate: {
-                [sequelize.Op.gte]: newValues.startDate,
-                [sequelize.Op.gte]: newValues.endDate
-              },
-              [sequelize.Op.not]: {
-                id
-              }
+          where: {
+            location: newValues.location,
+            startDate: {
+              [sequelize.Op.lte]: newValues.startDate,
+              [sequelize.Op.lte]: newValues.endDate
+            },
+            endDate: {
+              [sequelize.Op.gte]: newValues.startDate,
+              [sequelize.Op.gte]: newValues.endDate
+            },
+            [sequelize.Op.not]: {
+              id
             }
-          })
+          }
+        })
           .then((doesExist) => {
             if (doesExist !== null) {
               return this.res.status(400).json({

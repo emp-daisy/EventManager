@@ -86,5 +86,4 @@ export default class Users {
       })
       .catch(error => this.res.status(500).send(error));
   }
-
 }
