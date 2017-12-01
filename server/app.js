@@ -26,13 +26,13 @@ app.use('/v1/', centerRouter);
 app.use('/v1/', eventRouter);
 app.use('/v1/', userRouter);
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   // res.sendFile(path.resolve(__dirname, '../template/html/index.html'));
   res.status(200).send('Welcome to my Event Manager route');
 });
 
 //= ======== DEFAULT ROUTE==========
-app.use((req, res) => {
+app.get('/*', (req, res) => {
   // Invalid request
   res.status(404).json({
     error: {
