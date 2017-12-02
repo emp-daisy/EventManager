@@ -12,15 +12,16 @@ GETTING STARTED
 The template UI (GH_Pages will be accessible from https://emp-daisy.github.io/EventManager/html/index.html)
 
 BADGES
-TRAVIS-CI   -   [![Build Status](https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api)](https://travis-ci.org/emp-daisy/EventManager)
+ [![Build Status](https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api)](https://travis-ci.org/emp-daisy/EventManager)
 
-COVERALLS   -   <a href='https://coveralls.io/github/emp-daisy/EventManager?branch=ft-server-api'><img src='https://coveralls.io/repos/github/emp-daisy/EventManager/badge.svg?branch=ft-server-api' alt='Coverage Status' /></a>
+<a href='https://coveralls.io/github/emp-daisy/EventManager?branch=ft-server-api'><img src='https://coveralls.io/repos/github/emp-daisy/EventManager/badge.svg?branch=ft-server-api' alt='Coverage Status' /></a>
 
-CODE CLIMATE
-
-Maintainability Badge - <a href="https://codeclimate.com/github/emp-daisy/EventManager/maintainability"><img src="https://api.codeclimate.com/v1/badges/1083c8d7f29148c070f9/maintainability" /></a>
+<a href="https://codeclimate.com/github/emp-daisy/EventManager/maintainability"><img src="https://api.codeclimate.com/v1/badges/1083c8d7f29148c070f9/maintainability" /></a>
     
-Test Coverage Badge   -   <a href="https://codeclimate.com/github/emp-daisy/EventManager/test_coverage"><img src="https://api.codeclimate.com/v1/badges/1083c8d7f29148c070f9/test_coverage" /></a>
+<a href="https://codeclimate.com/github/emp-daisy/EventManager/test_coverage"><img src="https://api.codeclimate.com/v1/badges/1083c8d7f29148c070f9/test_coverage" /></a>
+
+API DOCUMENTATION
+https://jess-event-system.herokuapp.com/v1/api-docs/
 
 SETUP PROJECT
     RUNNING LOCALLY
