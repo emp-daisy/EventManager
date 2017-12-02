@@ -44,7 +44,8 @@ export default class Users {
             firstName: data.firstName,
             surname: data.surname,
             email: data.email,
-            password: bcrypt.hashSync(data.password, salt)
+            password: bcrypt.hashSync(data.password, salt),
+            isAdmin: data.isAdmin
           })
           .then(value => this.res.status(201).json({
             val: value,
@@ -64,7 +65,7 @@ export default class Users {
         }
       })
       .then((result) => {
-        if (!result) {
+        if (result === null) {
           return this.res.status(401).json({
             msg: 'User not found'
           });

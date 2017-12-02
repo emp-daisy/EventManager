@@ -19,13 +19,13 @@ export default class Events {
       .all()
       .then((result) => {
         if (result.length === 0) {
-          this.res.status(200).json({
+          return this.res.status(200).json({
             msg: 'No event available'
           });
         }
         this.res.status(200).json({
           val: result,
-          msg: 'Event returned'
+          msg: 'Events returned'
         });
       })
       .catch(error => this.res.status(500).send(error));

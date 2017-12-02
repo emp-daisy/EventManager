@@ -18,7 +18,7 @@ export default class Centers {
       .all()
       .then((result) => {
         if (result.length === 0) {
-          this.res.status(200).json({
+          return this.res.status(200).json({
             msg: 'No center available'
           });
         }
@@ -42,10 +42,10 @@ export default class Centers {
         where: {
           id: parseInt(id, 10)
         },
-        include: [{
+        /* include: [{
           model: eventDb,
           as: 'events'
-        }]
+        }] */
       })
       .then((result) => {
         if (result.length === 0) {
@@ -81,7 +81,7 @@ export default class Centers {
         msg: validateRes
       });
     }
-    if (this.req.verified.isAdmin) {
+    if (!this.req.verified.isAdmin) {
       return this.res.status(403).json({
         msg: 'Not logged in as an Admin'
       });
@@ -110,7 +110,7 @@ export default class Centers {
   deleteCenter() {
     const id = parseInt(this.req.params.id, 10);
 
-    if (this.req.verified.isAdmin) {
+    if (!this.req.verified.isAdmin) {
       return this.res.status(403).json({
         msg: 'Not logged in as an Admin'
       });
@@ -135,11 +135,11 @@ export default class Centers {
           })
           .then((row) => {
             if (row < 1) {
-              this.res.status(500).json({
+              return this.res.status(500).json({
                 msg: 'Error deleting center'
               });
             }
-            this.res.status(200).json({
+            return this.res.status(200).json({
               msg: 'Center deleted'
             });
           })
@@ -158,7 +158,7 @@ export default class Centers {
     const id = parseInt(this.req.params.id, 10);
     const data = this.req.body;
 
-    if (this.req.verified.isAdmin) {
+    if (!this.req.verified.isAdmin) {
       return this.res.status(403).json({
         msg: 'Not logged in as an Admin'
       });
@@ -234,11 +234,7 @@ export default class Centers {
             this.res.status(200).json({
               msg: 'Center updated successfully'
             });
-          })
-          .catch(error => this.res.status(500).send({
-            msg: 'Server Error',
-            error
-          }));
+          });
       })
       .catch(error => this.res.status(500).send({
         msg: 'Server Error',

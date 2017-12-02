@@ -2,11 +2,11 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Jess Event Manager",
-    "description": "My event maager API for a Bootcamp project"
+    "title": "Events Manager",
+    "description": " API documetationn for an event management system"
   },
-  "host": "jess-event-system.herokuapp.com",
-  "basePath": "/",
+  "host": "localhost:8000",
+  "basePath": "/api/v1",
   "schemes": [
     "http"
   ],
@@ -14,14 +14,14 @@
     "/users/login": {
       "post": {
         "tags": ["User"],
-        "summary": "Registers a user",
-        "description": "Creates a user and adds to the database.",
+        "summary": "Authenticates a user",
+        "description": "Authenticates a new user by cross checking the database",
         "parameters": [{
           "name": "person",
           "in": "body",
-          "description": "The user to create.",
+          "description": "user to authenticate",
           "schema": {
-            "$ref": "#/definitions/User"
+            "$ref": "#/definitions/UserLogin"
           }
         }],
         "responses": {
@@ -41,18 +41,18 @@
       "post": {
         "tags": ["User"],
         "summary": "Login a user",
-        "description": "Creates a user and adds to the database.",
+        "description": "Registers a user and stores it to the database.",
         "parameters": [{
           "name": "person",
           "in": "body",
-          "description": "The user to create.",
+          "description": "The user to Register.",
           "schema": {
             "$ref": "#/definitions/User"
           }
         }],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"
@@ -63,15 +63,15 @@
         }
       }
     },
-    "/v1/events": {
+    "/events": {
       "post": {
         "tags": ["Events"],
-        "summary": "Login a user",
-        "description": "Creates a user and adds to the database.",
+        "summary": "Creates a new event",
+        "description": "Creates a new events and stores it to the database.",
         "parameters": [{
-          "name": "person",
+          "name": "event",
           "in": "body",
-          "description": "The user to create.",
+          "description": "The event to create.",
           "schema": {
             "$ref": "#/definitions/Event"
           }
@@ -89,11 +89,11 @@
         }
       }
     },
-    "v1/events/{id}": {
+    "/events/{id}": {
       "put": {
         "tags": ["Events"],
         "summary": "Update an event",
-        "description": "Update an event in the database.",
+        "description": "Update an existing event in the database.",
         "parameters": [{
           "name": "id",
           "in": "path",
@@ -118,7 +118,7 @@
       "delete": {
         "tags": ["Events"],
         "summary": "Delete an event",
-        "description": "Delete an event from the database.",
+        "description": "Delete an existing event from the database.",
         "parameters": [{
           "name": "id",
           "in": "path",
@@ -136,17 +136,39 @@
             "description": "Server Error"
           }
         }
+      },
+      "get": {
+        "tags": ["Events"],
+        "summary": "Update an event",
+        "description": "Get an existing event in the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The event to get."
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
       }
     },
-    "/v1/center": {
+    "/centers": {
       "post": {
         "tags": ["Centers"],
         "summary": "Creates a center",
-        "description": "Creates a center and adds to the database.",
+        "description": "Creates a new center and stores to the database.",
         "parameters": [{
-          "name": "person",
+          "name": "center",
           "in": "body",
-          "description": "The user to create.",
+          "description": "The center to create.",
           "schema": {
             "$ref": "#/definitions/Center"
           }
@@ -165,12 +187,12 @@
       },
       "get": {
         "tags": ["Centers"],
-        "summary": "Creates a center",
-        "description": "Creates a center and adds to the database.",
+        "summary": "Gets all center",
+        "description": "gets all center and adds to the database.",
         "parameters": [{
-          "name": "person",
+          "name": "centers",
           "in": "body",
-          "description": "The user to create.",
+          "description": "",
           "schema": {
             "$ref": "#/definitions/Center"
           }
@@ -188,11 +210,11 @@
         }
       }
     },
-    "v1/centers/{id}": {
+    "centers/{id}": {
       "get": {
         "tags": ["Centers"],
-        "summary": "Creates a center",
-        "description": "Creates a center and adds to the database.",
+        "summary": "gets a single center",
+        "description": "gets a center and adds to the database.",
         "parameters": [{
           "name": "id",
           "in": "path",
@@ -213,13 +235,13 @@
       },
       "put": {
         "tags": ["Centers"],
-        "summary": "Creates a center",
-        "description": "Creates a center and adds to the database.",
+        "summary": "Modifies a center",
+        "description": "modifies a center and saves it to the database.",
         "parameters": [{
           "name": "id",
           "in": "path",
           "type": "integer",
-          "description": "The event to update.",
+          "description": "The center to update.",
           "schema": {
             "$ref": "#/definitions/Center"
           }
@@ -242,8 +264,7 @@
     "User": {
       "required": [
         "email",
-        "surname",
-        "firstName",
+        "username",
         "password",
         "confirmPassword"
       ],
@@ -252,10 +273,7 @@
           "type": "string",
           "uniqueItems": true
         },
-        "surname": {
-          "type": "string"
-        },
-        "firstName": {
+        "username": {
           "type": "string"
         },
         "password": {
@@ -269,30 +287,51 @@
         }
       }
     },
+    "UserLogin": {
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
     "Event": {
       "required": [
         "name",
         "location",
         "startDate",
-        "endDate",
-        "createdBy"
+        "days",
+        "centerId"
       ],
       "properties": {
-        "name": {
+        "eventName": {
           "type": "string",
           "uniqueItems": true
         },
-        "location": {
+        "centerId": {
           "type": "integer"
         },
         "startDate": {
           "type": "string"
         },
-        "endDate": {
+        "days": {
+          "type": "integer"
+        },
+        "status": {
           "type": "string"
         },
         "createdBy": {
-          "type": "string"
+          "type": "integer"
+        },
+        "updatedBy": {
+          "type": "integer"
         },
         "image": {
           "type": "string"
@@ -302,31 +341,40 @@
     "Center": {
       "required": [
         "name",
-        "location",
-        "createdBy",
-        "updatedBy"
+        "stateId",
+        "address",
+        "facilities",
+        "hallCapacity",
+        "carParkCapacity",
+        "price"
       ],
       "properties": {
         "name": {
           "type": "string",
           "uniqueItems": true
         },
-        "location": {
-          "type": "string"
+        "stateId": {
+          "type": "integer"
+        },
+        "address": {
+          "type": "integer"
         },
         "facilities": {
           "type": "string"
         },
-        "state": {
+        "hallCapacity": {
           "type": "integer"
         },
-        "image": {
-          "type": "string"
+        "carParkCapacity": {
+          "type": "integer"
         },
         "createdBy": {
           "type": "integer"
         },
         "updatedBy": {
+          "type": "integer"
+        },
+        "price": {
           "type": "integer"
         }
       }

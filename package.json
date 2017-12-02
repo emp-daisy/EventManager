@@ -4,7 +4,7 @@
   "description": "Event Manager Server-side",
   "main": "app.js",
   "scripts": {
-    "prestart": "sequelize db:migrate && sequelize db:seed:all",
+    "prestart": "sequelize db:migrate && sequelize db:seed",
     "start": "babel-watch server/app.js",
     "test": "nyc --reporter=html --reporter=text mocha ./server/tests/* --exit --require babel-register --reporter spec",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
