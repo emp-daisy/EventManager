@@ -123,7 +123,7 @@
           "name": "id",
           "in": "path",
           "type": "integer",
-          "description": "The event to delete.",
+          "description": "The event to delete."
         }],
         "responses": {
           "200": {
