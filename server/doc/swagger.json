@@ -5,7 +5,7 @@
     "title": "Jess Event Manager",
     "description": "My event maager API for a Bootcamp project"
   },
-  "host": "localhost:3088",
+  "host": "jess-event-system.herokuapp.com",
   "basePath": "/",
   "schemes": [
     "http"
@@ -13,6 +13,7 @@
   "paths": {
     "/users/login": {
       "post": {
+        "tags": ["User"],
         "summary": "Registers a user",
         "description": "Creates a user and adds to the database.",
         "parameters": [{
@@ -36,9 +37,9 @@
         }
       }
     },
-
     "/users": {
       "post": {
+        "tags": ["User"],
         "summary": "Login a user",
         "description": "Creates a user and adds to the database.",
         "parameters": [{
@@ -54,10 +55,184 @@
             "description": "OK"
           },
           "400": {
-            "description": "OK"
+            "description": "Bad Request"
           },
           "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/events": {
+      "post": {
+        "tags": ["Events"],
+        "summary": "Login a user",
+        "description": "Creates a user and adds to the database.",
+        "parameters": [{
+          "name": "person",
+          "in": "body",
+          "description": "The user to create.",
+          "schema": {
+            "$ref": "#/definitions/Event"
+          }
+        }],
+        "responses": {
+          "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "v1/events/{id}": {
+      "put": {
+        "tags": ["Events"],
+        "summary": "Update an event",
+        "description": "Update an event in the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The event to update.",
+          "schema": {
+            "$ref": "#/definitions/Event"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Events"],
+        "summary": "Delete an event",
+        "description": "Delete an event from the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The event to delete.",
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/center": {
+      "post": {
+        "tags": ["Centers"],
+        "summary": "Creates a center",
+        "description": "Creates a center and adds to the database.",
+        "parameters": [{
+          "name": "person",
+          "in": "body",
+          "description": "The user to create.",
+          "schema": {
+            "$ref": "#/definitions/Center"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Centers"],
+        "summary": "Creates a center",
+        "description": "Creates a center and adds to the database.",
+        "parameters": [{
+          "name": "person",
+          "in": "body",
+          "description": "The user to create.",
+          "schema": {
+            "$ref": "#/definitions/Center"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "v1/centers/{id}": {
+      "get": {
+        "tags": ["Centers"],
+        "summary": "Creates a center",
+        "description": "Creates a center and adds to the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The event to retrieve."
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Centers"],
+        "summary": "Creates a center",
+        "description": "Creates a center and adds to the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The event to update.",
+          "schema": {
+            "$ref": "#/definitions/Center"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -91,6 +266,68 @@
         },
         "isAdmin": {
           "type": "boolean"
+        }
+      }
+    },
+    "Event": {
+      "required": [
+        "name",
+        "location",
+        "startDate",
+        "endDate",
+        "createdBy"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "location": {
+          "type": "integer"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        }
+      }
+    },
+    "Center": {
+      "required": [
+        "name",
+        "location",
+        "createdBy",
+        "updatedBy"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "location": {
+          "type": "string"
+        },
+        "facilities": {
+          "type": "string"
+        },
+        "state": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "updatedBy": {
+          "type": "integer"
         }
       }
     }

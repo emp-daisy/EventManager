@@ -70,7 +70,7 @@ export default class Users {
           });
         } else if (!bcrypt.compareSync(data.password, result.password)) {
           return this.res.status(401).json({
-            msg: 'Username or password does not match'
+            msg: 'Invalid Username or Password'
           });
         }
 
@@ -79,7 +79,7 @@ export default class Users {
             id: result.id,
             isAdmin: result.isAdmin,
           }, process.env.SECRET_KEY, {
-            expiresIn: '24h'
+            expiresIn: '2d'
           }),
           msg: 'login successful'
         });

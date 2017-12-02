@@ -4,9 +4,9 @@
   "description": "Event Manager Server-side",
   "main": "app.js",
   "scripts": {
-    "prestart": "sequelize db:migrate",
+    "prestart": "sequelize db:migrate && sequelize db:seed:all",
     "start": "babel-watch server/app.js",
-    "test": "nyc --reporter=html --reporter=text mocha ./server/tests/ --compilers js:babel-register",
+    "test": "nyc --reporter=html --reporter=text mocha ./server/tests/* --exit --require babel-register --reporter spec",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "start:dev": "npm run test && coverage"
@@ -36,6 +36,7 @@
     "chai-http": "^3.0.0",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
+    "faker": "^4.1.0",
     "jsonwebtoken": "^8.1.0",
     "moment": "^2.19.2",
     "morgan": "^1.9.0",

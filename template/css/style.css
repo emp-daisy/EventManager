@@ -1,58 +1,59 @@
 html,
 body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 body {
-    height: 100vh;
-    width: 100vw;
-    background: linear-gradient(rgba(126, 0, 128, 1), #c94b4b, rgba(0, 0, 0, 0.8));
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(rgba(126, 0, 128, 1), #c94b4b, rgba(0, 0, 0, 0.8));
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .full-height {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 .full-height-80 {
-    min-height: 80vh;
+  min-height: 80vh;
 }
 
 .carousel-item img {
-    height: 50vh;
-    width: 100%
+  height: 50vh;
+  width: 100%;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.45);
 }
 
 .carousel-caption {
-    background: rgba(0, 0, 0, 0.45);
-    padding: 0;
+  padding: 0;
 }
 
 .container-center {
-    align-content: center;
-    align-items: center;
-    display: flex;
+  align-content: center;
+  align-items: center;
+  display: flex;
 }
 
 .bg-black {
-    background: #000;
+  background: #000;
 }
 
 .tab-custom,
 .tab-custom:hover {
-    color: white
+  color: white
 }
 
 .btn-circle-float {
-    width: 20vh;
-    height: 20vh;
-    padding: 0;
-    margin: 40px;
-    border-radius: 10vh;
-    font-size: 10vh;
-    line-height: 1.33;
+  width: 10vh;
+  height: 10vh;
+  padding: 0;
+  margin: 40px;
+  border-radius: 5vh;
+  font-size: 5vh;
+  line-height: 1.33;
 }

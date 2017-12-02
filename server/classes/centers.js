@@ -3,6 +3,7 @@ import model from '../models';
 import Validator from '../middleware/validator';
 
 const centerDb = model.Centers;
+const eventDb = model.Events;
 /**
  *
  */
@@ -23,7 +24,7 @@ export default class Centers {
         }
         this.res.status(200).json({
           val: result,
-          msg: 'Center returned'
+          msg: 'Centers returned'
         });
       })
       .catch(error => this.res.status(500).send({
@@ -40,7 +41,11 @@ export default class Centers {
       .findAll({
         where: {
           id: parseInt(id, 10)
-        }
+        },
+        include: [{
+          model: eventDb,
+          as: 'events'
+        }]
       })
       .then((result) => {
         if (result.length === 0) {
@@ -104,6 +109,12 @@ export default class Centers {
 
   deleteCenter() {
     const id = parseInt(this.req.params.id, 10);
+
+    if (this.req.verified.isAdmin) {
+      return this.res.status(403).json({
+        msg: 'Not logged in as an Admin'
+      });
+    }
     return centerDb
       .findOne({
         where: {
@@ -111,7 +122,7 @@ export default class Centers {
         }
       })
       .then((result) => {
-        if (result.length === 0) {
+        if (result === null) {
           return this.res.status(400).json({
             msg: 'Center not found'
           });
@@ -160,7 +171,7 @@ export default class Centers {
         }
       })
       .then((result) => {
-        if (result.length === 0) {
+        if (result === null) {
           return this.res.status(400).json({
             msg: 'Center not found'
           });
