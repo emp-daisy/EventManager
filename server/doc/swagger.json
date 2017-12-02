@@ -3,10 +3,10 @@
   "info": {
     "version": "1.0.0",
     "title": "Events Manager",
-    "description": " API documetationn for an event management system"
+    "description": " API documetation for an event management system for bootcamp"
   },
-  "host": "localhost:8000",
-  "basePath": "/api/v1",
+  "host": "jess-event-system.herokuapp.com",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
