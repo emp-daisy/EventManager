@@ -44,14 +44,26 @@
     <section class="container-fluid full-height-80  parallex-img" id="dashboard">
       <div class="row align-content-center">
         <div class="col-md-8 offset-md-2">
-          <ul class="nav nav-tabs nav-fill user-tabs" id="user-tab">
-            <li class="nav-item">
-              <a class="nav-link active tab-custom" href="#events" data-toggle="tab" data-id="1">EVENTS</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link tab-custom" href="#centers" data-toggle="tab" data-id="2">CENTERS</a>
-            </li>
-          </ul>
+          <div class="sticky-top">
+            <div class="clearfix">
+              <form action="#" id="searchForm" class="input-group w-50 float-right">
+                <input type="text" class="form-control" name="x" placeholder="Search...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <span class="fa fa-search"></span>
+                  </button>
+                </span>
+              </form>
+            </div>
+            <ul class="nav nav-tabs nav-fill user-tabs" id="user-tab">
+              <li class="nav-item">
+                <a class="nav-link active tab-custom" href="#events" data-toggle="tab" data-id="1">EVENTS</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link tab-custom" href="#centers" data-toggle="tab" data-id="2">CENTERS</a>
+              </li>
+            </ul>
+          </div>
           <div class="tab-content p-4">
             <div role="tabpanel" class="tab-pane active in" id="events">
               <div class="list-group">

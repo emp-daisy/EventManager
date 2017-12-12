@@ -48,6 +48,26 @@
   <div class="wrapper">
     <section class="container-fluid full-height-80 parallex-img" id="event">
       <h2 class="mx-5 font-weight-bold text-white">Available Centers</h2>
+      <div class="row text-center m-4 justify-content-center">
+        <div class="col-md-6 col-sm-12 offset-md-6">
+          <form action="#" method="get" id="searchForm" class="input-group">
+            <div class="input-group-btn search-panel">
+              <select name="search_param" id="search_param" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <option value="all">All</option>
+                <option value="name">Name</option>
+                <option value="location">Location</option>
+                <option value="facilities">Facilities</option>
+              </select>
+            </div>
+            <input type="text" class="form-control" name="x" placeholder="Search by...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <span class="fa fa-search"></span>
+              </button>
+            </span>
+          </form>
+        </div>
+      </div>
       <div class="row align-items-center m-4 justify-content-center">
         <div class="col-sm-6 col-md-4 col-lg-3">
           <div class="card text-black bg-light mb-3">
@@ -181,7 +201,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Center Name</h5>
+          <h5 class="modal-title col-4">Center Name</h5>
+          <form action="#" method="get" id="searchForm" class="input-group col-6">
+            <input type="text" class="form-control" name="x" placeholder="Search...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <span class="fa fa-search"></span>
+              </button>
+            </span>
+          </form>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -198,6 +226,7 @@
               <div class="d-flex w-100 justify-content-between p-2">
                 <small>Organised by user</small>
                 <button class="btn btn-sm btn-secondary">Attend</button>
+                <button class="btn btn-sm btn-secondary">Cancel</button>
               </div>
             </div>
 
@@ -211,6 +240,7 @@
               <div class="d-flex w-100 justify-content-between p-2">
                 <small>Organised by user</small>
                 <button class="btn btn-sm btn-secondary">Attend</button>
+                <button class="btn btn-sm btn-secondary">Cancel</button>
               </div>
             </div>
           </div>
