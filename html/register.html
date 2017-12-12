@@ -7,6 +7,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
   <link rel="stylesheet" href="../css/style.css">
   <title>Registration</title>
 </head>
@@ -16,8 +18,9 @@
     <a class="navbar-brand display-1 font-weight-bold" href="index.html">Event Manager</a>
     </div>
   </nav>
-  <div class="container-fluid full-height">
-    <div class="row align-items-center full-height-80">
+  <div class="wrapper">
+    <section class="align-items-center full-height-80 parallex-img" id="register">
+      <div class="img-overlay"></div>
       <div class="col-sm-6 offset-sm-3 col-12 text-center align-items-center">
         <h2 class="display-4 text-white">REGISTERATION</h2>
         <form>
@@ -29,9 +32,6 @@
           </div>
           <div class="form-group">
             <input class="form-control" type="text" placeholder="Email">
-          </div>
-          <div class="form-group">
-            <input class="form-control" type="text" placeholder="Username">
           </div>
           <div class="form-group">
             <input class="form-control" type="password" placeholder="Password">
@@ -52,12 +52,39 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row justify-content-center align-content-end">
-      <div class="text-center">
-        <p class="text-white">&copy Jessica Madufor (Andela 2017)</p>
+    </section>
+
+    <section class="footer" id="footer">
+      <div class="justify-content-center align-content-end">
+        <div class="text-center">
+          <ul class="nav list-inline ml-auto justify-content-center social-links">
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-facebook"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-twitter"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-linkedin"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-pinterest"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="text-center">
+          <p class="text-white">&copy Jessica Madufor (Andela 2017)</p>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
 </body>
 
