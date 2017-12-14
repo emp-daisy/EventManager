@@ -186,16 +186,12 @@ export default class Centers {
               }
             })
             .then((doesExist) => {
-              if (doesExist.length !== 0) {
+              if (doesExist !== null) {
                 return this.res.status(400).json({
                   msg: 'Center name is not unique'
                 });
               }
-            })
-            .catch(error => this.res.status(500).send({
-              msg: 'Server Error',
-              error
-            }));
+            });
         }
         const resJson = result.toJSON();
         const newValues = {

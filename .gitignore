@@ -2,3 +2,4 @@
 /node_modules
 /.nyc_output
 /.env
+/client/node_modules
