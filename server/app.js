@@ -2,6 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './doc/swagger.json';
 import eventRouter from './routes/event-routes';
@@ -12,7 +14,8 @@ const port = process.env.PORT || 3088; // port which server runs on
 const app = express(); // init express
 
 dotenv.config(); // add env file
-
+//= ========CORS===========================
+app.use(cors());
 //= ========MIDDLEWARE=====================
 // Log requests to the console.
 app.use(logger('dev'));
@@ -27,8 +30,7 @@ app.use('/v1/', eventRouter);
 app.use('/v1/', userRouter);
 
 app.get('/', (req, res) => {
-  // res.sendFile(path.resolve(__dirname, '../template/html/index.html'));
-  res.status(200).send('Welcome to my Event Manager route');
+  res.status(200).send('Welcome to my Event Manager API');
 });
 
 //= ======== DEFAULT ROUTE==========

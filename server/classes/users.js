@@ -66,11 +66,11 @@ export default class Users {
       })
       .then((result) => {
         if (result === null) {
-          return this.res.status(401).json({
+          return this.res.status(404).json({
             msg: 'User not found'
           });
         } else if (!bcrypt.compareSync(data.password, result.password)) {
-          return this.res.status(401).json({
+          return this.res.status(400).json({
             msg: 'Invalid Username or Password'
           });
         }
