@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "sequelize db:migrate && sequelize db:seed",
     "start": "babel-watch server/app.js",
-    "test": "nyc --reporter=html --reporter=text mocha --exit ./server/tests/api-test.js --compilers js:babel-register || ECHO.",
+    "test": "nyc --reporter=lcov --reporter=html --reporter=text mocha --exit ./server/tests/api-test.js --compilers js:babel-register || ECHO.",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "start:dev": "npm run test && coverage"

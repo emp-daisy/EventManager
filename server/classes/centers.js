@@ -75,6 +75,8 @@ export default class Centers {
 
   createCenter() {
     const data = this.req.body;
+    data.facilities = this.splitArray(data.facilities);
+
     const validateRes = Validator.validateCenter(data);
     if (validateRes !== true) {
       return this.res.status(400).json({
@@ -91,7 +93,7 @@ export default class Centers {
       .create({
         name: data.name,
         location: data.location,
-        facilities: this.splitArray(data.facilities),
+        facilities: data.facilities,
         states: parseInt(data.states, 10),
         image: data.image,
         createdBy: parseInt(this.req.verified.id, 10),

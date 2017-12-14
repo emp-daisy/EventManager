@@ -7,9 +7,21 @@ const {
   expect
 } = chai;
 chai.use(chaiHttp);
-let testToken, user, centerCount, centerId, eventCount, adminUser;
+let testToken, nonAdminToken, user, centerCount, centerId, eventCount, adminUser;
 
 describe('API Testing', () => {
+  describe('Base URL', () => {
+    it('Returns an base url text', (done) => {
+      chai.request(app)
+        .get('/')
+        .end((err, res) => {
+          expect(res).to.be.status(200);
+          expect(res.body).to.equal('Welcome to my Event Manager API');
+          done();
+        });
+    });
+  });
+
   describe('Valid User URL', () => {
     describe('Registration', () => {
       it('Returns newly created user object and 201 status code', (done) => {
@@ -80,6 +92,7 @@ describe('API Testing', () => {
             expect(res).to.be.status(200);
             expect(res.body.token).to.be.a('string');
             expect(res.body.msg).to.equal('login successful');
+            nonAdminToken = res.body.token;
             done();
           });
       });
@@ -106,7 +119,7 @@ describe('API Testing', () => {
             password: 'TESTpwd',
           })
           .end((err, res) => {
-            expect(res).to.be.status(401);
+            expect(res).to.be.status(404);
             expect(res.body.msg).to.equal('User not found');
             done();
           });
@@ -119,7 +132,7 @@ describe('API Testing', () => {
             password: 'tester',
           })
           .end((err, res) => {
-            expect(res).to.be.status(401);
+            expect(res).to.be.status(400);
             expect(res.body.msg).to.equal('Invalid Username or Password');
             done();
           });
@@ -151,9 +164,9 @@ describe('API Testing', () => {
             done();
           });
       });
-      it('Returns the new center as an object', (done) => {
+      it('Returns the error as user is not an Admin', (done) => {
         chai.request(app)
-          .post(`/v1/centers/?token=${testToken}`)
+          .post(`/v1/centers/?token=${nonAdminToken}`)
           .send({
             name: faker.random.words(),
             location: faker.address.streetAddress(),
@@ -168,8 +181,8 @@ describe('API Testing', () => {
             if (res.body.val) {
               centerId = res.body.val.id;
             }
-            expect(res).to.be.status(201);
-            expect(res.body.msg).to.equal('Center added successfully');
+            expect(res).to.be.status(403);
+            expect(res.body.msg).to.equal('Not logged in as an Admin');
             done();
           });
       });
@@ -315,13 +328,14 @@ describe('API Testing', () => {
   describe('Valid Event URL', () => {
     describe('/POST Event URL', () => {
       it('Returns the new event as an object', (done) => {
+        const date = faker.date.future();
         chai.request(app)
           .post(`/v1/events/?token=${testToken}`)
           .set('x-access-token', testToken)
           .send({
             name: faker.random.words(),
-            startDate: faker.date.future(),
-            endDate: faker.date.future(),
+            startDate: date,
+            endDate: faker.date.future(5, date),
             location: centerId,
             image: 'file://...'
           })
@@ -388,7 +402,7 @@ describe('API Testing', () => {
           .send({
             name: faker.random.words(),
             startDate: faker.date.past(),
-            endDate: faker.date.future(),
+            endDate: faker.date.past(),
             location: centerId,
             image: 'file://...'
           })
@@ -436,12 +450,13 @@ describe('API Testing', () => {
 
     describe('/PUT Event URL', () => {
       it('Returns the error code due to wrong id', (done) => {
+        const date = faker.date.future();
         chai.request(app)
           .put(`/v1/events/0/?token=${testToken}`)
           .send({
             name: faker.random.words(),
-            startDate: faker.date.future(),
-            endDate: faker.date.future(),
+            startDate: date,
+            endDate: faker.date.future(5, date),
             location: centerId,
             image: 'file://...'
           })
@@ -452,12 +467,13 @@ describe('API Testing', () => {
           });
       });
       it('Returns the updated event as an object', (done) => {
+        const date = faker.date.future();
         chai.request(app)
           .put(`/v1/events/${eventCount}/?token=${testToken}`)
           .send({
             name: faker.random.words(),
-            startDate: faker.date.future(),
-            endDate: faker.date.future(),
+            startDate: date,
+            endDate: faker.date.future(5, date),
             location: centerId,
             image: 'file://...'
           })
@@ -488,6 +504,45 @@ describe('API Testing', () => {
             done();
           });
       });
+    });
+  });
+
+  describe('POST with invalid token', () => {
+    it('Returns an error due to fake or expired token', (done) => {
+      chai.request(app)
+        .post('/v1/centers/?token=faketoken')
+        .send({
+          name: faker.random.words(),
+          location: faker.address.streetAddress(),
+          facilities: 'faker,random,words',
+          states: faker.random.number({
+            min: 1,
+            max: 37
+          }),
+          image: faker.system.directoryPath()
+        })
+        .end((err, res) => {
+          expect(res).to.be.status(403);
+          done();
+        });
+    });
+    it('Returns an error due to missing token', (done) => {
+      chai.request(app)
+        .post('/v1/centers/')
+        .send({
+          name: faker.random.words(),
+          location: faker.address.streetAddress(),
+          facilities: 'faker,random,words',
+          states: faker.random.number({
+            min: 1,
+            max: 37
+          }),
+          image: faker.system.directoryPath()
+        })
+        .end((err, res) => {
+          expect(res).to.be.status(403);
+          done();
+        });
     });
   });
 

@@ -40,7 +40,7 @@ class Validation {
     const rules = {
       name: 'required|string',
       location: 'required|string',
-      facilities: 'string',
+      facilities: 'array',
       states: 'required|integer',
       image: 'string'
     };
