@@ -7,7 +7,7 @@ const {
   expect
 } = chai;
 chai.use(chaiHttp);
-let testToken, nonAdminToken, user, centerCount, centerId, eventCount, adminUser;
+let adminToken, nonAdminToken, user, centerId, eventId, adminUser;
 
 describe('API Testing', () => {
   describe('Base URL', () => {
@@ -16,7 +16,7 @@ describe('API Testing', () => {
         .get('/')
         .end((err, res) => {
           expect(res).to.be.status(200);
-          expect(res.body).to.equal('Welcome to my Event Manager API');
+          expect(res.text).to.equal('Welcome to my Event Manager API');
           done();
         });
     });
@@ -32,8 +32,7 @@ describe('API Testing', () => {
             surname: faker.name.lastName(),
             email: faker.internet.email(),
             password: 'TESTpwd',
-            confirmPassword: 'TESTpwd',
-            isAdmin: faker.random.boolean()
+            confirmPassword: 'TESTpwd'
           })
           .end((err, res) => {
             expect(res).to.be.status(201);
@@ -80,6 +79,7 @@ describe('API Testing', () => {
           });
       });
     });
+
     describe('Login', () => {
       it('Returns an object token to the user with status coode 200', (done) => {
         chai.request(app)
@@ -96,7 +96,7 @@ describe('API Testing', () => {
             done();
           });
       });
-      it('Returns an object token to the admin user with status coode 200', (done) => {
+      it('Returns an object token to the admin user with status code 200', (done) => {
         chai.request(app)
           .post('/v1/users/login')
           .send({
@@ -107,7 +107,7 @@ describe('API Testing', () => {
             expect(res).to.be.status(200);
             expect(res.body.token).to.be.a('string');
             expect(res.body.msg).to.equal('login successful');
-            testToken = res.body.token;
+            adminToken = res.body.token;
             done();
           });
       });
@@ -144,7 +144,7 @@ describe('API Testing', () => {
     describe('/POST Center URL', () => {
       it('Returns the new center as an object', (done) => {
         chai.request(app)
-          .post(`/v1/centers/?token=${testToken}`)
+          .post(`/v1/centers/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
             location: faker.address.streetAddress(),
@@ -157,7 +157,7 @@ describe('API Testing', () => {
           })
           .end((err, res) => {
             if (res.body.val) {
-              centerCount = res.body.val.id;
+              centerId = res.body.val.id;
             }
             expect(res).to.be.status(201);
             expect(res.body.msg).to.equal('Center added successfully');
@@ -189,7 +189,7 @@ describe('API Testing', () => {
       it('Returns an error due to missing location field', (done) => {
         chai.request(app)
           .post('/v1/centers')
-          .set('x-access-token', testToken)
+          .set('x-access-token', adminToken)
           .send({
             name: faker.random.words(),
             facilities: 'faker,random,words',
@@ -208,7 +208,7 @@ describe('API Testing', () => {
       it('Returns an error due to missing title field', (done) => {
         chai.request(app)
           .post('/v1/centers')
-          .set('x-access-token', testToken)
+          .set('x-access-token', adminToken)
           .send({
             location: faker.address.streetAddress(),
             facilities: 'faker,random,words',
@@ -243,7 +243,7 @@ describe('API Testing', () => {
       });
       it('Returns details of a center', (done) => {
         chai.request(app)
-          .get(`/v1/centers/${centerCount}`)
+          .get(`/v1/centers/${centerId}`)
           .end((err, res) => {
             expect(res).to.be.status(200);
             expect(res.body.msg).to.equal('Center found');
@@ -264,7 +264,7 @@ describe('API Testing', () => {
     describe('/PUT Center URL', () => {
       it('Returns the error code due to wrong id', (done) => {
         chai.request(app)
-          .put(`/v1/centers/${centerCount + 10}/?token=${testToken}`)
+          .put(`/v1/centers/${centerId + 10}/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
             location: faker.address.streetAddress(),
@@ -283,7 +283,7 @@ describe('API Testing', () => {
       });
       it('Returns the updated center as an object', (done) => {
         chai.request(app)
-          .put(`/v1/centers/${centerCount}/?token=${testToken}`)
+          .put(`/v1/centers/${centerId}/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
             location: faker.address.streetAddress(),
@@ -301,59 +301,37 @@ describe('API Testing', () => {
           });
       });
     });
-
-    describe('/DELETE Center URL', () => {
-      it('Returns the message for deleted object', (done) => {
-        chai.request(app)
-          .delete(`/v1/centers/${centerCount}/?token=${testToken}`)
-          .end((err, res) => {
-            expect(res).to.have.status(200);
-            expect(res.body.msg).to.equal('Center deleted');
-            done();
-          });
-      });
-      it('Returns an error for invalid id', (done) => {
-        chai.request(app)
-          .delete('/v1/centers/0')
-          .set('x-access-token', testToken)
-          .end((err, res) => {
-            expect(res).to.have.status(400);
-            expect(res.body.msg).to.equal('Center not found');
-            done();
-          });
-      });
-    });
   });
 
   describe('Valid Event URL', () => {
     describe('/POST Event URL', () => {
       it('Returns the new event as an object', (done) => {
-        const date = faker.date.future();
         chai.request(app)
-          .post(`/v1/events/?token=${testToken}`)
-          .set('x-access-token', testToken)
+          .post(`/v1/events/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
-            startDate: date,
-            endDate: faker.date.future(5, date),
+            startDate: '20/12/2099',
+            endDate: '24/12/2099',
             location: centerId,
             image: 'file://...'
           })
           .end((err, res) => {
+            if (res.body.val) {
+              eventId = res.body.val.id;
+            }
             expect(res).to.be.status(201);
             expect(res.body.msg).to.equal('Event added successfully');
-            eventCount = res.body.val.id;
             done();
           });
       });
 
       it('Returns an error due to missing location field', (done) => {
         chai.request(app)
-          .post(`/v1/events/?token=${testToken}`)
+          .post(`/v1/events/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
-            startDate: faker.date.future(),
-            endDate: faker.date.future(),
+            startDate: '20/09/2099',
+            endDate: '24/09/2099',
             image: 'file://...'
           })
           .end((err, res) => {
@@ -365,10 +343,10 @@ describe('API Testing', () => {
 
       it('Returns an error due to missing title field', (done) => {
         chai.request(app)
-          .post(`/v1/events/?token=${testToken}`)
+          .post(`/v1/events/?token=${adminToken}`)
           .send({
-            startDate: faker.date.future(),
-            endDate: faker.date.future(),
+            startDate: '20/01/2099',
+            endDate: '24/01/2099',
             location: centerId,
             image: 'file://...'
           })
@@ -380,16 +358,16 @@ describe('API Testing', () => {
       });
       it('Returns an error due to missing date field', (done) => {
         chai.request(app)
-          .post(`/v1/events/?token=${testToken}`)
+          .post(`/v1/events/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
-            endDate: faker.date.future(),
+            endDate: '24/05/2099',
             location: centerId,
             image: 'file://...'
           })
           .end((err, res) => {
             if (res.body.val) {
-              eventCount = res.body.val.id;
+              eventId = res.body.val.id;
             }
             expect(res).to.be.status(400);
             expect(res.body.msg).to.be.an('object');
@@ -398,11 +376,11 @@ describe('API Testing', () => {
       });
       it('Returns an error if date is in the past', (done) => {
         chai.request(app)
-          .post(`/v1/events/?token=${testToken}`)
+          .post(`/v1/events/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
-            startDate: faker.date.past(),
-            endDate: faker.date.past(),
+            startDate: '20/12/2000',
+            endDate: '24/12/2000',
             location: centerId,
             image: 'file://...'
           })
@@ -430,7 +408,7 @@ describe('API Testing', () => {
       });
       it('Returns an object array for the event', (done) => {
         chai.request(app)
-          .get(`/v1/events/${eventCount}`)
+          .get(`/v1/events/${eventId}`)
           .end((err, res) => {
             expect(res).to.be.status(200);
             expect(res.body.msg).to.equal('Event found');
@@ -450,13 +428,12 @@ describe('API Testing', () => {
 
     describe('/PUT Event URL', () => {
       it('Returns the error code due to wrong id', (done) => {
-        const date = faker.date.future();
         chai.request(app)
-          .put(`/v1/events/0/?token=${testToken}`)
+          .put(`/v1/events/0/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
-            startDate: date,
-            endDate: faker.date.future(5, date),
+            startDate: '20/10/2099',
+            endDate: '24/10/2099',
             location: centerId,
             image: 'file://...'
           })
@@ -467,13 +444,12 @@ describe('API Testing', () => {
           });
       });
       it('Returns the updated event as an object', (done) => {
-        const date = faker.date.future();
         chai.request(app)
-          .put(`/v1/events/${eventCount}/?token=${testToken}`)
+          .put(`/v1/events/${eventId}/?token=${adminToken}`)
           .send({
             name: faker.random.words(),
-            startDate: date,
-            endDate: faker.date.future(5, date),
+            startDate: '20/02/2099',
+            endDate: '24/02/2099',
             location: centerId,
             image: 'file://...'
           })
@@ -488,7 +464,7 @@ describe('API Testing', () => {
     describe('/DELETE Event URL', () => {
       it('Returns the message for deleted object', (done) => {
         chai.request(app)
-          .delete(`/v1/events/${eventCount}/?token=${testToken}`)
+          .delete(`/v1/events/${eventId}/?token=${adminToken}`)
           .end((err, res) => {
             expect(res).to.have.status(200);
             expect(res.body.msg).to.equal('Event deleted');
@@ -497,10 +473,34 @@ describe('API Testing', () => {
       });
       it('Returns an error for invalid id', (done) => {
         chai.request(app)
-          .delete(`/v1/events/0/?token=${testToken}`)
+          .delete(`/v1/events/0/?token=${adminToken}`)
           .end((err, res) => {
             expect(res).to.have.status(400);
             expect(res.body.msg).to.equal('Event not found');
+            done();
+          });
+      });
+    });
+  });
+
+  describe('Valid Center <Clean up>', () => {
+    describe('/DELETE Center URL', () => {
+      it('Returns the message for deleted object', (done) => {
+        chai.request(app)
+          .delete(`/v1/centers/${centerId}/?token=${adminToken}`)
+          .end((err, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body.msg).to.equal('Center deleted');
+            done();
+          });
+      });
+      it('Returns an error for invalid id', (done) => {
+        chai.request(app)
+          .delete('/v1/centers/0')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            expect(res.body.msg).to.equal('Center not found');
             done();
           });
       });
