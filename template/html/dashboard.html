@@ -2,250 +2,414 @@
 <html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/tab.js"></script>
-    <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/tab.js"></script>
+  <title>Dashboard</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark">
-        <h1 class="navbar-brand">Event Manager</h1>
+  <nav class="navbar navbar-expand-md navbar-dark">
+    <a class="navbar-brand display-1 font-weight-bold" href="index.html">Event Manager</a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbarNavDropdown"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbarNavDropdown"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="navbar-content">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="events.html">Events</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="dashboard.html">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link">Log out</a>
-                </li>
+    <div class="collapse navbar-collapse" id="navbar-content">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="events.html">Events</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Log out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<<<<<<< HEAD
+  <div class="container-fluid full-height-80">
+    <div class="row align-content-center">
+      <div class="col-md-8 offset-md-2">
+        <ul class="nav nav-tabs nav-fill user-tabs" id="user-tab">
+          <li class="nav-item">
+            <a class="nav-link active tab-custom" href="#events" data-toggle="tab" data-id="1">EVENTS</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-custom" href="#centers" data-toggle="tab" data-id="2">CENTERS</a>
+          </li>
+        </ul>
+        <div class="tab-content p-4">
+          <div role="tabpanel" class="tab-pane active in" id="events">
+            <div class="list-group">
+              <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Event name</h5>
+                  <small>Date/Time</small>
+                </div>
+                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <div class="d-flex w-100 justify-content-end p-2">
+                  <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
+                    Edit
+                  </button>
+                  <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                </div>
+              </div>
+              <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Event name</h5>
+                  <small>Date/Time</small>
+                </div>
+                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <div class="d-flex w-100 justify-content-end p-2">
+                  <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
+                    Edit
+                  </button>
+                  <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                </div>
+              </div>
+              <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Event name</h5>
+                  <small>Date/Time</small>
+                </div>
+                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <div class="d-flex w-100 justify-content-end p-2">
+                  <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
+                    Edit
+                  </button>
+                  <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="centers">
+            <div class="list-group">
+              <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Center name</h5>
+                </div>
+                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <div class="d-flex w-100 justify-content-end p-2">
+                  <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
+                    Edit
+                  </button>
+                  <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                </div>
+              </div>
+              <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Center name</h5>
+                </div>
+                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <div class="d-flex w-100 justify-content-end p-2">
+                  <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
+                    Edit
+                  </button>
+                  <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                </div>
+              </div>
+              <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Center name</h5>
+                </div>
+                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <div class="d-flex w-100 justify-content-end p-2">
+                  <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
+                    Edit
+                  </button>
+                  <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+=======
+  <div>
+    <section class="container-fluid full-height-80  parallex-img" id="dashboard">
+      <div class="row align-content-center">
+        <div class="col-md-8 offset-md-2">
+          <div class="sticky-top">
+            <div class="clearfix">
+              <form action="#" id="searchForm" class="input-group w-50 float-right">
+                <input type="text" class="form-control" name="x" placeholder="Search...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <span class="fa fa-search"></span>
+                  </button>
+                </span>
+              </form>
+            </div>
+            <ul class="nav nav-tabs nav-fill user-tabs" id="user-tab">
+              <li class="nav-item">
+                <a class="nav-link active tab-custom" href="#events" data-toggle="tab" data-id="1">EVENTS</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link tab-custom" href="#centers" data-toggle="tab" data-id="2">CENTERS</a>
+              </li>
             </ul>
-        </div>
-    </nav>
-    <div class="container-fluid full-height-80">
-        <div class="py-3">
-            <button type="button" class="btn btn-dark mx-1" data-toggle="modal" data-target="#addEvent">
-                New Event
-            </button>
-            <button type="button" class="btn btn-dark mx-1" data-toggle="modal" data-target="#addCenter">
-                New Center
-            </button>
-        </div>
-        <div class="row align-content-center">
-            <div class="col-md-8 offset-md-2">
-                <ul class="nav nav-tabs nav-fill user-tabs" id="user-tab">
-                    <li class="nav-item">
-                        <a class="nav-link active tab-custom" href="#events" data-toggle="tab" data-id="1">EVENTS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link tab-custom" href="#centers" data-toggle="tab" data-id="2">CENTERS</a>
-                    </li>
-                </ul>
-                <div class="tab-content p-4">
-                    <div role="tabpanel" class="tab-pane active in" id="events">
-                        <div class="list-group">
-                            <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Event name</h5>
-                                    <small>Date/Time</small>
-                                </div>
-                                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                                    varius blandit.</p>
-                                <div class="d-flex w-100 justify-content-end p-2">
-                                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
-                                        Edit
-                                    </button>
-                                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
-                                </div>
-                            </div>
-                            <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Event name</h5>
-                                    <small>Date/Time</small>
-                                </div>
-                                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                                    varius blandit.</p>
-                                <div class="d-flex w-100 justify-content-end p-2">
-                                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
-                                        Edit
-                                    </button>
-                                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
-                                </div>
-                            </div>
-                            <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Event name</h5>
-                                    <small>Date/Time</small>
-                                </div>
-                                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                                    varius blandit.</p>
-                                <div class="d-flex w-100 justify-content-end p-2">
-                                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
-                                        Edit
-                                    </button>
-                                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane fade" id="centers">
-                        <div class="list-group">
-                            <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Center name</h5>
-                                </div>
-                                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                                    varius blandit.</p>
-                                <div class="d-flex w-100 justify-content-end p-2">
-                                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
-                                        Edit
-                                    </button>
-                                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
-                                </div>
-                            </div>
-                            <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Center name</h5>
-                                </div>
-                                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                                    varius blandit.</p>
-                                <div class="d-flex w-100 justify-content-end p-2">
-                                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
-                                        Edit
-                                    </button>
-                                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
-                                </div>
-                            </div>
-                            <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Center name</h5>
-                                </div>
-                                <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                                    varius blandit.</p>
-                                <div class="d-flex w-100 justify-content-end p-2">
-                                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
-                                        Edit
-                                    </button>
-                                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          </div>
+          <div class="tab-content p-4">
+            <div role="tabpanel" class="tab-pane active in" id="events">
+              <div class="list-group">
+                <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Event name</h5>
+                    <small>Date/Time</small>
+                  </div>
+                  <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  <div class="d-flex w-100 justify-content-end p-2">
+                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
+                      Edit
+                    </button>
+                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                  </div>
                 </div>
+                <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Event name</h5>
+                    <small>Date/Time</small>
+                  </div>
+                  <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  <div class="d-flex w-100 justify-content-end p-2">
+                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
+                      Edit
+                    </button>
+                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                  </div>
+                </div>
+                <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Event name</h5>
+                    <small>Date/Time</small>
+                  </div>
+                  <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  <div class="d-flex w-100 justify-content-end p-2">
+                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addEvent" data-id="test">
+                      Edit
+                    </button>
+                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div role="tabpanel" class="tab-pane fade" id="centers">
+              <div class="list-group">
+                <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Center name</h5>
+                  </div>
+                  <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  <div class="d-flex w-100 justify-content-end p-2">
+                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
+                      Edit
+                    </button>
+                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                  </div>
+                </div>
+                <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Center name</h5>
+                  </div>
+                  <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  <div class="d-flex w-100 justify-content-end p-2">
+                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
+                      Edit
+                    </button>
+                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                  </div>
+                </div>
+                <div class="list-group-item mb-2 bg-black flex-column align-items-start text-white">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Center name</h5>
+                  </div>
+                  <p class="mb-1">Description: Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  <div class="d-flex w-100 justify-content-end p-2">
+                    <button type="button" class="mx-2 btn btn-dark" data-toggle="modal" data-target="#addCenter" data-id="test">
+                      Edit
+                    </button>
+                    <button class="mx-2 btn btn-sm btn-secondary">Delete</button>
+                  </div>
+>>>>>>> origin/gh-pages
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="row fixed-bottom justify-content-end">
-            <button type="button" class="btn btn-dark btn-circle-float" id="user-add" data-toggle="modal" data-target="#addEvent">
-                <i class="fa fa-plus"></i>
-            </button>
-
-        </div>
+      </div>
+<<<<<<< HEAD
     </div>
-    <div class="justify-content-center align-content-end">
+
+    <div class="row fixed-bottom justify-content-end">
+      <button type="button" class="btn btn-dark btn-circle-float" id="user-add" data-toggle="modal" data-target="#addEvent" data-toggle="tooltip"
+        data-placement="left" title="New event">
+        <i class="fa fa-plus"></i>
+      </button>
+
+    </div>
+  </div>
+  <div class="justify-content-center align-content-end">
+    <div class="text-center">
+      <p class="text-white">&copy Jessica Madufor (Andela 2017)</p>
+    </div>
+  </div>
+  <!-- MODALS -->
+  <div class="modal fade text-center" id="addEvent">
+=======
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">2</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">3</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="row fixed-bottom justify-content-end">
+        <button type="button" class="btn btn-dark btn-circle-float" id="user-add" data-toggle="modal" data-target="#addEvent" data-toggle="tooltip"
+          data-placement="left" title="New event">
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
+
+    </section>
+
+    <section class="footer" id="footer">
+      <div class="justify-content-center align-content-end">
         <div class="text-center">
-            <p class="text-white">&copy Jessica Madufor (Andela 2017)</p>
+          <ul class="nav list-inline ml-auto justify-content-center social-links">
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-facebook"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-twitter"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-linkedin"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="p-1 fa fa-pinterest"></i>
+              </a>
+            </li>
+          </ul>
         </div>
-    </div>
-    <!-- MODALS -->
-    <div class="modal fade text-center" id="addEvent">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title">New event</h1>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <form>
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Event name">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Description">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <input class="form-control" type="date" placeholder="Date">
-                                </div>
-                                <div class="form-group col col-md-12">
-                                    <input class="form-control" type="time" placeholder="Time">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Location">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col col-md-6">
-                                    <button type="button" class="btn btn-block border-1 text-black py-3 btn-light btn-block" data-dismiss="modal">Cancel</button>
-                                </div>
-                                <div class="form-group col col-md-6">
-                                    <button type="button" class="btn btn-dark btn-block border-1 text-white py-3">Add Event</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div class="text-center">
+          <p class="text-white">&copy Jessica Madufor (Andela 2017)</p>
         </div>
+      </div>
+    </section>
+  </div>
+  <!-- MODALS -->
+  <div class="modal fade text-center" id="addEvent" data-backdrop="static" data-keyboard="false">
+>>>>>>> origin/gh-pages
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title">New event</h1>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form>
+              <div class="form-group">
+                <input class="form-control" type="text" placeholder="Event name">
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" placeholder="Description">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <input class="form-control" type="date" placeholder="Date">
+                </div>
+                <div class="form-group col col-md-12">
+                  <input class="form-control" type="time" placeholder="Time">
+                </div>
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" placeholder="Location">
+              </div>
+              <div class="form-row">
+                <div class="form-group col col-md-6">
+                  <button type="button" class="btn btn-block border-1 text-black py-3 btn-light btn-block" data-dismiss="modal">Cancel</button>
+                </div>
+                <div class="form-group col col-md-6">
+                  <button type="button" class="btn btn-dark btn-block border-1 text-white py-3">Add Event</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="modal fade text-center" id="addCenter">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title">New Center</h1>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <form>
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Center name">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Description">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Location">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col col-md-6">
-                                    <button type="button" class="btn btn-block border-1 text-black py-3 btn-light btn-block" data-dismiss="modal">Cancel</button>
-                                </div>
-                                <div class="form-group col col-md-6">
-                                    <button type="button" class="btn btn-dark btn-block border-1 text-white py-3">Add Center</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<<<<<<< HEAD
+  <div class="modal fade text-center" id="addCenter">
+=======
+  <div class="modal fade text-center" id="addCenter" data-backdrop="static" data-keyboard="false">
+>>>>>>> origin/gh-pages
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title">New Center</h1>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <div>
+            <form>
+              <div class="form-group">
+                <input class="form-control" type="text" placeholder="Center name">
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" placeholder="Description">
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" placeholder="Location">
+              </div>
+              <div class="form-row">
+                <div class="form-group col col-md-6">
+                  <button type="button" class="btn btn-block border-1 text-black py-3 btn-light btn-block" data-dismiss="modal">Cancel</button>
+                </div>
+                <div class="form-group col col-md-6">
+                  <button type="button" class="btn btn-dark btn-block border-1 text-white py-3">Add Center</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- END OF MODAL -->
+  </div>
+  <!-- END OF MODAL -->
 </body>
 
 </html>

@@ -1,58 +1,153 @@
 html,
 body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+<<<<<<< HEAD
+=======
+  height: 100vh;
+  width: 100vw;
+>>>>>>> origin/gh-pages
 }
 
 body {
-    height: 100vh;
-    width: 100vw;
-    background: linear-gradient(rgba(126, 0, 128, 1), #c94b4b, rgba(0, 0, 0, 0.8));
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
+  height: 100vh;
+  width: 100vw;
+<<<<<<< HEAD
+  background: linear-gradient(rgba(126, 0, 128, 1), #c94b4b, rgba(0, 0, 0, 0.8));
+=======
+  /*background: linear-gradient(rgba(126, 0, 128, 1), #c94b4b, rgba(0, 0, 0, 0.8));*/
+  background: #343a40;
+>>>>>>> origin/gh-pages
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .full-height {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 .full-height-80 {
-    min-height: 80vh;
+  min-height: 80vh;
 }
 
+<<<<<<< HEAD
 .carousel-item img {
-    height: 50vh;
-    width: 100%
+  height: 50vh;
+  width: 100%;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.45);
 }
 
 .carousel-caption {
-    background: rgba(0, 0, 0, 0.45);
-    padding: 0;
+  padding: 0;
 }
 
+=======
+>>>>>>> origin/gh-pages
 .container-center {
-    align-content: center;
-    align-items: center;
-    display: flex;
+  align-content: center;
+  align-items: center;
+  display: flex;
 }
 
 .bg-black {
-    background: #000;
+  background: #000;
 }
 
 .tab-custom,
 .tab-custom:hover {
-    color: white
+  color: white
 }
 
 .btn-circle-float {
-    width: 20vh;
-    height: 20vh;
-    padding: 0;
-    margin: 40px;
-    border-radius: 10vh;
-    font-size: 10vh;
-    line-height: 1.33;
+  width: 10vh;
+  height: 10vh;
+  padding: 0;
+  margin: 40px;
+  border-radius: 5vh;
+  font-size: 5vh;
+  line-height: 1.33;
 }
+<<<<<<< HEAD
+=======
+
+.jumbotron {
+  background-color: #00000000;
+}
+
+#intro {
+  background: url(../img/11.png) no-repeat center center fixed;
+}
+
+#contact {
+  background: url(../img/12.png) no-repeat center center fixed;
+}
+
+#latest {
+  background: url(../img/13.png) no-repeat center center fixed;
+}
+
+#login,
+#register {
+  background: url(../img/13.png) no-repeat center center fixed;
+}
+
+#event {
+  background: url(../img/21.png) no-repeat center center fixed;
+}
+
+#dashboard {
+  background: url(../img/21.png) no-repeat center center fixed;
+}
+
+.intro h2,
+.intro h3 {
+  color: #fff;
+}
+
+.img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0.4;
+}
+
+.parallex-img {
+  display: table;
+  height: 100%;
+  position: relative;
+  width: 100%;
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+}
+
+.social-links a {
+  color: white;
+}
+
+.page-link {
+  color: black;
+}
+
+.page-item.active .page-link {
+  z-index: 2;
+  color: #fff;
+  background-color: black;
+  border-color: black;
+}
+
+.page-link:hover {
+  color: rgb(34, 34, 34);
+}
+
+.event-list {
+  background: #343a40;
+  color: white;
+}
+>>>>>>> origin/gh-pages
