@@ -28,7 +28,10 @@ export default class Events {
           msg: 'Events returned'
         });
       })
-      .catch(error => this.res.status(500).send(error));
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 
   findOneEvent() {
@@ -52,7 +55,10 @@ export default class Events {
           msg: 'Event found'
         });
       })
-      .catch(error => this.res.status(500).send(error));
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 
   createEvent() {
@@ -63,19 +69,22 @@ export default class Events {
         msg: validateRes
       });
     }
+    const start = moment(data.startDate, 'DD-MM-YYYY').format();
+    const end = moment(data.endDate, 'DD-MM-YYYY').format();
+    console.log('yesss', start, end);
     eventDb.findOne({
-      where: {
-        location: parseInt(data.location, 10),
-        [sequelize.Op.or]: {
-          startDate: {
-            [sequelize.Op.between]: [data.startDate, data.endDate]
-          },
-          endDate: {
-            [sequelize.Op.between]: [data.startDate, data.endDate]
+        where: {
+          location: parseInt(data.location, 10),
+          [sequelize.Op.or]: {
+            startDate: {
+              [sequelize.Op.between]: [start, end]
+            },
+            endDate: {
+              [sequelize.Op.between]: [start, end]
+            }
           }
         }
-      }
-    })
+      })
       .then((doesExist) => {
         if (doesExist !== null) {
           return this.res.status(400).json({
@@ -83,20 +92,23 @@ export default class Events {
           });
         }
         eventDb.create({
-          name: data.name,
-          location: parseInt(data.location, 10),
-          startDate: moment(data.startDate, 'DD-MM-YYYY'),
-          endDate: moment(data.endDate, 'DD-MM-YYYY'),
-          createdBy: parseInt(this.req.verified.id, 10),
-          image: data.image
-        })
+            name: data.name,
+            location: parseInt(data.location, 10),
+            startDate: start,
+            endDate: end,
+            createdBy: parseInt(this.req.verified.id, 10),
+            image: data.image
+          })
           .then(result => this.res.status(201).json({
             val: result,
             msg: 'Event added successfully'
           }));
       })
       .catch((error) => {
-        this.res.status(500).send(error);
+        this.res.status(500).send({
+          msg: 'Server Error',
+          error
+        });
       });
   }
 
@@ -118,13 +130,13 @@ export default class Events {
         }
         if (data.name) {
           eventDb.findOne({
-            where: {
-              name: data.name,
-              [sequelize.Op.not]: {
-                id
-              },
-            }
-          })
+              where: {
+                name: data.name,
+                [sequelize.Op.not]: {
+                  id
+                },
+              }
+            })
             .then((doesExist) => {
               if (doesExist !== null) {
                 return this.res.status(400).json({
@@ -142,8 +154,8 @@ export default class Events {
           name: data.name || resJson.name,
           location: parseInt(data.location, 10) || resJson.location,
           image: data.image || resJson.image,
-          startDate: data.startDate ? moment(data.startDate, 'DD-MM-YYYY HH:mm') : false || resJson.startDate,
-          endDate: data.endDate ? moment(data.endDate, 'DD-MM-YYYY HH:mm') : false || resJson.endDate
+          startDate: data.startDate ? moment(data.startDate, 'DD-MM-YYYY HH:mm').format() : false || resJson.startDate,
+          endDate: data.endDate ? moment(data.endDate, 'DD-MM-YYYY HH:mm').format() : false || resJson.endDate
         };
         const validateRes = Validator.validateEvent(newValues);
         if (validateRes !== true) {
@@ -153,21 +165,21 @@ export default class Events {
         }
         // CHECK IF THE CENTER IS BOOKED FOR SELECTED DATES
         eventDb.findOne({
-          where: {
-            location: newValues.location,
-            [sequelize.Op.or]: {
-              startDate: {
-                [sequelize.Op.between]: [data.startDate, data.endDate]
+            where: {
+              location: newValues.location,
+              [sequelize.Op.or]: {
+                startDate: {
+                  [sequelize.Op.between]: [newValues.startDate, newValues.endDate]
+                },
+                endDate: {
+                  [sequelize.Op.between]: [newValues.startDate, newValues.endDate]
+                }
               },
-              endDate: {
-                [sequelize.Op.between]: [data.startDate, data.endDate]
+              [sequelize.Op.not]: {
+                id
               }
-            },
-            [sequelize.Op.not]: {
-              id
             }
-          }
-        })
+          })
           .then((doesExist) => {
             if (doesExist !== null) {
               return this.res.status(400).json({
@@ -200,7 +212,10 @@ export default class Events {
               });
           });
       })
-      .catch(error => this.res.status(500).send(error));
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 
   deleteEvent() {
@@ -236,6 +251,9 @@ export default class Events {
             });
           });
       })
-      .catch(error => this.res.status(500).send(error));
+      .catch(error => this.res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
   }
 }

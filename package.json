@@ -4,7 +4,7 @@
   "description": "Event Manager Server-side",
   "main": "app.js",
   "scripts": {
-    "prestart": "sequelize db:migrate && sequelize db:seed",
+    "seed": "sequelize db:migrate && sequelize db:seed:all",
     "start": "babel-watch server/app.js",
     "test": "nyc --reporter=lcov --reporter=html --reporter=text mocha --exit ./server/tests/api-test.js --compilers js:babel-register || ECHO.",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -20,7 +20,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
-    "mocha": "^3.5.2",
+    "mocha": "^4.0.1",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^11.3.0"
   },

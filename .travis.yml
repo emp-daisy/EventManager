@@ -1,11 +1,19 @@
 language: node_js
 node_js:
 - "stable"
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database db_events_test;' -U postgres
+  - npm run seed
+cache:
+  directories:
+    - "node_modules"
 env:
  global:
    - export NODE_ENV=test
+install:
+  - npm install
 script:
-- npm test
-- npm run coverage
-- npm install
-after_success: 'npm run coveralls'
+  - npm test
+after_success: npm run coveralls
