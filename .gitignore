@@ -3,3 +3,4 @@
 /.nyc_output
 /.env
 /client/node_modules
+/client/dist
