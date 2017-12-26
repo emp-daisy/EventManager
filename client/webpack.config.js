@@ -44,7 +44,7 @@ exports.default = {
         loaders: ['style-loader', 'css-loader', 'sass-loader']
       }, {
         test: [
-          /\.jpe?g$/, /\.png$/, /\.ico$/
+          /\.jpe?g$/, /\.png$/, /\.ico$/, /\.gif$/
         ],
         loader: require.resolve('url-loader'),
         options: {
