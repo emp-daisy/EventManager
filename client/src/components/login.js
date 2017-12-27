@@ -67,7 +67,7 @@ class Login extends Component {
         <section className="align-items-center full-height-80 parallex-img" id="login">
           <div className="img-overlay"/>
           <div className="col-md-6 text-center">
-            <h2 className="display-4 text-white">LOGIN</h2>
+            <h2 className="text-white">LOGIN</h2>
 
             {this.props.alert && <div className="alert alert-danger">{this.props.alertMessage}</div>}
 

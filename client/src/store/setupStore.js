@@ -3,7 +3,7 @@ import thunkMiddleware from 'redux-thunk'
 import {createLogger} from 'redux-logger'
 import rootReducer from '../reducers/rootReducer';
 
-export const API_URL = "http://localhost:3088/v1/users";
+export const API_URL = "http://localhost:3088/v1/";
 
 const loggerMiddleware = createLogger()
 

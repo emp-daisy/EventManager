@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router} from 'react-router';
-import {BrowserRouter as Routerr, Route, Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
-//import {ConnectedRouter as Router} from 'react-router-redux';
 import Store from './store/setupStore'
 import './styles/index.scss';
 import Login from './components/login';
@@ -13,10 +12,9 @@ import Dashboard from './components/dashboard';
 import Events from './components/events';
 import NotFound from './components/notFound';
 import {history} from './actions/history';
+import {getToken} from './actions/authentication';
 
-const isAuthenticated = sessionStorage.getItem('jwt-token');
-
-if (isAuthenticated) {
+if (getToken) {
   Store.dispatch({type: 'LOGIN_USER_GRANTED'});
 }
 

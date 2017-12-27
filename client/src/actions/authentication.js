@@ -1,30 +1,16 @@
+import jwtDecode from 'jwt-decode';
 import URLSearchParams from 'url-search-params';
 import {API_URL} from '../store/setupStore';
 import {history} from './history';
 
-const loginAction = () => {
-  return {type: "LOGIN_USER"}
-}
-
-const logOutAction = () => {
-  return {type: "LOGOUT_USER"}
-}
-
-const registerAction = () => {
-  return {type: "REGISTER_USER"}
-}
-
-const descTimer = () => {
-  return {type: 'DEC_TIMER'};
-}
 export const login = (email, password) => {
   return (dispatch) => {
-    dispatch(loginAction());
+    dispatch({type: "LOGIN_USER"});
 
     const payload = new URLSearchParams();
     payload.set("email", email);
     payload.set("password", password);
-    fetch(`${API_URL}/login`, {
+    fetch(`${API_URL}users/login`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -47,7 +33,7 @@ export const login = (email, password) => {
 
 export const register = (credientials) => {
   return (dispatch) => {
-    dispatch(registerAction());
+    dispatch({type: "REGISTER_USER"});
 
     const payload = new URLSearchParams();
     payload.set("firstName", credientials.firstname);
@@ -56,7 +42,7 @@ export const register = (credientials) => {
     payload.set("password", credientials.password);
     payload.set("confirmPassword", credientials.passwordconfirm);
 
-    fetch(`${API_URL}`, {
+    fetch(`${API_URL}users`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -82,7 +68,14 @@ export const register = (credientials) => {
     }).catch((error) => {
       if (error instanceof Promise) {
         error.then((e) => {
-          dispatch({type: 'REGISTER_USER_FAILED', msg: e.msg})
+          if (e.errors) {
+            let message = Object
+              .values(e.errors)
+              .join('\n');
+            dispatch({type: 'REGISTER_USER_FAILED', msg: message})
+          } else {
+            dispatch({type: 'REGISTER_USER_FAILED', msg: e.msg})
+          }
         })
       } else {
         dispatch({
@@ -95,6 +88,43 @@ export const register = (credientials) => {
     });
   }
 }
+
+export const logOut = () => {
+  return (dispatch) => {
+    removeToken();
+    dispatch({type: "LOGOUT_USER"});
+  }
+};
+
+export const getToken = () => {
+  checkTokenExpiry();
+  localStorage.getItem('jwt-token');
+}
+
+const saveToken = (token) => {
+  localStorage.setItem('jwt-token', token);
+}
+
+const removeToken = () => {
+  localStorage.removeItem('jwt-token');
+}
+
+const checkTokenExpiry = () => {
+  let jwt = getToken();
+  if (jwt) {
+    let jwtExp = jwtDecode(jwt).exp;
+    let expiryDate = new Date(0);
+    expiryDate.setUTCSeconds(jwtExp);
+
+    if (new Date() < expiryDate) {
+      return true;
+    }
+  }
+
+  removeToken();
+  return false;
+}
+
 const countDown = (dispatch) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -102,15 +132,4 @@ const countDown = (dispatch) => {
       resolve();
     }, 1000);
   })
-}
-
-export const logOut = () => {
-  return (dispatch) => {
-    sessionStorage.removeItem('jwt-token');
-    dispatch(logOutAction());
-  }
-};
-
-const saveToken = (token) => {
-  sessionStorage.setItem('jwt-token', token);
 }
