@@ -4,23 +4,23 @@ import Header from './header';
 import ListGroupItem from './listGroupItem';
 import Pagination from './pagination';
 import FloatingButton from './floatingButton';
-
+// import {checkTokenExpiry} from './actions/authentication'; if
+// (!checkTokenExpiry) {   this     .props     .history     .push('/'); }
 const Dashboard = () => (
-  <div className="wrapper" id="wrapper">
-    <Header />
+  <div className="wrapper d-flex flex-column h-100" id="wrapper">
+    <Header/>
     <section
-      className="container-fluid full-height-80  parallex-img"
-      id="dashboard"
-    >
+      className="container-fluid d-flex flex-column flex-grow background-img "
+      id="dashboard">
       <div className="row align-content-center">
         <div className="col-md-8 offset-md-2">
           <div className="sticky-top">
             <div className="clearfix">
               <form action="#" id="searchForm" className="input-group w-50 float-right">
-                <input type="text" className="form-control" name="x" placeholder="Search..." />
+                <input type="text" className="form-control" name="x" placeholder="Search..."/>
                 <span className="input-group-btn">
                   <button className="btn btn-default" type="submit">
-                    <span className="fa fa-search" />
+                    <span className="fa fa-search"/>
                   </button>
                 </span>
               </form>
@@ -31,8 +31,7 @@ const Dashboard = () => (
                   className="nav-link active tab-custom"
                   href="#events"
                   data-toggle="tab"
-                  data-id="1"
-                >EVENTS
+                  data-id="1">EVENTS
                 </a>
               </li>
               <li className="nav-item">
@@ -40,8 +39,7 @@ const Dashboard = () => (
                   className="nav-link tab-custom"
                   href="#centers"
                   data-toggle="tab"
-                  data-id="2"
-                >CENTERS
+                  data-id="2">CENTERS
                 </a>
               </li>
             </ul>
@@ -49,24 +47,23 @@ const Dashboard = () => (
           <div className="tab-content p-4">
             <div role="tabpanel" className="tab-pane active in" id="events">
               <div className="list-group">
-                <ListGroupItem />
+                <ListGroupItem/>
               </div>
             </div>
             <div role="tabpanel" className="tab-pane fade" id="centers">
               <div className="list-group">
-                <ListGroupItem />
+                <ListGroupItem/>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Pagination />
+      <Pagination/>
       <div className="row fixed-bottom justify-content-end">
-        <FloatingButton />
+        <FloatingButton/>
       </div>
-
     </section>
-    <Footer />
+    <Footer/>
   </div>
 );
 

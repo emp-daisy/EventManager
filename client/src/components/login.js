@@ -62,9 +62,9 @@ class Login extends Component {
     const isEnabled = this.canSubmit();
 
     return (
-      <div>
+      <div className="wrapper d-flex flex-column h-100">
         <Header/>
-        <section className="align-items-center full-height-80 parallex-img" id="login">
+        <section className="align-items-center d-flex flex-column flex-grow background-img" id="login">
           <div className="img-overlay"/>
           <div className="col-md-6 text-center">
             <h2 className="text-white">LOGIN</h2>
@@ -110,7 +110,6 @@ class Login extends Component {
             </div>
           </div>
         </section>
-
         <Footer/>
       </div>
     );

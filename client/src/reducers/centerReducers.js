@@ -4,7 +4,8 @@ const defaultState = {
   errorMessage: '',
   success: false,
   sucessMessage: '',
-  centerList: []
+  centerList: [],
+  allCenterList: []
 };
 
 const centers = (state = defaultState, action) => {
@@ -20,7 +21,8 @@ const centers = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: false,
-        centerList: action.data
+        centerList: action.data,
+        allCenterList: action.data
       });
       break;
     case 'REQUEST_CENTERS_FAILED':
@@ -29,6 +31,15 @@ const centers = (state = defaultState, action) => {
         error: true,
         errorMessage: action.msg
       });
+      break;
+    case 'FILTER_BY':
+      currentState = Object.assign({}, state, {
+        centerList: undefined
+      }, {
+        isLoading: false,
+        error: false,
+        centerList: action.data
+      });;
       break;
     default:
       currentState = state;

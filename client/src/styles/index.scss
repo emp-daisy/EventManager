@@ -32,6 +32,17 @@ body,
   display: flex;
 }
 
+.footer {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+
+.flex-grow {
+  flex: 1 0 auto;
+}
+
 .bg-black {
   background: #000;
 }
@@ -46,6 +57,7 @@ body,
   height: 10vh;
   padding: 0;
   margin: 40px;
+  margin-bottom: 10vh;
   border-radius: 5vh;
   font-size: 5vh;
   line-height: 1.33;
@@ -98,6 +110,17 @@ body,
   height: 100vh;
   position: relative;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+}
+
+.background-img {
   display: flex;
   justify-content: center;
   text-align: center;

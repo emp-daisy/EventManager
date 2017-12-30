@@ -34,7 +34,7 @@ const authentication = (state = defaultState, action) => {
       });
       break;
     case 'LOGOUT_USER':
-      currentState = Object.assign({}, state, {isLoggedIn: true});
+      currentState = Object.assign({}, state, {isLoggedIn: false});
       break;
     case 'REGISTER_USER':
       currentState = Object.assign({}, state, {isLoading: true});

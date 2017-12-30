@@ -66,12 +66,11 @@ class Register extends Component {
   render() {
     const isEnabled = this.canSubmit();
     return (
-      <div>
+      <div className="wrapper d-flex flex-column h-100">
         <Header/>
         <section
-          className="align-items-center full-height-80 parallex-img"
+          className="align-items-center d-flex flex-column flex-grow background-img"
           id="register">
-          <div className="img-overlay"/>
           <div className="col-md-6 col-12 text-center align-items-center">
             <h2 className="text-white text-center">REGISTER</h2>
             {this.props.alert && <div className="alert alert-danger">{this.props.alertMessage}</div>}
