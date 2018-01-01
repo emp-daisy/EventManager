@@ -3,7 +3,6 @@ import model from '../models';
 import Validator from '../middleware/validator';
 
 const centerDb = model.Centers;
-const eventDb = model.Events;
 /**
  *
  */
@@ -37,10 +36,12 @@ export default class Centers {
       where: {
         id: parseInt(id, 10)
       },
-      /* include: [{
-          model: eventDb,
+      include: [
+        {
+          model: model.Events,
           as: 'events'
-        }] */
+        }
+      ]
     }).then((result) => {
       if (result.length === 0) {
         return this
@@ -57,8 +58,9 @@ export default class Centers {
 
   splitArray(word) {
     this.word = word;
-    if (!word)
-      {return [];}
+    if (!word) {
+      return [];
+    }
     const strArr = this
       .word
       .split(',')
@@ -121,11 +123,11 @@ export default class Centers {
             .json({ msg: 'Center not found' });
         }
         return centerDb
-          .destroy({ 
-where: {
+          .destroy({
+ where: {
             id
-          } 
-})
+          }
+ })
           .then((row) => {
             if (row < 1) {
               return this
@@ -155,11 +157,11 @@ where: {
     }
 
     return centerDb
-      .findOne({
- where: {
+      .findOne({ 
+where: {
         id
-      } 
-})
+      }
+ })
       .then((result) => {
         if (result === null) {
           return this
@@ -207,11 +209,11 @@ where: {
           states: newValues.states,
           image: newValues.image,
           updatedBy: parseInt(this.req.verified.id, 10)
-        }, {
- where: {
+        }, { 
+where: {
           id
-        }
- }).then((value) => {
+        } 
+}).then((value) => {
           if (value.length === 0) {
             return this
               .res
