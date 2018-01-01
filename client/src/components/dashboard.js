@@ -1,8 +1,8 @@
 import React from 'react';
+import Pagination from 'react-js-pagination';
 import Footer from './footer';
 import Header from './header';
 import ListGroupItem from './listGroupItem';
-import Pagination from './pagination';
 import FloatingButton from './floatingButton';
 // import {checkTokenExpiry} from './actions/authentication'; if
 // (!checkTokenExpiry) {   this     .props     .history     .push('/'); }

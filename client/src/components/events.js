@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import $ from 'jquery';
 import Header from './header';
 import Footer from './footer';
 import Pagination from 'react-js-pagination';
@@ -19,19 +17,21 @@ class Events extends Component {
       activePage: 1,
       searchText: '',
       selectOption: 'all',
-      perPage: 10
+      perPage: 12,
+      showEventKey: '',
+      showEvent: false
     };
     this.handlePageChange = this
       .handlePageChange
       .bind(this);
-    this.handleModal = this
-      .handleModal
+    this.showModal = this
+      .showModal
+      .bind(this);
+    this.hideModal = this
+      .hideModal
       .bind(this);
     this.onChange = this
       .onChange
-      .bind(this);
-    this.onFilterSearch = this
-      .onFilterSearch
       .bind(this);
   }
 
@@ -41,40 +41,33 @@ class Events extends Component {
       .getCenters();
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.searchText !== this.state.searchText || nextState.selectOption !== this.state.selectOption) {
+      this
+        .props
+        .filterBy(nextState.selectOption, nextState.searchText, this.props.listOfAllCenters);
+    }
+  }
+
   handlePageChange(pageNumber) {
     this.setState({activePage: pageNumber});
   }
 
-  handleModal(event) {
-    $.noConflict();
-    $(ReactDOM.findDOMNode(this.refs.eventModal)).show();
+  showModal(id) {
+    this.setState({showEventKey: id});
+    this.setState({showEvent: true});
   }
-
-  onFilterSearch(event) {
-    event.preventDefault();
-    this
-      .props
-      .filterBy(this.state.selectOption, this.state.searchText, this.props.listOfAllCenters);
+  hideModal() {
+    this.setState({showEventKey: ''});
+    this.setState({showEvent: false});
   }
-
   onChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     });
-
-    if (this.state.searchText.length === 1) {
-      this
-        .props
-        .getCenters();
-    } else {
-      this
-        .props
-        .filterBy(this.state.selectOption, this.state.searchText, this.props.listOfAllCenters);
-    }
   }
 
   render() {
-    const isEnabled = this.state.searchText.length > 0;
     const {activePage, perPage} = this.state;
     const {listOfCenters} = this.props;
     // Logic for displaying pages
@@ -91,8 +84,7 @@ class Events extends Component {
             <div className="col-md-6 col-sm-12 offset-md-6">
               <SearchBlock
                 onChange={this.onChange}
-                onFilter={this.onFilterSearch}
-                disabled={!isEnabled}
+                showButton={false}
                 dropDownArray={['All', 'Name', 'Location', 'Facilities']}/>
             </div>
           </div>
@@ -110,7 +102,7 @@ class Events extends Component {
                     ? center.image
                     : undefined}
                     title={center.name}
-                    onClick={this.handleModal}
+                    onClick={() => this.showModal(center)}
                     buttonText="Check events">{center.location}</CardBlock>
                 </div>
               ))}
@@ -123,12 +115,14 @@ class Events extends Component {
               activePage={this.state.activePage}
               itemsCountPerPage={this.state.perPage}
               totalItemsCount={this.props.listOfCenters.length}
-              pageRangeDisplayed={5}
               onChange={this.handlePageChange}/>
           </div>}
         </section>
-        <Footer/>
-        <ListEvents ref='eventModal'/>
+        <Footer/> {this.state.showEvent && <ListEvents
+          ref='eventModal'
+          onHide={this.hideModal}
+          showValue={this.state.showEventKey}/>
+}
       </div>
     );
   }

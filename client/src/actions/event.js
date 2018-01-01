@@ -1,32 +1,30 @@
 import {API_URL} from '../store/setupStore';
 
-export const getCenters = () => {
+export const getEvents = () => {
   return (dispatch) => {
-    dispatch({type: "REQUEST_CENTERS"});
+    dispatch({type: "REQUEST_EVENTS"});
 
-    fetch(`${API_URL}centers`)
+    fetch(`${API_URL}events`)
       .then(res => res.json())
       .then(data => {
-        let resCenters = [];
+        let resEvents = [];
         if (data.val) {
-          resCenters = data.val
+          resEvents = data.val
         }
-        dispatch({type: 'REQUEST_CENTERS_GRANTED', data: resCenters});
+        dispatch({type: 'REQUEST_EVENTS_GRANTED', data: resEvents});
       }, err => {
         console.log('ERROR', err);
-        dispatch({type: 'REQUEST_CENTERS_FAILED', msg: 'Error connecting to server...'})
+        dispatch({type: 'REQUEST_EVENTS_FAILED', msg: 'Error connecting to server...'})
       });
   }
 }
 
-export const filterBy = (filterValue, searchValue, centers) => {
+export const filterEventsBy = (filterValue, searchValue, events) => {
   return (dispatch) => {
     let filtered = [];
 
-    if (searchValue.length === 0) {
-      filtered = centers;
-    } else if (filterValue === 'all') {
-      filtered = centers.filter(o => Object.keys(o).some(k => {
+    if (filterValue === 'all') {
+      filtered = events.filter(o => Object.keys(o).some(k => {
         if (o[k]) {
           return o[k]
             .toString()
@@ -37,7 +35,7 @@ export const filterBy = (filterValue, searchValue, centers) => {
         }
       }));
     } else {
-      filtered = centers.filter((k => {
+      filtered = events.filter((k => {
         if (k[filterValue]) {
           return k[filterValue]
             .toString()
@@ -48,7 +46,6 @@ export const filterBy = (filterValue, searchValue, centers) => {
         }
       }))
     }
-    dispatch({type: 'FILTER_CENTERS_BY', data: filtered});
-    console.log('UKXXX', filtered);
+    dispatch({type: 'FILTER_EVENTS_BY', data: filtered});
   }
 }

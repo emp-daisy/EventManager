@@ -4,41 +4,41 @@ const defaultState = {
   errorMessage: '',
   success: false,
   sucessMessage: '',
-  centerList: [],
-  allCenterList: []
+  eventsList: [],
+  allEventsList: []
 };
 
-const centers = (state = defaultState, action) => {
+const events = (state = defaultState, action) => {
   let currentState;
   switch (action.type) {
-    case 'REQUEST_CENTERS':
+    case 'REQUEST_EVENTS':
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false
       });
       break;
-    case 'REQUEST_CENTERS_GRANTED':
+    case 'REQUEST_EVENTS_GRANTED':
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: false,
-        centerList: action.data,
-        allCenterList: action.data
+        eventsList: action.data,
+        allEventsList: action.data
       });
       break;
-    case 'REQUEST_CENTERS_FAILED':
+    case 'REQUEST_EVENTS_FAILED':
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: true,
         errorMessage: action.msg
       });
       break;
-    case 'FILTER_CENTERS_BY':
+    case 'FILTER_EVENTS_BY':
       currentState = Object.assign({}, state, {
-        centerList: undefined
+        eventsList: undefined
       }, {
         isLoading: false,
         error: false,
-        centerList: action.data
+        eventsList: action.data
       });;
       break;
     default:
@@ -47,4 +47,4 @@ const centers = (state = defaultState, action) => {
   return currentState;
 }
 
-export default centers;
+export default events;

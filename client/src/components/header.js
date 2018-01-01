@@ -7,7 +7,11 @@ import {logOut} from '../actions/authentication';
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      currentPage: '',
+      activeStyle: 'nav-item active',
+      linkStyle: 'nav-item'
+    };
     this.onLogOut = this
       .onLogOut
       .bind(this);
@@ -18,6 +22,7 @@ class Header extends Component {
       .logOut();
   }
   render() {
+    const path = window.location.pathname;
     return (
       <nav className="navbar navbar-expand-md navbar-dark">
         <Link to="/" className="navbar-brand display-1 font-weight-bold">Event Manager</Link>
@@ -33,19 +38,28 @@ class Header extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbar-content">
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
+            <li
+              className={path === '/'
+              ? this.state.activeStyle
+              : this.state.linkStyle}>
               <Link to="/" className="nav-link">Home</Link>
             </li>
-            <li className="nav-item">
+            <li
+              className={path.includes('events')
+              ? this.state.activeStyle
+              : this.state.linkStyle}>
               <Link to="/events" className="nav-link">Events</Link>
             </li>
-            {this.props.loggedIn && <li className="nav-item active">
+            {this.props.loggedIn && <li
+              className={path.includes('dashboard')
+              ? this.state.activeStyle
+              : this.state.linkStyle}>
               <Link to="/dashboard" className="nav-link">Dashboard</Link>
             </li>}
-            {(!this.props.loggedIn && !window.location.pathname.includes('login')) && <li className="nav-item">
+            {(!this.props.loggedIn && !path.includes('login')) && <li className="nav-item">
               <Link to="/login" className="nav-link">Login</Link>
             </li>}
-            {(!this.props.loggedIn && !window.location.pathname.includes('register')) && <li className="nav-item">
+            {(!this.props.loggedIn && !path.includes('register')) && <li className="nav-item">
               <Link to="/register" className="nav-link">Register</Link>
             </li>}
             {this.props.loggedIn && <li className="nav-item">

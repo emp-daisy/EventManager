@@ -5,7 +5,7 @@ import event from '../assets/event.jpg';
 class CardBlock extends Component {
   render() {
     return (
-      <div className="card" key={this.props.id}>
+      <div className="card">
         <img className="card-img-top" src={this.props.src} alt={this.props.title}/>
         <div className="card-body">
           <h4 className="card-title">{this.props.title}</h4>
@@ -26,7 +26,7 @@ CardBlock.defaultProps = {
   buttonText: "Check events"
 }
 CardBlock.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   id: PropTypes.any.isRequired,

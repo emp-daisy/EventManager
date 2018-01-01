@@ -27,8 +27,7 @@ class SearchBlock extends Component {
           className="form-control"
           name="searchText"
           onChange={this.props.onChange}
-          placeholder="Search by..."/>
-        <span className="input-group-btn">
+          placeholder="Search by..."/> {this.props.showButton && <span className="input-group-btn">
           <button
             className="btn btn-default"
             onClick={this.props.onFilter}
@@ -37,6 +36,7 @@ class SearchBlock extends Component {
             <span className="fa fa-search"/>
           </button>
         </span>
+}
       </form>
 
     );
@@ -45,12 +45,16 @@ class SearchBlock extends Component {
 
 SearchBlock.defaultProps = {
   disabled: true,
-  dropDownArray: []
+  dropDownArray: [],
+  showButton: true,
+  onFilter: () => {},
+  onChange: () => {}
 }
 SearchBlock.propTypes = {
   onChange: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  dropDownArray: PropTypes.array.isRequired
+  dropDownArray: PropTypes.array.isRequired,
+  showButton: PropTypes.bool.isRequired
 }
 export default SearchBlock;

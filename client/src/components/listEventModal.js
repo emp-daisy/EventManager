@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import $ from 'jquery';
+import PropTypes from 'prop-types';
 import ListGroupItem from './listGroupItem';
 import Pagination from 'react-js-pagination';
 import SearchBlock from './searchForm';
@@ -12,30 +13,26 @@ class ListEvent extends Component {
     super(props);
     this.state = {
       activePAge: 1,
-      searchText: ''
+      searchText: '',
+      events: []
     };
     this.onChange = this
       .onChange
       .bind(this);
-    this.onFilterEventSearch = this
-      .onFilterEventSearch
-      .bind(this);
     this.handlePageChange = this
       .handlePageChange
       .bind(this);
-    this.handleCloseModal = this
-      .handleCloseModal
-      .bind(this);
 
   }
 
-  onFilterEventSearch(event) {
-    event.preventDefault();
+  componentWillMount() {
     this
       .props
-      .filterEvent(this.state.searchText, this.props.listOfEvents);
+      .getEvents(this.props.showValue.id);
   }
-
+  componentDidMount() {
+    $(this.refs.listEvent).show();
+  }
   onChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -46,16 +43,12 @@ class ListEvent extends Component {
     this.setState({activePage: pageNumber});
   }
 
-  handleCloseModal(event) {
-    $.noConflict();
-    $('#listEvent').hide();
-  }
   render() {
-    const isEnabled = this.state.searchText.length > 0;
     return (
       <div
         className="modal"
         id="listEvent"
+        ref="listEvent"
         data-backdrop="static"
         data-keyboard="false"
         tabIndex="-1"
@@ -65,17 +58,14 @@ class ListEvent extends Component {
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title col-4">Center Name</h5>
-              <SearchBlock
-                onChange={this.onChange}
-                onFilter={this.onFilterEventSearch}
-                disabled={!isEnabled}/>
+              <h5 className="modal-title col-4">{this.props.showValue.name}</h5>
+              <SearchBlock onChange={this.onChange} showButton={false}/>
               <button
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
-                onClick={this.handleCloseModal}>
+                onClick={this.props.onHide}>
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -109,7 +99,7 @@ class ListEvent extends Component {
 };
 
 const mapStateToProps = (state) => {
-  return {loading: state.center.isLoading, alert: state.center.error, alertMessage: state.center.errorMessage, listOfCenters: state.center.centerList, listOfAllCenters: state.center.allCenterList};
+  return {loading: state.event.isLoading, alert: state.event.error, alertMessage: state.event.errorMessage, listOfEvents: state.event.eventList, listOfAllEvents: state.event.allEventList};
 }
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
@@ -118,4 +108,8 @@ const matchDispatchToProps = (dispatch) => {
   }, dispatch);
 }
 
+ListEvent.propTypes = {
+  showValue: PropTypes.any.isRequired,
+  onHide: PropTypes.func.isRequired
+}
 export default connect(mapStateToProps, matchDispatchToProps)(ListEvent);
