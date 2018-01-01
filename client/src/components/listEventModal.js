@@ -57,17 +57,21 @@ class ListEvent extends Component {
         aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title col-4">{this.props.showValue.name}</h5>
-              <SearchBlock onChange={this.onChange} showButton={false}/>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-                onClick={this.props.onHide}>
-                <span aria-hidden="true">&times;</span>
-              </button>
+            <div className="modal-header flex-column pb-0">
+              <div className="d-flex flex-row justify-content-end ml-auto"><SearchBlock onChange={this.onChange} showButton={false}/>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                  onClick={this.props.onHide}>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+
+              </div>
+              <div className="d-flex flex-row">
+                <h5 className="modal-title">{this.props.showValue.name}</h5>
+              </div>
             </div>
             <div
               className="modal-body"

@@ -93,9 +93,9 @@ class Events extends Component {
           {(pageItems.length === 0 && !this.props.alert) && <h3 className="text-white">No center found</h3>}
 
           {pageItems.length > 0 && <div>
-            <div className="row align-items-center m-4 justify-content-center">
+            <div className="card-deck">
               {pageItems.map(center => (
-                <div className="col-sm-6 col-md-4 col-lg-3" key={center.id}>
+                <div className="col-sm-6 col-md-4 col-lg-3 mt-4" key={center.id}>
                   <CardBlock
                     id={center.id}
                     src={center.image
@@ -111,7 +111,7 @@ class Events extends Component {
               className="justify-content-center"
               linkClass="page-link"
               itemClass="page-item"
-              innerClass="pagination justify-content-center"
+              innerClass="pagination justify-content-center m-4"
               activePage={this.state.activePage}
               itemsCountPerPage={this.state.perPage}
               totalItemsCount={this.props.listOfCenters.length}
