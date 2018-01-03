@@ -2,7 +2,6 @@ import sequelize from 'sequelize';
 import model from '../models';
 import Validator from '../middleware/validator';
 
-const centerDb = model.Centers;
 /**
  *
  */
@@ -13,47 +12,98 @@ export default class Centers {
   }
 
   findAllCenter() {
-    return centerDb
-      .all()
+    return model
+      .Centers
+      .all({
+        attributes: [
+          'id',
+          'name',
+          'location',
+          'facilities',
+          'image',
+          [
+            sequelize.col('State.name'),
+            'state'
+          ]
+        ],
+        include: [
+          {
+            attributes: [],
+            model: model.States
+          }
+        ]
+      })
       .then((result) => {
         if (result.length === 0) {
           return this
             .res
             .status(200)
-            .json({ msg: 'No center available' });
+            .json({msg: 'No center available'});
         }
         this
           .res
           .status(200)
-          .json({ val: result, msg: 'Centers returned' });
+          .json({val: result, msg: 'Centers returned'});
       })
-      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
+      .catch(error => this.res.status(500).send({msg: 'Server Error', error}));
   }
 
   findOneCenter() {
-    const { id } = this.req.params;
-    return centerDb.findAll({
-      where: {
-        id: parseInt(id, 10)
-      },
-      include: [
-        {
-          model: model.Events,
-          as: 'events'
+    const {id} = this.req.params;
+    return model
+      .Centers
+      .findAll({
+        attributes: [
+          'id',
+          'name',
+          'location',
+          'facilities',
+          'image',
+          [
+            sequelize.col('State.name'),
+            'state'
+          ]
+        ],
+        where: {
+          id: parseInt(id, 10)
+        },
+        include: [
+          {
+            attributes: [
+              'id', 'name', 'startDate', 'endDate'
+            ],
+            model: model.Events,
+            as: 'events',
+            include: [
+              {
+                model: model.Users,
+                attributes: [
+                  [
+                    sequelize.fn('CONCAT', sequelize.col('firstName'), ' ', sequelize.col('surname')),
+                    'organiser'
+                  ]
+                ]
+              }
+            ]
+          }, {
+            attributes: [],
+            model: model.States
+          }
+        ]
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this
+            .res
+            .status(400)
+            .json({msg: 'Center not found'});
         }
-      ]
-    }).then((result) => {
-      if (result.length === 0) {
-        return this
+        this
           .res
-          .status(400)
-          .json({ msg: 'Center not found' });
-      }
-      this
-        .res
-        .status(200)
-        .json({ val: result, msg: 'Center found' });
-    }).catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
+          .status(200)
+          .json({val: result, msg: 'Center found'});
+      })
+      .catch(error => this.res.status(500).send({msg: 'Server Error', error}));
   }
 
   splitArray(word) {
@@ -78,26 +128,28 @@ export default class Centers {
       return this
         .res
         .status(400)
-        .json({ msg: validateRes });
+        .json({msg: validateRes});
     }
     if (!this.req.verified.isAdmin) {
       return this
         .res
         .status(403)
-        .json({ msg: 'Not logged in as an Admin' });
+        .json({msg: 'Not logged in as an Admin'});
     }
 
-    return centerDb.create({
-      name: data.name,
-      location: data.location,
-      facilities: data.facilities,
-      states: parseInt(data.states, 10),
-      image: data.image,
-      createdBy: parseInt(this.req.verified.id, 10),
-      updatedBy: parseInt(this.req.verified.id, 10)
-    })
-      .then(result => this.res.status(201).json({ val: result, msg: 'Center added successfully' }))
-      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
+    return model
+      .Centers
+      .create({
+        name: data.name,
+        location: data.location,
+        facilities: data.facilities,
+        states: parseInt(data.states, 10),
+        image: data.image,
+        createdBy: parseInt(this.req.verified.id, 10),
+        updatedBy: parseInt(this.req.verified.id, 10)
+      })
+      .then(result => this.res.status(201).json({val: result, msg: 'Center added successfully'}))
+      .catch(error => this.res.status(500).send({msg: 'Server Error', error}));
   }
 
   deleteCenter() {
@@ -107,42 +159,40 @@ export default class Centers {
       return this
         .res
         .status(403)
-        .json({ msg: 'Not logged in as an Admin' });
+        .json({msg: 'Not logged in as an Admin'});
     }
-    return centerDb
-      .findOne({
- where: {
-        id
-      } 
-})
+    return model
+      .Centers
+      .findOne({where: {
+          id
+        }})
       .then((result) => {
         if (result === null) {
           return this
             .res
             .status(400)
-            .json({ msg: 'Center not found' });
+            .json({msg: 'Center not found'});
         }
-        return centerDb
-          .destroy({
- where: {
-            id
-          }
- })
+        return model
+          .Centers
+          .destroy({where: {
+              id
+            }})
           .then((row) => {
             if (row < 1) {
               return this
                 .res
                 .status(500)
-                .json({ msg: 'Error deleting center' });
+                .json({msg: 'Error deleting center'});
             }
             return this
               .res
               .status(200)
-              .json({ msg: 'Center deleted' });
+              .json({msg: 'Center deleted'});
           })
-          .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
+          .catch(error => this.res.status(500).send({msg: 'Server Error', error}));
       })
-      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
+      .catch(error => this.res.status(500).send({msg: 'Server Error', error}));
   }
 
   updateCenter() {
@@ -153,38 +203,40 @@ export default class Centers {
       return this
         .res
         .status(403)
-        .json({ msg: 'Not logged in as an Admin' });
+        .json({msg: 'Not logged in as an Admin'});
     }
 
-    return centerDb
-      .findOne({ 
-where: {
-        id
-      }
- })
+    return model
+      .Centers
+      .findOne({where: {
+          id
+        }})
       .then((result) => {
         if (result === null) {
           return this
             .res
             .status(400)
-            .json({ msg: 'Center not found' });
+            .json({msg: 'Center not found'});
         }
         if (data.name) {
-          centerDb.findOne({
-            where: {
-              name: data.name,
-              [sequelize.Op.not]: {
-                id
+          model
+            .Centers
+            .findOne({
+              where: {
+                name: data.name,
+                [sequelize.Op.not]: {
+                  id
+                }
               }
-            }
-          }).then((doesExist) => {
-            if (doesExist !== null) {
-              return this
-                .res
-                .status(400)
-                .json({ msg: 'Center name is not unique' });
-            }
-          });
+            })
+            .then((doesExist) => {
+              if (doesExist !== null) {
+                return this
+                  .res
+                  .status(400)
+                  .json({msg: 'Center name is not unique'});
+              }
+            });
         }
         const resJson = result.toJSON();
         const newValues = {
@@ -200,32 +252,33 @@ where: {
           return this
             .res
             .status(400)
-            .json({ msg: validateRes });
+            .json({msg: validateRes});
         }
-        return centerDb.update({
-          name: newValues.name,
-          location: newValues.location,
-          facilities: newValues.facilities,
-          states: newValues.states,
-          image: newValues.image,
-          updatedBy: parseInt(this.req.verified.id, 10)
-        }, { 
-where: {
-          id
-        } 
-}).then((value) => {
-          if (value.length === 0) {
-            return this
+        return model
+          .Centers
+          .update({
+            name: newValues.name,
+            location: newValues.location,
+            facilities: newValues.facilities,
+            states: newValues.states,
+            image: newValues.image,
+            updatedBy: parseInt(this.req.verified.id, 10)
+          }, {where: {
+              id
+            }})
+          .then((value) => {
+            if (value.length === 0) {
+              return this
+                .res
+                .status(400)
+                .json({msg: 'Center update failed'});
+            }
+            this
               .res
-              .status(400)
-              .json({ msg: 'Center update failed' });
-          }
-          this
-            .res
-            .status(200)
-            .json({ msg: 'Center updated successfully' });
-        });
+              .status(200)
+              .json({msg: 'Center updated successfully'});
+          });
       })
-      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
+      .catch(error => this.res.status(500).send({msg: 'Server Error', error}));
   }
 }
