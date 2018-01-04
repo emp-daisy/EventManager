@@ -4,12 +4,15 @@
   "description": "Event Manager Server-side",
   "main": "app.js",
   "scripts": {
-    "seed": "sequelize db:migrate && sequelize db:seed:all",
-    "start": "babel-watch server/app.js",
+    "migrate": "sequelize db:migrate",
+    "seed": "sequelize db:seed:all",
+    "start": "npm run build:client && npm run start:server",
     "test": "nyc --reporter=lcov --reporter=html --reporter=text mocha --exit ./server/tests/api-test.js --compilers js:babel-register || ECHO.",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
-    "start:dev": "npm run test && coverage"
+    "start:dev": "npm run test && coverage",
+    "build:client": "cd client && webpack --config webpack.config.js",
+    "start:server": "babel-watch server/app.js"
   },
   "author": "Jessica",
   "license": "ISC",
