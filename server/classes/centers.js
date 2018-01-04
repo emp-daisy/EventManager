@@ -52,7 +52,7 @@ export default class Centers {
     const {id} = this.req.params;
     return model
       .Centers
-      .findAll({
+      .findOne({
         attributes: [
           'id',
           'name',

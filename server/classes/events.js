@@ -3,8 +3,6 @@ import sequelize from 'sequelize';
 import model from '../models';
 import Validator from '../middleware/validator';
 
-const eventDb = model.Events;
-
 /**
  *
  */
@@ -15,30 +13,28 @@ export default class Events {
   }
 
   findAllEvent() {
-    return eventDb
+    return model
+      .Events
       .all()
       .then((result) => {
         if (result.length === 0) {
-          return this.res.status(200).json({
-            msg: 'No event available'
-          });
+          return this
+            .res
+            .status(200)
+            .json({ msg: 'No event available' });
         }
-        this.res.status(200).json({
-          val: result,
-          msg: 'Events returned'
-        });
+        this
+          .res
+          .status(200)
+          .json({ val: result, msg: 'Events returned' });
       })
-      .catch(error => this.res.status(500).send({
-        msg: 'Server Error',
-        error
-      }));
+      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
   }
 
   findOneEvent() {
-    const {
-      id
-    } = this.req.params;
-    return eventDb
+    const { id } = this.req.params;
+    return model
+      .Events
       .findOne({
         where: {
           id: parseInt(id, 10)
@@ -46,33 +42,33 @@ export default class Events {
       })
       .then((result) => {
         if (result === null) {
-          return this.res.status(400).json({
-            msg: 'Event not found'
-          });
+          return this
+            .res
+            .status(400)
+            .json({ msg: 'Event not found' });
         }
-        this.res.status(200).json({
-          val: result,
-          msg: 'Event found'
-        });
+        this
+          .res
+          .status(200)
+          .json({ val: result, msg: 'Event found' });
       })
-      .catch(error => this.res.status(500).send({
-        msg: 'Server Error',
-        error
-      }));
+      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
   }
 
   createEvent() {
     const data = this.req.body;
     const validateRes = Validator.validateEvent(data);
     if (validateRes !== true) {
-      return this.res.status(400).json({
-        msg: validateRes
-      });
+      return this
+        .res
+        .status(400)
+        .json({ msg: validateRes });
     }
     const start = moment(data.startDate, 'DD-MM-YYYY').format();
     const end = moment(data.endDate, 'DD-MM-YYYY').format();
-    console.log('yesss', start, end);
-    eventDb.findOne({
+    model
+      .Events
+      .findOne({
         where: {
           location: parseInt(data.location, 10),
           [sequelize.Op.or]: {
@@ -87,11 +83,14 @@ export default class Events {
       })
       .then((doesExist) => {
         if (doesExist !== null) {
-          return this.res.status(400).json({
-            msg: 'Center already booked for this period'
-          });
+          return this
+            .res
+            .status(400)
+            .json({ msg: 'Center already booked for this period' });
         }
-        eventDb.create({
+        model
+          .Events
+          .create({
             name: data.name,
             location: parseInt(data.location, 10),
             startDate: start,
@@ -99,16 +98,13 @@ export default class Events {
             createdBy: parseInt(this.req.verified.id, 10),
             image: data.image
           })
-          .then(result => this.res.status(201).json({
-            val: result,
-            msg: 'Event added successfully'
-          }));
+          .then(result => this.res.status(201).json({ val: result, msg: 'Event added successfully' }));
       })
       .catch((error) => {
-        this.res.status(500).send({
-          msg: 'Server Error',
-          error
-        });
+        this
+          .res
+          .status(500)
+          .send({ msg: 'Server Error', error });
       });
   }
 
@@ -116,55 +112,64 @@ export default class Events {
     const id = parseInt(this.req.params.id, 10);
     const data = this.req.body;
 
-    return eventDb
+    return model
+      .Events
       .findOne({
-        where: {
-          id
-        }
-      })
+ where: {
+        id
+      }
+ })
       .then((result) => {
         if (result === null) {
-          return this.res.status(400).json({
-            msg: 'Event not found'
-          });
+          return this
+            .res
+            .status(400)
+            .json({ msg: 'Event not found' });
         }
         if (data.name) {
-          eventDb.findOne({
+          model
+            .Events
+            .findOne({
               where: {
                 name: data.name,
                 [sequelize.Op.not]: {
                   id
-                },
+                }
               }
             })
             .then((doesExist) => {
               if (doesExist !== null) {
-                return this.res.status(400).json({
-                  msg: 'Event name is not unique'
-                });
+                return this
+                  .res
+                  .status(400)
+                  .json({ msg: 'Event name is not unique' });
               }
             })
-            .catch(error => this.res.status(500).send({
-              msg: 'Server Error',
-              error
-            }));
+            .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
         }
         const resJson = result.toJSON();
         const newValues = {
           name: data.name || resJson.name,
           location: parseInt(data.location, 10) || resJson.location,
           image: data.image || resJson.image,
-          startDate: data.startDate ? moment(data.startDate, 'DD-MM-YYYY HH:mm').format() : false || resJson.startDate,
-          endDate: data.endDate ? moment(data.endDate, 'DD-MM-YYYY HH:mm').format() : false || resJson.endDate
+          startDate: data.startDate
+            ? moment(data.startDate, 'DD-MM-YYYY HH:mm').format()
+            : false || resJson.startDate,
+          endDate: data.endDate
+            ? moment(data.endDate, 'DD-MM-YYYY HH:mm').format()
+            : false || resJson.endDate
         };
         const validateRes = Validator.validateEvent(newValues);
         if (validateRes !== true) {
-          return this.res.status(400).json({
-            msg: validateRes
-          });
+          return this
+            .res
+            .status(400)
+            .json({ msg: validateRes });
         }
         // CHECK IF THE CENTER IS BOOKED FOR SELECTED DATES
-        eventDb.findOne({
+        model
+          .Events
+          .findOne({
             where: {
               location: newValues.location,
               [sequelize.Op.or]: {
@@ -182,11 +187,13 @@ export default class Events {
           })
           .then((doesExist) => {
             if (doesExist !== null) {
-              return this.res.status(400).json({
-                msg: 'Center already booked for this period'
-              });
+              return this
+                .res
+                .status(400)
+                .json({ msg: 'Center already booked for this period' });
             }
-            return eventDb
+            return model
+              .Events
               .update({
                 name: newValues.name,
                 location: newValues.location,
@@ -195,34 +202,31 @@ export default class Events {
                 endDate: newValues.endDate,
                 createdBy: resJson.createdBy
               }, {
-                where: {
-                  id
-                }
-              })
+ where: {
+                id
+              }
+ })
               .then((value) => {
                 if (value.length === 0) {
-                  return this.res.status(400).json({
-                    msg: 'Event update failed'
-                  });
+                  return this
+                    .res
+                    .status(400)
+                    .json({ msg: 'Event update failed' });
                 }
-                this.res.status(200).json({
-                  val: value,
-                  msg: 'Event updated successfully'
-                });
+                this
+                  .res
+                  .status(200)
+                  .json({ val: value, msg: 'Event updated successfully' });
               });
           });
       })
-      .catch(error => this.res.status(500).send({
-        msg: 'Server Error',
-        error
-      }));
+      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
   }
 
   deleteEvent() {
-    const {
-      id
-    } = this.req.params;
-    return eventDb
+    const { id } = this.req.params;
+    return model
+      .Events
       .findAll({
         where: {
           id: parseInt(id, 10)
@@ -230,30 +234,31 @@ export default class Events {
       })
       .then((result) => {
         if (result.length === 0) {
-          return this.res.status(400).json({
-            msg: 'Event not found'
-          });
+          return this
+            .res
+            .status(400)
+            .json({ msg: 'Event not found' });
         }
-        return eventDb
+        return model
+          .Events
           .destroy({
-            where: {
-              id
-            }
-          })
+ where: {
+            id
+          }
+ })
           .then((row) => {
             if (row < 1) {
-              this.res.status(500).json({
-                msg: 'Error deleting events'
-              });
+              this
+                .res
+                .status(500)
+                .json({ msg: 'Error deleting events' });
             }
-            return this.res.status(200).json({
-              msg: 'Event deleted'
-            });
+            return this
+              .res
+              .status(200)
+              .json({ msg: 'Event deleted' });
           });
       })
-      .catch(error => this.res.status(500).send({
-        msg: 'Server Error',
-        error
-      }));
+      .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
   }
 }
