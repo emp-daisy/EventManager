@@ -3,7 +3,7 @@ const webpack = require('webpack');
 exports.default = {
   entry: ['./src/index.js'],
   output: {
-    filename: 'dist/bundle.js'
+    filename: './dist/bundle.js'
   },
   devServer: {
     publicPath: "/",

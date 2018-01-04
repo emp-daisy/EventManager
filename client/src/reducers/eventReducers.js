@@ -4,8 +4,8 @@ const defaultState = {
   errorMessage: '',
   success: false,
   sucessMessage: '',
-  eventsList: [],
-  allEventsList: []
+  eventList: [],
+  allEventList: []
 };
 
 const events = (state = defaultState, action) => {
@@ -21,8 +21,8 @@ const events = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: false,
-        eventsList: action.data,
-        allEventsList: action.data
+        eventList: action.data,
+        allEventList: action.data
       });
       break;
     case 'REQUEST_EVENTS_FAILED':
@@ -34,11 +34,11 @@ const events = (state = defaultState, action) => {
       break;
     case 'FILTER_EVENTS_BY':
       currentState = Object.assign({}, state, {
-        eventsList: undefined
+        eventList: undefined
       }, {
         isLoading: false,
         error: false,
-        eventsList: action.data
+        eventList: action.data
       });;
       break;
     default:

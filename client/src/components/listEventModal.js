@@ -6,15 +6,24 @@ import PropTypes from 'prop-types';
 import ListGroupItem from './listGroupItem';
 import Pagination from 'react-js-pagination';
 import SearchBlock from './searchForm';
-import {getEvents, filterEventsBy} from '../actions/event';
+import {getEventsByCenter, filterEventsBy} from '../actions/event';
 
 class ListEvent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePAge: 1,
+      activePage: 1,
+      perPage: 20,
       searchText: '',
-      events: []
+      events: [],
+      localeOptions: {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
     };
     this.onChange = this
       .onChange
@@ -24,26 +33,38 @@ class ListEvent extends Component {
       .bind(this);
 
   }
-
   componentWillMount() {
     this
       .props
-      .getEvents(this.props.showValue.id);
+      .getEventsByCenter(this.props.showValue.id);
   }
   componentDidMount() {
     $(this.refs.listEvent).show();
+  }
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.searchText !== this.state.searchText) {
+      this.setState({activePage: 1});
+      this
+        .props
+        .filterEventsBy(nextState.searchText, this.props.listOfAllEvents);
+    }
   }
   onChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     });
   }
-
   handlePageChange(pageNumber) {
     this.setState({activePage: pageNumber});
   }
 
   render() {
+    const {activePage, perPage} = this.state;
+    const {listOfEvents} = this.props;
+    // Logic for displaying pages
+    const indexOfLastItems = activePage * perPage;
+    const indexOfFirstItems = indexOfLastItems - perPage;
+    const pageItems = listOfEvents.slice(indexOfFirstItems, indexOfLastItems);
     return (
       <div
         className="modal"
@@ -58,7 +79,8 @@ class ListEvent extends Component {
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header flex-column pb-0">
-              <div className="d-flex flex-row justify-content-end ml-auto"><SearchBlock onChange={this.onChange} showButton={false}/>
+              <div className="d-flex flex-row justify-content-end ml-auto">
+                <SearchBlock onChange={this.onChange} showButton={false}/>
                 <button
                   type="button"
                   className="close"
@@ -79,20 +101,36 @@ class ListEvent extends Component {
               'maxHeight': 'calc(100vh - 100px)',
               'overflowY': 'auto'
             }}>
-              <div className="list-group">
-                <ListGroupItem/>
-              </div>
-            </div>
+              {pageItems.length > 0
+                ? <div className="list-group">
+                    {pageItems.map(event => (<ListGroupItem
+                      key={event.id}
+                      owner={event.User.organiser}
+                      start={new Date(event.startDate).toLocaleString('en-GB', this.state.localeOptions)}
+                      end={new Date(event.endDate).toLocaleString('en-GB', this.state.localeOptions)}
+                      id={event.id}
+                      name={event.name}
+                      buttons={(
+                      <div>
+                        <button type="button" className="mx-2 btn-sm btn-dark">
+                          Attend
+                        </button>
+                      </div>
+                    )}/>))}
+
+                  </div>
+                : <h3 className="text-center">No event available</h3>
+}</div>
             <div className="modal-footer">
               <Pagination
+                hideDisabled
                 className="justify-content-center"
                 linkClass="page-link"
                 itemClass="page-item"
                 innerClass="pagination justify-content-center"
                 activePage={this.state.activePage}
-                itemsCountPerPage={20}
-                totalItemsCount={12}
-                pageRangeDisplayed={5}
+                itemsCountPerPage={this.state.perPage}
+                totalItemsCount={this.props.listOfEvents.length}
                 onChange={this.handlePageChange}/>
             </div>
           </div>
@@ -107,8 +145,8 @@ const mapStateToProps = (state) => {
 }
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    getEvents: getEvents,
-    filterEvent: filterEventsBy
+    getEventsByCenter: getEventsByCenter,
+    filterEventsBy: filterEventsBy
   }, dispatch);
 }
 

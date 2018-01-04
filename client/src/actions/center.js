@@ -13,13 +13,12 @@ export const getCenters = () => {
         }
         dispatch({type: 'REQUEST_CENTERS_GRANTED', data: resCenters});
       }, err => {
-        console.log('ERROR', err);
         dispatch({type: 'REQUEST_CENTERS_FAILED', msg: 'Error connecting to server...'})
       });
   }
 }
 
-export const filterBy = (filterValue, searchValue, centers) => {
+export const filterCentersBy = (filterValue, searchValue, centers) => {
   return (dispatch) => {
     let filtered = [];
 
@@ -49,6 +48,5 @@ export const filterBy = (filterValue, searchValue, centers) => {
       }))
     }
     dispatch({type: 'FILTER_CENTERS_BY', data: filtered});
-    console.log('UKXXX', filtered);
   }
 }

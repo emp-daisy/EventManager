@@ -6,7 +6,7 @@ import Footer from './footer';
 import Pagination from 'react-js-pagination';
 import Spinner from './spinner';
 import CardBlock from './cards';
-import {getCenters, filterBy} from '../actions/center';
+import {getCenters, filterCentersBy} from '../actions/center';
 import SearchBlock from './searchForm';
 import ListEvents from './listEventModal';
 
@@ -43,13 +43,18 @@ class Events extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.searchText !== this.state.searchText || nextState.selectOption !== this.state.selectOption) {
+      this.setState({activePage: 1});
       this
         .props
-        .filterBy(nextState.selectOption, nextState.searchText, this.props.listOfAllCenters);
+        .filterCentersBy(nextState.selectOption, nextState.searchText, this.props.listOfAllCenters);
     }
   }
 
   handlePageChange(pageNumber) {
+    this
+      .refs
+      ._list
+      .scrollIntoView({block: 'start', behavior: 'smooth'});
     this.setState({activePage: pageNumber});
   }
 
@@ -92,7 +97,7 @@ class Events extends Component {
           {this.props.loading && <Spinner/>}
           {(pageItems.length === 0 && !this.props.alert) && <h3 className="text-white">No center found</h3>}
 
-          {pageItems.length > 0 && <div>
+          {pageItems.length > 0 && <div ref='_list'>
             <div className="card-deck">
               {pageItems.map(center => (
                 <div className="col-sm-6 col-md-4 col-lg-3 mt-4" key={center.id}>
@@ -103,11 +108,12 @@ class Events extends Component {
                     : undefined}
                     title={center.name}
                     onClick={() => this.showModal(center)}
-                    buttonText="Check events">{center.location}</CardBlock>
+                    buttonText="Check events">{center.location}, {center.state}</CardBlock>
                 </div>
               ))}
             </div>
             <Pagination
+              hideDisabled
               className="justify-content-center"
               linkClass="page-link"
               itemClass="page-item"
@@ -134,7 +140,7 @@ const mapStateToProps = (state) => {
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getCenters: getCenters,
-    filterBy: filterBy
+    filterCentersBy: filterCentersBy
   }, dispatch);
 }
 
