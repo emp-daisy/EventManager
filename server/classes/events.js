@@ -4,18 +4,36 @@ import model from '../models';
 import Validator from '../middleware/validator';
 
 /**
- *
+ * Class handling events routing
+ * @export
+ * @class Events
  */
 export default class Events {
+  /**
+   * Creates an instance of Events.
+   * @param {any} req
+   * @param {any} res
+   * @memberof Events
+  */
   constructor(req, res) {
     this.req = req;
     this.res = res;
   }
 
+  /**
+   * Returns an events created by a user
+   *
+   * @returns {Object} JSON object for all events with status code
+   * @memberof Events
+   */
   findAllEvent() {
     return model
       .Events
-      .all()
+      .findAll({
+        where: {
+          id: parseInt(this.req.verified.id, 10)
+        }
+      })
       .then((result) => {
         if (result.length === 0) {
           return this
@@ -30,6 +48,13 @@ export default class Events {
       })
       .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
   }
+
+  /**
+   * Returns detals of an event
+   *
+   * @returns {Object} JSON object for an event detail with status code
+   * @memberof Events
+   */
 
   findOneEvent() {
     const { id } = this.req.params;
@@ -55,6 +80,12 @@ export default class Events {
       .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
   }
 
+  /**
+   * Creates a new event
+   *
+   * @returns {Object} JSON object with message and status code
+   * @memberof Events
+   */
   createEvent() {
     const data = this.req.body;
     const validateRes = Validator.validateEvent(data);
@@ -108,6 +139,12 @@ export default class Events {
       });
   }
 
+  /**
+   * Modifies an event
+   *
+   * @returns {Object} JSON object with updated event, message and status code
+   * @memberof Events
+   */
   updateEvent() {
     const id = parseInt(this.req.params.id, 10);
     const data = this.req.body;
@@ -223,6 +260,12 @@ export default class Events {
       .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
   }
 
+  /**
+   * Deletes an event
+   *
+   * @returns {Object} JSON object with message and status code
+   * @memberof Events
+   */
   deleteEvent() {
     const { id } = this.req.params;
     return model

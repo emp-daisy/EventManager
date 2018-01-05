@@ -4,8 +4,8 @@ import authenticationToken from '../middleware/auth';
 
 const eventRouter = express.Router();
 
-// GET ALL EVENT
-eventRouter.get('/events', (req, res) => {
+// GET ALL EVENT FOR A USER
+eventRouter.get('/events', authenticationToken, (req, res) => {
   new Events(req, res).findAllEvent();
 });
 
