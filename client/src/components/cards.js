@@ -11,6 +11,18 @@ class CardBlock extends Component {
           <h4 className="card-title">{this.props.title}</h4>
           <p className="card-text">{this.props.children}
           </p>
+          {this.props.facilities.length > 0 &&
+          <ul className="list-inline">Facilities: {this
+              .props
+              .facilities
+              .map((facility,index) => {
+                return (
+                  <li className="list-inline-item" key={index}>
+                   <small className="font-weight-bold">* {facility}</small>
+                  </li>
+                )
+              })}
+          </ul>}
           <a
             onClick={this.props.onClick}
             className="btn btn-dark btn-block border-1 text-white py-3">{this.props.buttonText}
@@ -20,10 +32,10 @@ class CardBlock extends Component {
     );
   }
 };
-
 CardBlock.defaultProps = {
   src: event,
-  buttonText: "Check events"
+  buttonText: "Check events",
+  facilities: []
 }
 CardBlock.propTypes = {
   children: PropTypes.node.isRequired,
@@ -31,6 +43,7 @@ CardBlock.propTypes = {
   title: PropTypes.string.isRequired,
   id: PropTypes.any.isRequired,
   src: PropTypes.any.isRequired,
-  buttonText: PropTypes.node
+  buttonText: PropTypes.node,
+  facilities: PropTypes.array.isRequired
 }
 export default CardBlock;

@@ -106,8 +106,13 @@ class ListEvent extends Component {
                     {pageItems.map(event => (<ListGroupItem
                       key={event.id}
                       owner={event.User.organiser}
-                      start={new Date(event.startDate).toLocaleString('en-GB', this.state.localeOptions)}
-                      end={new Date(event.endDate).toLocaleString('en-GB', this.state.localeOptions)}
+                      details={(
+                      <span>{new Date(event.startDate).toLocaleString('en-GB', this.state.localeOptions)}
+                        <span>
+                          {' - '}
+                        </span>
+                        {new Date(event.endDate).toLocaleString('en-GB', this.state.localeOptions)}</span>
+                    )}
                       id={event.id}
                       name={event.name}
                       buttons={(

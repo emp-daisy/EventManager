@@ -1,70 +1,106 @@
-import React from 'react';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import Pagination from 'react-js-pagination';
 import Footer from './footer';
 import Header from './header';
-import ListGroupItem from './listGroupItem';
 import FloatingButton from './floatingButton';
-// import {checkTokenExpiry} from './actions/authentication'; if
-// (!checkTokenExpiry) {   this     .props     .history     .push('/'); }
-const Dashboard = () => (
-  <div className="wrapper d-flex flex-column h-100" id="wrapper">
-    <Header/>
-    <section
-      className="container-fluid d-flex flex-column flex-grow background-img "
-      id="dashboard">
-      <div className="row align-content-center">
-        <div className="col-md-8 offset-md-2">
-          <div className="sticky-top">
-            <div className="clearfix">
-              <form action="#" id="searchForm" className="input-group w-50 float-right">
-                <input type="text" className="form-control" name="x" placeholder="Search..."/>
-                <span className="input-group-btn">
-                  <button className="btn btn-default" type="submit">
-                    <span className="fa fa-search"/>
-                  </button>
-                </span>
-              </form>
-            </div>
-            <ul className="nav nav-tabs nav-fill user-tabs" id="user-tab">
-              <li className="nav-item">
-                <a
-                  className="nav-link active tab-custom"
-                  href="#events"
-                  data-toggle="tab"
-                  data-id="1">EVENTS
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link tab-custom"
-                  href="#centers"
-                  data-toggle="tab"
-                  data-id="2">CENTERS
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div className="tab-content p-4">
-            <div role="tabpanel" className="tab-pane active in" id="events">
-              <div className="list-group">
-                <ListGroupItem/>
-              </div>
-            </div>
-            <div role="tabpanel" className="tab-pane fade" id="centers">
-              <div className="list-group">
-                <ListGroupItem/>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Pagination/>
-      <div className="row fixed-bottom justify-content-end">
-        <FloatingButton/>
-      </div>
-    </section>
-    <Footer/>
-  </div>
-);
+import SearchBlock from './searchForm';
+import Tabs from './tabs';
+import TabContent from './tabContent';
+import {isUserAdmin} from '../actions/authentication';
 
-export default Dashboard;
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activePage: 1,
+      perPage: 10,
+      activeTab: 1
+    }
+    this.onChange = this
+      .onChange
+      .bind(this);
+    this.handlePageChange = this
+      .handlePageChange
+      .bind(this);
+    this.handleTabChange = this
+      .handleTabChange
+      .bind(this);
+  }
+  componentWillMount() {
+    if (!this.props.loggedIn) {
+      this
+        .props
+        .history
+        .push('/login');
+    }
+  }
+  componentWillUpdate(nextProps) {
+    if (!nextProps.loggedIn) {
+      this
+        .props
+        .history
+        .push('/login');
+    }
+  }
+  onChange() {}
+  handlePageChange(pageNumber) {
+    this
+      .refs
+      ._list
+      .scrollIntoView({block: 'start', behavior: 'smooth'});
+    this.setState({activePage: pageNumber});
+  }
+  handleTabChange(tabNumber) {
+    if (tabNumber !== this.state.activeTab) {
+      this.setState({activeTab: tabNumber, activePage: 1});
+    }
+  }
+  render() {
+    return (
+      <div className="wrapper d-flex flex-column h-100" id="wrapper">
+        <Header/>
+        <section
+          className="container-fluid d-flex flex-column flex-grow background-img "
+          id="dashboard">
+          <div className="row align-content-center">
+            <div className="col-md-8 offset-md-2">
+              <div className="sticky-top">
+                <div className="clearfix  w-50 ml-auto">
+                  <SearchBlock onChange={this.onChange} showButton={false}/>
+                </div>
+                <Tabs role={isUserAdmin()} onChange={this.handleTabChange}/>
+              </div>
+              <div ref="_list">
+                <TabContent role={isUserAdmin()} tabIndex={this.state.activeTab}/></div>
+            </div>
+          </div>
+          <Pagination
+            hideDisabled
+            className="justify-content-center"
+            linkClass="page-link"
+            itemClass="page-item"
+            innerClass="pagination justify-content-center m-4"
+            activePage={this.state.activePage}
+            itemsCountPerPage={this.state.perPage}
+            totalItemsCount={50}
+            onChange={this.handlePageChange}/>
+          <div className="row fixed-bottom justify-content-end">
+            <FloatingButton tab={this.state.activeTab}/>
+          </div>
+        </section>
+        <Footer/>
+      </div>
+    );
+  }
+};
+
+const mapStateToProps = (state) => {
+  return {loggedIn: state.user.isLoggedIn};
+}
+const matchDispatchToProps = (dispatch) => {
+  return bindActionCreators({}, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(Dashboard);

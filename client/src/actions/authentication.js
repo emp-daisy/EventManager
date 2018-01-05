@@ -98,7 +98,7 @@ export const logOut = () => {
 
 export const getToken = () => {
   checkTokenExpiry();
-  localStorage.getItem('jwt-token');
+  return localStorage.getItem('jwt-token');
 }
 
 const saveToken = (token) => {
@@ -110,7 +110,7 @@ const removeToken = () => {
 }
 
 const checkTokenExpiry = () => {
-  let jwt = getToken();
+  let jwt = localStorage.getItem('jwt-token');
   if (jwt) {
     let jwtExp = jwtDecode(jwt).exp;
     let expiryDate = new Date(0);
@@ -120,8 +120,16 @@ const checkTokenExpiry = () => {
       return true;
     }
   }
-
   removeToken();
+  return false;
+}
+
+export const isUserAdmin = () => {
+  let jwt = getToken();
+  if (jwt) {
+    let admin = jwtDecode(jwt).isAdmin;
+    return admin;
+  }
   return false;
 }
 

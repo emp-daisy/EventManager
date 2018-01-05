@@ -14,8 +14,10 @@ import NotFound from './components/notFound';
 import {history} from './actions/history';
 import {getToken} from './actions/authentication';
 
-if (getToken) {
+if (getToken()) {
   Store.dispatch({type: 'LOGIN_USER_GRANTED'});
+} else {
+  Store.dispatch({type: 'UNAUTHENTICATED_USER'});
 }
 
 ReactDOM.render(

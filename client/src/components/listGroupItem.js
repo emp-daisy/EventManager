@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-class ListGroupItem extends React.Component {
+class ListGroupItem extends Component {
   render() {
     return (
       <div
@@ -11,14 +11,14 @@ class ListGroupItem extends React.Component {
           <small>{this.props.owner}</small>
         </div>
         <p className="mb-1">
-          {this.props.start}<span>{' - '}</span>{this.props.end}
+          {this.props.details}
         </p>
         <div className="d-flex w-100 justify-content-end p-2">
           {this.props.edit
             ? <div>
                 <button
                   type="button"
-                  className="mx-2 btn btn-dark"
+                  className="mx-2 btn btn-dark btn-sm"
                   data-toggle="modal"
                   data-target="#addEvent"
                   data-id="test">
@@ -33,11 +33,12 @@ class ListGroupItem extends React.Component {
   }
 };
 ListGroupItem.defaultProps = {
-  edit: false
+  edit: false,
+  details: '',
+  owner: ''
 }
 ListGroupItem.propTypes = {
-  start: PropTypes.any.isRequired,
-  end: PropTypes.any.isRequired,
+  details: PropTypes.any.isRequired,
   id: PropTypes.any.isRequired,
   name: PropTypes.any.isRequired,
   owner: PropTypes.any.isRequired,

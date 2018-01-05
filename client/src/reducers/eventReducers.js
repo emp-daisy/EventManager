@@ -32,6 +32,27 @@ const events = (state = defaultState, action) => {
         errorMessage: action.msg
       });
       break;
+    case 'REQUEST_USER_EVENTS':
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false
+      });
+      break;
+    case 'REQUEST_USER_EVENTS_GRANTED':
+      currentState = Object.assign({}, state, {
+        isLoading: false,
+        error: false,
+        eventList: action.data,
+        allEventList: action.data
+      });
+      break;
+    case 'REQUEST_USER_EVENTS_FAILED':
+      currentState = Object.assign({}, state, {
+        isLoading: false,
+        error: true,
+        errorMessage: action.msg
+      });
+      break;
     case 'FILTER_EVENTS_BY':
       currentState = Object.assign({}, state, {
         eventList: undefined

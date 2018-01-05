@@ -107,6 +107,7 @@ class Events extends Component {
                     ? center.image
                     : undefined}
                     title={center.name}
+                    facilities={center.facilities}
                     onClick={() => this.showModal(center)}
                     buttonText="Check events">{center.location}, {center.state}</CardBlock>
                 </div>

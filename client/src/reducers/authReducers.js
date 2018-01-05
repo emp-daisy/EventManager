@@ -26,6 +26,14 @@ const authentication = (state = defaultState, action) => {
         errorMessage: action.msg
       });
       break;
+
+    case 'UNAUTHENTICATED_USER':
+      currentState = Object.assign({}, state, {
+        isLoggedIn: false,
+        isLoading: false,
+        error: false
+      });
+      break;
     case 'LOGIN_USER_GRANTED':
       currentState = Object.assign({}, state, {
         isLoggedIn: true,
