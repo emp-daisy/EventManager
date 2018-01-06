@@ -67,7 +67,7 @@ export default class Users {
             }))
           .catch(error => this.res.status(500).send(error));
       })
-      .catc(error => this.res.status(500).send(error));
+      .catch(error => this.res.status(500).send(error));
   }
   /**
  * Login an existing user
