@@ -1,12 +1,14 @@
 const webpack = require('webpack');
+const path = require('path');
 
 exports.default = {
-  entry: ['./src/index.js'],
+  entry: [path.resolve(__dirname, './src/index.js')],
   output: {
-    filename: './dist/bundle.js'
+    path: path.resolve(__dirname),
+    filename: 'dist/bundle.js'
   },
   devServer: {
-    publicPath: "/",
+    publicPath: '/',
     contentBase: './public',
     hot: true,
     historyApiFallback: true
@@ -34,7 +36,7 @@ exports.default = {
             [
               'es2015', {
                 loose: true,
-                'modules': false
+                modules: false
               }
             ]
           ]
