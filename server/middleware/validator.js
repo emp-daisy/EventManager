@@ -1,8 +1,17 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
 /**
+ *
+ * @class Validation
  */
 class Validation {
+  /**
+   * Validates an event submisssion
+   *
+   * @param {any} data
+   * @returns  {Object} valiation response
+   * @memberof Validation
+   */
   validateEvent(data) {
     this.data = data;
     const rules = {
@@ -10,7 +19,7 @@ class Validation {
       location: 'required|integer',
       startDate: 'required|customDate|futureDate',
       endDate: 'required|customDate|futureDate|different:startDate',
-      image: 'string',
+      image: 'string'
     };
     const msg = {
       'required.name': 'Empty title',
@@ -22,19 +31,27 @@ class Validation {
     };
     Validator.register(
       'customDate',
-      (value, requirement, attribute) => moment(value, 'DD-MM-YYYY').isValid(), 'The :attribute is not a valid sate in format DD/MM/YYY'
+      value => moment(value, 'DD-MM-YYYY').isValid(),
+      'The :attribute is not a valid sate in format DD/MM/YYY'
     );
 
     Validator.register(
       'futureDate',
-      (value, requirement, attribute) => moment(value, 'DD-MM-YYYY').isAfter(moment()), 'The :attribute is not a future date'
+      value => moment(value, 'DD-MM-YYYY').isAfter(moment()),
+      'The :attribute is not a future date'
     );
 
     const validation = new Validator(data, rules, msg);
 
-    return (validation.passes()) ? true : validation.errors.all();
+    return validation.passes() ? true : validation.errors.all();
   }
-
+  /**
+   * Validates a center submisssion
+   *
+   * @param {any} data
+   * @returns  {Object} valiation response
+   * @memberof Validation
+   */
   validateCenter(data) {
     this.data = data;
     const rules = {
@@ -47,14 +64,20 @@ class Validation {
     const msg = {
       'required.name': 'Empty title',
       'required.location': 'Empty location',
-      'required.states': 'Empty states',
+      'required.states': 'Empty states'
     };
-
 
     const validation = new Validator(data, rules, msg);
 
-    return (validation.passes()) ? true : validation.errors.all();
+    return validation.passes() ? true : validation.errors.all();
   }
+  /**
+   * Validates an registration submisssion
+   *
+   * @param {any} data
+   * @returns  {Object} valiation response
+   * @memberof Validation
+   */
   validateUser(data) {
     this.data = data;
     const rules = {
@@ -73,9 +96,8 @@ class Validation {
       'same:password': 'Password does not match'
     };
 
-
     const validation = new Validator(data, rules, msg);
-    return (validation.passes()) ? true : validation.errors.all();
+    return validation.passes() ? true : validation.errors.all();
   }
 }
 export default new Validation();

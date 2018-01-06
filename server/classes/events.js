@@ -55,7 +55,6 @@ export default class Events {
    * @returns {Object} JSON object for an event detail with status code
    * @memberof Events
    */
-
   findOneEvent() {
     const { id } = this.req.params;
     return model
