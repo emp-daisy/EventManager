@@ -3,7 +3,7 @@ import chai from 'chai';
 import faker from 'faker';
 import app from '../app';
 
-const {expect} = chai;
+const { expect } = chai;
 chai.use(chaiHttp);
 let adminToken,
   nonAdminToken,
@@ -134,7 +134,7 @@ describe('API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({email: user.email, password: 'TESTpwd'})
+          .send({ email: user.email, password: 'TESTpwd' })
           .end((err, res) => {
             expect(res)
               .to
@@ -155,7 +155,7 @@ describe('API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({email: adminUser.email, password: 'TESTpwd'})
+          .send({ email: adminUser.email, password: 'TESTpwd' })
           .end((err, res) => {
             expect(res)
               .to
@@ -176,7 +176,7 @@ describe('API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({email: 'abc@abc.io', password: 'TESTpwd'})
+          .send({ email: 'abc@abc.io', password: 'TESTpwd' })
           .end((err, res) => {
             expect(res)
               .to
@@ -192,7 +192,7 @@ describe('API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({email: user.email, password: 'tester'})
+          .send({ email: user.email, password: 'tester' })
           .end((err, res) => {
             expect(res)
               .to
@@ -223,7 +223,7 @@ describe('API Testing', () => {
             facilities: 'faker,random,words',
             states: faker
               .random
-              .number({min: 1, max: 37}),
+              .number({ min: 1, max: 37 }),
             image: faker
               .system
               .directoryPath()
@@ -256,7 +256,7 @@ describe('API Testing', () => {
             facilities: 'faker,random,words',
             states: faker
               .random
-              .number({min: 1, max: 37}),
+              .number({ min: 1, max: 37 }),
             image: faker
               .system
               .directoryPath()
@@ -287,7 +287,7 @@ describe('API Testing', () => {
             facilities: 'faker,random,words',
             states: faker
               .random
-              .number({min: 1, max: 37}),
+              .number({ min: 1, max: 37 }),
             image: faker
               .system
               .directoryPath()
@@ -316,7 +316,7 @@ describe('API Testing', () => {
             facilities: 'faker,random,words',
             states: faker
               .random
-              .number({min: 1, max: 37}),
+              .number({ min: 1, max: 37 }),
             image: faker
               .system
               .directoryPath()
@@ -408,7 +408,7 @@ describe('API Testing', () => {
             facilities: 'faker,random,words',
             states: faker
               .random
-              .number({min: 1, max: 37}),
+              .number({ min: 1, max: 37 }),
             image: faker
               .system
               .directoryPath()
@@ -438,7 +438,7 @@ describe('API Testing', () => {
             facilities: 'faker,random,words',
             states: faker
               .random
-              .number({min: 1, max: 37}),
+              .number({ min: 1, max: 37 }),
             image: faker
               .system
               .directoryPath()
@@ -516,7 +516,9 @@ describe('API Testing', () => {
         chai
           .request(app)
           .post(`/v1/events/?token=${adminToken}`)
-          .send({startDate: '20/01/2099', endDate: '24/01/2099', location: centerId, image: 'file://...'})
+          .send({
+            startDate: '20/01/2099', endDate: '24/01/2099', location: centerId, image: 'file://...'
+          })
           .end((err, res) => {
             expect(res)
               .to
@@ -587,7 +589,7 @@ describe('API Testing', () => {
       it('Returns all events as an array of objects', (done) => {
         chai
           .request(app)
-          .get('/v1/events')
+          .get(`/v1/events/?token=${adminToken}`)
           .end((err, res) => {
             expect(res)
               .to
@@ -608,7 +610,7 @@ describe('API Testing', () => {
       it('Returns an object array for the event', (done) => {
         chai
           .request(app)
-          .get(`/v1/events/${eventId}`)
+          .get(`/v1/events/${eventId}/?token=${adminToken}`)
           .end((err, res) => {
             expect(res)
               .to
@@ -623,7 +625,7 @@ describe('API Testing', () => {
       it('Returns an error status for invalid id', (done) => {
         chai
           .request(app)
-          .get('/v1/events/0')
+          .get(`/v1/events/0/?token=${adminToken}`)
           .end((err, res) => {
             expect(res)
               .to
@@ -773,7 +775,7 @@ describe('API Testing', () => {
           facilities: 'faker,random,words',
           states: faker
             .random
-            .number({min: 1, max: 37}),
+            .number({ min: 1, max: 37 }),
           image: faker
             .system
             .directoryPath()
@@ -800,7 +802,7 @@ describe('API Testing', () => {
           facilities: 'faker,random,words',
           states: faker
             .random
-            .number({min: 1, max: 37}),
+            .number({ min: 1, max: 37 }),
           image: faker
             .system
             .directoryPath()
@@ -850,7 +852,9 @@ describe('API Testing', () => {
       chai
         .request(app)
         .post('/no-url')
-        .send({eventId: 666, eventName: 'House warming', eventLocation: 'GRA PH', eventDate: '12/12/2017', createdBy: 1})
+        .send({
+          eventId: 666, eventName: 'House warming', eventLocation: 'GRA PH', eventDate: '12/12/2017', createdBy: 1
+        })
         .end((err, res) => {
           expect(res)
             .to
@@ -881,7 +885,9 @@ describe('API Testing', () => {
       chai
         .request(app)
         .put('/no-url')
-        .send({eventId: 666, eventName: 'House warming', eventLocation: 'GRA PH', eventDate: '12/12/2017', createdBy: 1})
+        .send({
+          eventId: 666, eventName: 'House warming', eventLocation: 'GRA PH', eventDate: '12/12/2017', createdBy: 1
+        })
         .end((err, res) => {
           expect(res)
             .to
