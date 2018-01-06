@@ -60,12 +60,12 @@ const events = (state = defaultState, action) => {
         isLoading: false,
         error: false,
         eventList: action.data
-      });;
+      });
       break;
     default:
       currentState = state;
   }
   return currentState;
-}
+};
 
 export default events;

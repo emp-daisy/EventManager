@@ -42,10 +42,10 @@ const authentication = (state = defaultState, action) => {
       });
       break;
     case 'LOGOUT_USER':
-      currentState = Object.assign({}, state, {isLoggedIn: false});
+      currentState = Object.assign({}, state, { isLoggedIn: false });
       break;
     case 'REGISTER_USER':
-      currentState = Object.assign({}, state, {isLoading: true});
+      currentState = Object.assign({}, state, { isLoading: true });
       break;
     case 'REGISTER_USER_FAILED':
       currentState = Object.assign({}, state, {
@@ -63,10 +63,10 @@ const authentication = (state = defaultState, action) => {
       });
       break;
     case 'CLEAR_MESSAGE':
-      currentState = Object.assign({}, state, {success: false});
+      currentState = Object.assign({}, state, { success: false });
       break;
     case 'INC_TIMER':
-      currentState = Object.assign({}, state, {countDown: action.time});
+      currentState = Object.assign({}, state, { countDown: action.time });
       break;
     case 'DEC_TIMER':
       currentState = Object.assign({}, state, {
@@ -77,6 +77,6 @@ const authentication = (state = defaultState, action) => {
       currentState = state;
   }
   return currentState;
-}
+};
 
 export default authentication;

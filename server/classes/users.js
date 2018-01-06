@@ -7,9 +7,6 @@ const userDb = model.Users;
 const salt = bcrypt.genSaltSync(10);
 /**
  *
-/**
- *
- *
  * @export
  * @class Users
  */

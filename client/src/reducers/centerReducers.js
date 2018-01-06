@@ -39,12 +39,12 @@ const centers = (state = defaultState, action) => {
         isLoading: false,
         error: false,
         centerList: action.data
-      });;
+      });
       break;
     default:
       currentState = state;
   }
   return currentState;
-}
+};
 
 export default centers;
