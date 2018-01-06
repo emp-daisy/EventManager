@@ -5,7 +5,7 @@ services:
   - postgresql
 before_script:
   - psql -c 'create database db_events_test;' -U postgres
-  - npm run migration
+  - npm run migrate
   - npm run seed
 cache:
   directories:
