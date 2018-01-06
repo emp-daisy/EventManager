@@ -59,7 +59,7 @@ class Dashboard extends Component {
   }
   render() {
     return (
-      <div className="wrapper d-flex flex-column h-100" id="wrapper">
+      <div className="wrapper" id="wrapper">
         <Header/>
         <section
           className="container-fluid d-flex flex-column flex-grow background-img "

@@ -31,7 +31,7 @@ export default class Events {
       .Events
       .findAll({
         where: {
-          id: parseInt(this.req.verified.id, 10)
+          createdBy: parseInt(this.req.verified.id, 10)
         }
       })
       .then((result) => {
@@ -152,10 +152,10 @@ export default class Events {
     return model
       .Events
       .findOne({
- where: {
-        id
-      }
- })
+        where: {
+          id
+        }
+      })
       .then((result) => {
         if (result === null) {
           return this
@@ -239,10 +239,10 @@ export default class Events {
                 endDate: newValues.endDate,
                 createdBy: resJson.createdBy
               }, {
- where: {
-                id
-              }
- })
+                where: {
+                  id
+                }
+              })
               .then((value) => {
                 if (value.length === 0) {
                   return this
@@ -285,10 +285,10 @@ export default class Events {
         return model
           .Events
           .destroy({
- where: {
-            id
-          }
- })
+            where: {
+              id
+            }
+          })
           .then((row) => {
             if (row < 1) {
               this

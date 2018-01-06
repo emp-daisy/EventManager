@@ -5,7 +5,9 @@ exports.default = {
   entry: [path.resolve(__dirname, './src/index.js')],
   output: {
     path: path.resolve(__dirname),
-    filename: 'dist/bundle.js'
+    filename: 'dist/bundle.js',
+    hotUpdateChunkFilename: 'dist/hot/hot-update.js',
+    hotUpdateMainFilename: 'dist/hot/hot-update.json'
   },
   devServer: {
     publicPath: '/',

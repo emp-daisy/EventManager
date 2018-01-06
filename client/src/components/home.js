@@ -27,11 +27,11 @@ class HomePage extends Component {
   render() {
     const {listOfCenters} = this.props;
     const listSize = listOfCenters.length;
-    const pageItems = listOfCenters.slice((listSize - 12), listSize.length);
+    const pageItems = listOfCenters.slice((listSize - 6), listSize.length);
 
     return (
       <div className="wrapper" id="wrapper">
-          <Header/>
+        <Header/>
         <section className="intro parallex-img" id="intro">
           <div className="img-overlay"/>
           <div
@@ -55,25 +55,27 @@ class HomePage extends Component {
             </div>
           </div>
         </section>
-        <section className="latest parallex-img" id="latest" style={{
-            height: '100%'
-          }}>
-          <div className="img-overlay"/>
-            {listSize > 0 && <div className="row justify-content-center">
-              {pageItems.map(center => (
-                    <div className="col-sm-6 col-md-4 col-lg-3 mt-2" key={center.id}>
-                      <CardBlock
-                        id={center.id}
-                        src={center.image
-                        ? center.image
-                        : undefined}
-                        title={center.name}
-                        onClick={this.OnEventClick}
-                        buttonText="Check events">{center.location}</CardBlock>
-                    </div>
-                  ))}
-              
-            </div>}
+        <section
+          className="latest parallex-img"
+          id="latest"
+          style={{
+          height: '100%'
+        }}>
+          <div className="img-overlay"/> {listSize > 0 && <div className="row justify-content-center">
+            {pageItems.map(center => (
+              <div className="col-sm-6 col-md-4 col-lg-3 mt-2" key={center.id}>
+                <CardBlock
+                  id={center.id}
+                  src={center.image
+                  ? center.image
+                  : undefined}
+                  title={center.name}
+                  onClick={this.OnEventClick}
+                  buttonText="Check events">{center.location}</CardBlock>
+              </div>
+            ))}
+
+          </div>}
         </section>
         <section className="contact parallex-img" id="contact">
           <div className="img-overlay"/>
