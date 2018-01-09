@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const Footer = () => (
   <section className="footer" id="footer">
@@ -7,32 +6,31 @@ const Footer = () => (
       <div className="text-center">
         <ul className="nav list-inline ml-auto justify-content-center social-links">
           <li>
-            <Link to="/">
+            <a href="/">
               <i className="p-1 fa fa-facebook" />
-            </Link>
+            </a>
           </li>
           <li>
-            <Link to="/">
+            <a href="/">
               <i className="p-1 fa fa-twitter" />
-            </Link>
+            </a>
           </li>
           <li>
-            <Link to="/">
+            <a href="/">
               <i className="p-1 fa fa-linkedin" />
-            </Link>
+            </a>
           </li>
           <li>
-            <Link to="/">
+            <a href="/">
               <i className="p-1 fa fa-pinterest" />
-            </Link>
+            </a>
           </li>
         </ul>
       </div>
       <div className="text-center">
-        <p className="text-white">&copy Jessica Madufor (Andela 2017)</p>
+        <p className="text-white">&copy; Jessica Madufor (Andela 2017)</p>
       </div>
     </div>
-  </section>
-);
+  </section>);
 
 export default Footer;

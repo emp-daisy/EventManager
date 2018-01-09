@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 exports.default = {
-  entry: [path.resolve(__dirname, './src/index.js')],
+  entry: [path.resolve(__dirname, './src/index.jsx')],
   output: {
     path: path.resolve(__dirname),
     filename: 'dist/bundle.js',
@@ -16,10 +16,8 @@ exports.default = {
     historyApiFallback: true
   },
   resolve: {
-    modules: [
-      'node_modules', 'src'
-    ],
-    extensions: ['.js']
+    modules: ['node_modules', 'src'],
+    extensions: ['.js', '.jsx']
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -28,7 +26,7 @@ exports.default = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
@@ -36,20 +34,21 @@ exports.default = {
           presets: [
             'react',
             [
-              'es2015', {
+              'es2015',
+              {
                 loose: true,
                 modules: false
               }
             ]
           ]
         }
-      }, {
+      },
+      {
         test: /\.scss$/,
         loaders: ['style-loader', 'css-loader', 'sass-loader']
-      }, {
-        test: [
-          /\.jpe?g$/, /\.png$/, /\.ico$/, /\.gif$/
-        ],
+      },
+      {
+        test: [/\.jpe?g$/, /\.png$/, /\.ico$/, /\.gif$/],
         loader: require.resolve('url-loader'),
         options: {
           limit: 10000,

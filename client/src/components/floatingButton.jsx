@@ -7,7 +7,6 @@ const FloatingButton = () => (
     id="user-add"
     data-toggle="modal"
     data-target="#addEvent"
-    data-toggle="tooltip"
     data-placement="left"
     title="New event"
   >

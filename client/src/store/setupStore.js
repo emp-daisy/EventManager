@@ -7,10 +7,9 @@ export const API_URL = 'v1/';
 
 const loggerMiddleware = createLogger();
 
-const Store = createStore(rootReducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
-
-Store.subscribe(() => {
-  console.log('STORE SUB...', Store.getState());
-});
+const Store = createStore(
+  rootReducer,
+  applyMiddleware(thunkMiddleware, loggerMiddleware)
+);
 
 export default Store;
