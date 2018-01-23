@@ -1,7 +1,9 @@
 import { API_URL } from '../store/setupStore';
 import { getToken } from './authentication';
+import { addNotification, connectionError, validationError } from './notify';
 
 export const getEventsByCenter = id => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'REQUEST_EVENTS' });
 
   fetch(`${API_URL}centers/${id}`)
@@ -14,10 +16,12 @@ export const getEventsByCenter = id => (dispatch) => {
       dispatch({ type: 'REQUEST_EVENTS_GRANTED', data: resEvents });
     }, () => {
       dispatch({ type: 'REQUEST_EVENTS_FAILED', msg: 'Error connecting to server...' });
+      connectionError(dispatch);
     });
 };
 
 export const getEventsByUser = () => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'REQUEST_USER_EVENTS' });
 
   fetch(`${API_URL}events`, {
@@ -35,10 +39,12 @@ export const getEventsByUser = () => (dispatch) => {
       dispatch({ type: 'REQUEST_USER_EVENTS_GRANTED', data: resEvents });
     }, () => {
       dispatch({ type: 'REQUEST_USER_EVENTS_FAILED', msg: 'Error connecting to server...' });
+      connectionError(dispatch);
     });
 };
 
 export const deleteEvent = id => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'DELETE_EVENTS' });
   fetch(`${API_URL}events/${id}`, {
     method: 'delete',
@@ -50,15 +56,23 @@ export const deleteEvent = id => (dispatch) => {
     .then((data) => {
       if (data.status === 200) {
         dispatch({ type: 'DELETE_EVENTS_GRANTED', id: +id });
+        dispatch(addNotification({
+          message: 'Delete successful',
+          level: 'success',
+          autoDismiss: 10
+        }));
       } else {
         dispatch({ type: 'DELETE_EVENTS_FAILED', msg: 'Error deleting from to server. TRY AGAIN LATER' });
+        connectionError(dispatch, data.json());
       }
     }, () => {
       dispatch({ type: 'DELETE_EVENTS_FAILED', msg: 'Error deleting from to server...' });
+      connectionError(dispatch);
     });
 };
 
 export const createEvent = eventData => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'CREATE_EVENTS' });
   fetch(`${API_URL}events/`, {
     method: 'post',
@@ -70,18 +84,27 @@ export const createEvent = eventData => (dispatch) => {
   })
     .then(res => res)
     .then((data) => {
-      console.log('RESPONSEEEEEEEE', data.json());
+      const dataBody = data.json();
       if (data.status === 201) {
-        dispatch({ type: 'CREATE_EVENTS_GRANTED' });
+        dispatch({ type: 'CREATE_EVENTS_GRANTED' }); dispatch(addNotification({
+          message: 'New Event added successful',
+          level: 'success',
+          autoDismiss: 10
+        }));
       } else {
         dispatch({ type: 'CREATE_EVENTS_FAILED', msg: 'Error creating new event. TRY AGAIN LATER' });
+        dataBody.then((res) => {
+          connectionError(dispatch, validationError(res));
+        });
       }
     }, () => {
       dispatch({ type: 'CREATE_EVENTS_FAILED', msg: 'Error creating new event...' });
+      connectionError(dispatch);
     });
 };
 
 export const updateEvent = (eventData, id) => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'UPDATE_EVENTS' });
   fetch(`${API_URL}events/${id}`, {
     method: 'put',
@@ -93,14 +116,22 @@ export const updateEvent = (eventData, id) => (dispatch) => {
   })
     .then(res => res)
     .then((data) => {
-      console.log('RESPONSEEEEEEEE', data.json());
+      const dataBody = data.json();
       if (data.status === 200) {
-        dispatch({ type: 'UPDATE_EVENTS_GRANTED' });
+        dispatch({ type: 'UPDATE_EVENTS_GRANTED' }); dispatch(addNotification({
+          message: 'Update successful',
+          level: 'success',
+          autoDismiss: 10
+        }));
       } else {
         dispatch({ type: 'UPDATE_EVENTS_FAILED', msg: 'Error updating event. TRY AGAIN LATER' });
+        dataBody.then((res) => {
+          connectionError(dispatch, validationError(res));
+        });
       }
     }, () => {
       dispatch({ type: 'UPDATE_EVENTS_FAILED', msg: 'Error updating event...' });
+      connectionError(dispatch);
     });
 };
 

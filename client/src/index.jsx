@@ -11,6 +11,7 @@ import Home from './components/home';
 import Dashboard from './components/dashboard';
 import Events from './components/events';
 import NotFound from './components/notFound';
+import Notification from './components/flashNotification';
 import { history } from './actions/history';
 import { getToken } from './actions/authentication';
 
@@ -23,14 +24,17 @@ if (getToken()) {
 ReactDOM.render(
   <Provider store={Store}>
     <Router history={history}>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/events" component={Events} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route component={NotFound} />
-      </Switch>
+      <div>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/events" component={Events} />
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route component={NotFound} />
+        </Switch>
+        <Route component={Notification} />
+      </div>
     </Router>
   </Provider>,
   document.getElementById('root')
