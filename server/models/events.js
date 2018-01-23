@@ -8,8 +8,7 @@ const Events = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     location: {
       type: DataTypes.INTEGER,

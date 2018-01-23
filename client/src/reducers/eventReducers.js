@@ -53,6 +53,28 @@ const events = (state = defaultState, action) => {
         errorMessage: action.msg
       });
       break;
+    case 'DELETE_EVENTS':
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false
+      });
+      break;
+    case 'DELETE_EVENTS_GRANTED':
+
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false,
+        eventList: state.eventList.filter(el => el.name !== action.id),
+        allEventList: state.allEventList.filter(el => el.name !== action.id)
+      });
+      break;
+    case 'DELETE_EVENTS_FAILED':
+      currentState = Object.assign({}, state, {
+        isLoading: false,
+        error: true,
+        errorMessage: action.msg
+      });
+      break;
     case 'FILTER_EVENTS_BY':
       currentState = Object.assign({}, state, {
         eventList: undefined

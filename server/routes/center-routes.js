@@ -29,4 +29,8 @@ centerRouter.delete('/centers/:id', authenticationToken, (req, res) => {
   new Centers(req, res).deleteCenter();
 });
 
+centerRouter.get('/states', (req, res) => {
+  new Centers(req, res).getStates();
+});
+
 export default centerRouter;

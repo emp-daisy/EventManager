@@ -218,7 +218,7 @@ Register.propTypes = {
   success: PropTypes.bool.isRequired,
   successMessage: PropTypes.string.isRequired,
   register: PropTypes.func.isRequired,
-  history: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   counter: PropTypes.number.isRequired
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Register);

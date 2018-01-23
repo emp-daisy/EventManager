@@ -25,8 +25,7 @@ class Login extends Component {
       password: ''
     };
     this.onSubmit = this.onSubmit.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeState = this.onChangeState.bind(this);
     this.canSubmit = this.canSubmit.bind(this);
   }
   /**
@@ -56,17 +55,8 @@ class Login extends Component {
    * @param {any} event
    * @memberof Login
    */
-  onChangeEmail(event) {
-    this.setState({ email: event.target.value });
-  }
-  /**
-   *
-   * @returns {null} no return
-   * @param {any} event
-   * @memberof Login
-   */
-  onChangePassword(event) {
-    this.setState({ password: event.target.value });
+  onChangeState(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
   /**
    *
@@ -103,7 +93,6 @@ class Login extends Component {
           className="align-items-center d-flex flex-column flex-grow background-img"
           id="login"
         >
-          <div className="img-overlay" />
           <div className="col-md-6 text-center">
             <h2 className="text-white">LOGIN</h2>
 
@@ -116,22 +105,20 @@ class Login extends Component {
               <div className="form-group">
                 <input
                   className="form-control"
-                  onChange={this.onChangeEmail}
+                  onChange={this.onChangeState}
                   type="text"
                   placeholder="Email"
+                  name="email"
                 />
               </div>
               <div className="form-group">
                 <input
                   className="form-control"
-                  onChange={this.onChangePassword}
+                  onChange={this.onChangeState}
                   type="password"
                   placeholder="Password"
+                  name="password"
                 />
-              </div>
-              <div className="form-check text-white">
-                <input type="checkbox" />
-                Remember me
               </div>
               <div className="form-group">
                 <button
@@ -181,6 +168,6 @@ Login.propTypes = {
   alert: PropTypes.bool.isRequired,
   alertMessage: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,
-  history: PropTypes.func.isRequired
+  history: PropTypes.objectOf(PropTypes.any).isRequired
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Login);

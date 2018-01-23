@@ -31,13 +31,13 @@ class Validation {
     };
     Validator.register(
       'customDate',
-      value => moment(value, 'DD-MM-YYYY').isValid(),
-      'The :attribute is not a valid sate in format DD/MM/YYY'
+      value => moment(value).isValid(),
+      'The :attribute is not a valid sate in format DD/MM/YYYY'
     );
 
     Validator.register(
       'futureDate',
-      value => moment(value, 'DD-MM-YYYY').isAfter(moment()),
+      value => moment(value).isAfter(moment()),
       'The :attribute is not a future date'
     );
 

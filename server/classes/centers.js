@@ -33,6 +33,7 @@ export default class Centers {
           'location',
           'facilities',
           'image',
+          [sequelize.col('Centers.states'), 'stateId'],
           [sequelize.col('State.name'), 'state']
         ],
         include: [
@@ -67,6 +68,7 @@ export default class Centers {
           'location',
           'facilities',
           'image',
+          [sequelize.col('Centers.states'), 'stateId'],
           [sequelize.col('State.name'), 'state']
         ],
         where: {
@@ -281,6 +283,30 @@ export default class Centers {
             }
             this.res.status(200).json({ msg: 'Center updated successfully' });
           });
+      })
+      .catch(error =>
+        this.res.status(500).send({ msg: 'Server Error', error }));
+  }
+
+  /**
+ *
+ *
+ * @returns {Object} JSON response
+ * @memberof Centers
+ */
+  getStates() {
+    return model.States
+      .all({
+        attributes: [
+          'id',
+          'name'
+        ]
+      })
+      .then((result) => {
+        if (result.length === 0) {
+          return this.res.status(200).json({ msg: 'No state available' });
+        }
+        this.res.status(200).json({ val: result, msg: 'States returned' });
       })
       .catch(error =>
         this.res.status(500).send({ msg: 'Server Error', error }));

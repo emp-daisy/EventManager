@@ -46,40 +46,36 @@ export const register = credientials => (dispatch) => {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     body: payload
-  }).then((res) => {
-    if (res.status === 201) {
-      return res.json();
-    }
-    throw res.json();
-  }).then((data) => {
-    dispatch({ type: 'REGISTER_USER_GRANTED', msg: data.msg });
-    dispatch({ type: 'INC_TIMER', time: 5 });
-    const counter = Array.from(new Array(5), (val, index) => countDown(dispatch));
-    return counter.reduce((promiseChain, currentTask) => promiseChain.then(currentTask), Promise.resolve());
-  }).then((delayed) => {
-    history.replace('/login');
-    dispatch({ type: 'CLEAR_MESSAGE' });
-  })
-    .catch((error) => {
-      if (error instanceof Promise) {
-        error.then((e) => {
-          if (e.errors) {
-            const message = Object
-              .values(e.errors)
-              .join('\n');
-            dispatch({ type: 'REGISTER_USER_FAILED', msg: message });
-          } else {
-            dispatch({ type: 'REGISTER_USER_FAILED', msg: e.msg });
-          }
-        });
-      } else {
-        dispatch({
-          type: 'REGISTER_USER_FAILED',
-          msg: error.msg
-            ? error.msg
-            : error
-        });
+  }).then(res => res)
+    .then((response) => {
+      const data = response.json();
+      if (data.status === 201) {
+        dispatch({ type: 'REGISTER_USER_GRANTED', msg: data.msg });
+        dispatch({ type: 'INC_TIMER', time: 5 });
+        const counter = Array.from(new Array(5), () => countDown(dispatch));
+        return counter.reduce((promiseChain, currentTask) => promiseChain.then(currentTask), Promise.resolve());
       }
+      let message = data.msg;
+      if (data.errors) {
+        message = Object
+          .values(data.errors)
+          .join('\n');
+      }
+      dispatch({ type: 'REGISTER_USER_FAILED', msg: message });
+      return false;
+    }).then((success) => {
+      if (success) {
+        history.replace('/login');
+        dispatch({ type: 'CLEAR_MESSAGE' });
+      }
+    })
+    .catch((error) => {
+      dispatch({
+        type: 'REGISTER_USER_FAILED',
+        msg: error.msg
+          ? error.msg
+          : error
+      });
     });
 };
 

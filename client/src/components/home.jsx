@@ -59,10 +59,9 @@ class HomePage extends Component {
     return (
       <div className="wrapper" id="wrapper">
         <section className="intro parallex-img" id="intro">
-          <div className="img-overlay" />
           <div
             className="d-flex flex-column"
-            style={{ 'min-height': '100vh' }}
+            style={{ minHeight: '100vh' }}
           >
             <Header />
             <div
@@ -94,7 +93,6 @@ class HomePage extends Component {
           className="latest parallex-img"
           id="latest"
         >
-          <div className="img-overlay" />
           {listSize > 0 &&
           <div className="row justify-content-center">
             {pageItems.map(center => (
@@ -126,7 +124,6 @@ class HomePage extends Component {
           </div>
         </section>
         <section className="contact parallex-img" id="contact">
-          <div className="img-overlay" />
           <div className="row align-items-center">
             <div className="col-sm-6 offset-sm-3 col-12 text-center align-items-center">
               <h2 className="display-4 text-white">GET IN TOUCH</h2>

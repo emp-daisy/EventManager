@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import $ from 'jquery';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import ListGroupItem from './listGroupItem';
@@ -25,14 +26,6 @@ class ListEvent extends Component {
       activePage: 1,
       perPage: 20,
       searchText: '',
-      localeOptions: {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      }
     };
     this.onChange = this
       .onChange
@@ -144,7 +137,7 @@ class ListEvent extends Component {
               style={{
               maxHeight: 'calc(100vh - 100px)',
               overflowY: 'auto'
-            }}
+              }}
             >
               {pageItems.length > 0
                 ?
@@ -153,11 +146,11 @@ class ListEvent extends Component {
                       key={event.id}
                       owner={event.User.organiser}
                       details={(
-                        <span>{new Date(event.startDate).toLocaleString('en-GB', this.state.localeOptions)}
+                        <span>{moment(event.startDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}
                           <span>
                             {' - '}
                           </span>
-                          {new Date(event.endDate).toLocaleString('en-GB', this.state.localeOptions)}
+                          {moment(event.endDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}
                         </span>
                       )}
                       id={event.id}
@@ -172,7 +165,7 @@ class ListEvent extends Component {
                     />))}
                   </div>
                 : <h3 className="text-center">No event available</h3>
-}
+              }
             </div>
             <div className="modal-footer">
               <Pagination

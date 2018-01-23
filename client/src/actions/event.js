@@ -12,7 +12,7 @@ export const getEventsByCenter = id => (dispatch) => {
         : [];
 
       dispatch({ type: 'REQUEST_EVENTS_GRANTED', data: resEvents });
-    }, (err) => {
+    }, () => {
       dispatch({ type: 'REQUEST_EVENTS_FAILED', msg: 'Error connecting to server...' });
     });
 };
@@ -23,8 +23,6 @@ export const getEventsByUser = () => (dispatch) => {
   fetch(`${API_URL}events`, {
     method: 'get',
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
       'x-access-token': getToken()
     }
   })
@@ -35,8 +33,74 @@ export const getEventsByUser = () => (dispatch) => {
         : [];
 
       dispatch({ type: 'REQUEST_USER_EVENTS_GRANTED', data: resEvents });
-    }, (err) => {
+    }, () => {
       dispatch({ type: 'REQUEST_USER_EVENTS_FAILED', msg: 'Error connecting to server...' });
+    });
+};
+
+export const deleteEvent = id => (dispatch) => {
+  dispatch({ type: 'DELETE_EVENTS' });
+  fetch(`${API_URL}events/${id}`, {
+    method: 'delete',
+    headers: {
+      'x-access-token': getToken()
+    }
+  })
+    .then(res => res)
+    .then((data) => {
+      if (data.status === 200) {
+        dispatch({ type: 'DELETE_EVENTS_GRANTED', id: +id });
+      } else {
+        dispatch({ type: 'DELETE_EVENTS_FAILED', msg: 'Error deleting from to server. TRY AGAIN LATER' });
+      }
+    }, () => {
+      dispatch({ type: 'DELETE_EVENTS_FAILED', msg: 'Error deleting from to server...' });
+    });
+};
+
+export const createEvent = eventData => (dispatch) => {
+  dispatch({ type: 'CREATE_EVENTS' });
+  fetch(`${API_URL}events/`, {
+    method: 'post',
+    headers: {
+      'x-access-token': getToken(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(eventData)
+  })
+    .then(res => res)
+    .then((data) => {
+      console.log('RESPONSEEEEEEEE', data.json());
+      if (data.status === 201) {
+        dispatch({ type: 'CREATE_EVENTS_GRANTED' });
+      } else {
+        dispatch({ type: 'CREATE_EVENTS_FAILED', msg: 'Error creating new event. TRY AGAIN LATER' });
+      }
+    }, () => {
+      dispatch({ type: 'CREATE_EVENTS_FAILED', msg: 'Error creating new event...' });
+    });
+};
+
+export const updateEvent = (eventData, id) => (dispatch) => {
+  dispatch({ type: 'UPDATE_EVENTS' });
+  fetch(`${API_URL}events/${id}`, {
+    method: 'put',
+    body: JSON.stringify(eventData),
+    headers: {
+      'x-access-token': getToken(),
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(res => res)
+    .then((data) => {
+      console.log('RESPONSEEEEEEEE', data.json());
+      if (data.status === 200) {
+        dispatch({ type: 'UPDATE_EVENTS_GRANTED' });
+      } else {
+        dispatch({ type: 'UPDATE_EVENTS_FAILED', msg: 'Error updating event. TRY AGAIN LATER' });
+      }
+    }, () => {
+      dispatch({ type: 'UPDATE_EVENTS_FAILED', msg: 'Error updating event...' });
     });
 };
 

@@ -20,13 +20,11 @@ const ListGroupItem = props => (
                 <button
                   type="button"
                   className="mx-2 btn btn-dark btn-sm"
-                  data-toggle="modal"
-                  data-target="#addEvent"
-                  data-id="test"
+                  onClick={props.onEdit}
                 >
                   Edit
                 </button>
-                <button className="mx-2 btn btn-sm btn-secondary">Delete</button>
+                <button className="mx-2 btn btn-sm btn-secondary" onClick={props.onDelete}>Delete</button>
               </div>
             : props.buttons
       }
@@ -38,14 +36,18 @@ ListGroupItem.defaultProps = {
   edit: false,
   details: '',
   owner: '',
-  buttons: (<div />)
+  buttons: (<div />),
+  onEdit: () => {},
+  onDelete: () => {}
 };
 ListGroupItem.propTypes = {
-  details: PropTypes.string,
+  details: PropTypes.node,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   name: PropTypes.string.isRequired,
   owner: PropTypes.string,
   edit: PropTypes.bool,
-  buttons: PropTypes.element
+  buttons: PropTypes.element,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 export default ListGroupItem;

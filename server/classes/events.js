@@ -30,9 +30,31 @@ export default class Events {
     return model
       .Events
       .findAll({
+        attributes: [
+          'id',
+          'name',
+          'location',
+          'startDate',
+          'endDate'
+        ],
         where: {
           createdBy: parseInt(this.req.verified.id, 10)
-        }
+        },
+        include: [
+          {
+            attributes: [
+              'name',
+              'location'
+            ],
+            model: model.Centers,
+            include: [
+              {
+                model: model.States,
+                attributes: ['name']
+              }
+            ]
+          }
+        ]
       })
       .then((result) => {
         if (result.length === 0) {
@@ -62,7 +84,29 @@ export default class Events {
       .findOne({
         where: {
           id: parseInt(id, 10)
-        }
+        },
+        attributes: [
+          'id',
+          'name',
+          'location',
+          'startDate',
+          'endDate'
+        ],
+        include: [
+          {
+            attributes: [
+              'name',
+              'location'
+            ],
+            model: model.Centers,
+            include: [
+              {
+                model: model.States,
+                attributes: ['name']
+              }
+            ]
+          }
+        ]
       })
       .then((result) => {
         if (result === null) {
@@ -87,6 +131,9 @@ export default class Events {
    */
   createEvent() {
     const data = this.req.body;
+    data.startDate = moment(data.startDate, ['DD-MM-YYYYTHH:mm', 'DD-MM-YYYY HH:mm', 'DD-MM-YYYY']).format();
+    data.endDate = moment(data.endDate, ['DD-MM-YYYYTHH:mm', 'DD-MM-YYYY HH:mm', 'DD-MM-YYYY']).format();
+
     const validateRes = Validator.validateEvent(data);
     if (validateRes !== true) {
       return this
@@ -94,8 +141,6 @@ export default class Events {
         .status(400)
         .json({ msg: validateRes });
     }
-    const start = moment(data.startDate, 'DD-MM-YYYY').format();
-    const end = moment(data.endDate, 'DD-MM-YYYY').format();
     model
       .Events
       .findOne({
@@ -103,10 +148,10 @@ export default class Events {
           location: parseInt(data.location, 10),
           [sequelize.Op.or]: {
             startDate: {
-              [sequelize.Op.between]: [start, end]
+              [sequelize.Op.between]: [data.startDate, data.endDate]
             },
             endDate: {
-              [sequelize.Op.between]: [start, end]
+              [sequelize.Op.between]: [data.startDate, data.endDate]
             }
           }
         }
@@ -123,8 +168,8 @@ export default class Events {
           .create({
             name: data.name,
             location: parseInt(data.location, 10),
-            startDate: start,
-            endDate: end,
+            startDate: data.startDate,
+            endDate: data.endDate,
             createdBy: parseInt(this.req.verified.id, 10),
             image: data.image
           })
@@ -189,10 +234,10 @@ export default class Events {
           location: parseInt(data.location, 10) || resJson.location,
           image: data.image || resJson.image,
           startDate: data.startDate
-            ? moment(data.startDate, 'DD-MM-YYYY HH:mm').format()
+            ? moment(data.startDate, ['DD-MM-YYYYTHH:mm', 'DD-MM-YYYY HH:mm', 'DD-MM-YYYY']).format()
             : false || resJson.startDate,
           endDate: data.endDate
-            ? moment(data.endDate, 'DD-MM-YYYY HH:mm').format()
+            ? moment(data.endDate, ['DD-MM-YYYYTHH:mm', 'DD-MM-YYYY HH:mm', 'DD-MM-YYYY']).format()
             : false || resJson.endDate
         };
         const validateRes = Validator.validateEvent(newValues);

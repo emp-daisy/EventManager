@@ -18,6 +18,13 @@ body {
   background-size: cover;
 }
 
+.wrapper{  
+  min-height:  100vh;
+  position:  relative;
+  display:  flex;
+  flex-direction:  column;
+}
+
 .full-height {
   min-height: 100vh;
 }
@@ -68,28 +75,24 @@ body {
 }
 
 #intro {
-  background: url(../assets/11.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/11.png) no-repeat center center fixed;
 }
 
 #contact {
-  background: url(../assets/12.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/12.png) no-repeat center center fixed;
 }
 
 #latest {
-  background: url(../assets/13.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/13.png) no-repeat center center fixed;
 }
 
 #login,
 #register {
-  background: url(../assets/13.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/13.png) no-repeat center center fixed;
 }
 
-#event {
-  background: url(../assets/21.png) no-repeat center center fixed;
-}
-
-#dashboard {
-  background: url(../assets/21.png) no-repeat center center fixed;
+#dashboard, #event {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/21.png) no-repeat center center fixed;
 }
 
 .intro h2,
@@ -122,7 +125,7 @@ body {
 
 .background-img {
   display: flex;
-  justify-content: center;
+/*  justify-content: center; */
   text-align: center;
   flex-direction: column;
   -webkit-background-size: cover !important;
@@ -153,4 +156,28 @@ body {
 .event-list {
   background: #343a40;
   color: white;
+}
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.overlayModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: overlayFadeIn 0.5s 0.2s forwards;
+}
+.react-confirm-alert-overlay, .overlayModal{
+  z-index: 1500 !important
 }
