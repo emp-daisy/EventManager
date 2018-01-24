@@ -38,7 +38,9 @@ export default class Events {
           'endDate'
         ],
         where: {
-          createdBy: parseInt(this.req.verified.id, 10)
+          createdBy: parseInt(this.req.verified.id, 10),
+          startDate: { [sequelize.Op.gte]: moment() },
+          endDate: { [sequelize.Op.gte]: moment() }
         },
         include: [
           {
@@ -83,7 +85,9 @@ export default class Events {
       .Events
       .findOne({
         where: {
-          id: parseInt(id, 10)
+          id: parseInt(id, 10),
+          startDate: { [sequelize.Op.gte]: moment() },
+          endDate: { [sequelize.Op.gte]: moment() }
         },
         attributes: [
           'id',
