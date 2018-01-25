@@ -32,7 +32,7 @@ class Validation {
     Validator.register(
       'customDate',
       value => moment(value).isValid(),
-      'The :attribute is not a valid sate in format DD/MM/YYYY'
+      'The :attribute is not a valid date in correct format'
     );
 
     Validator.register(

@@ -2,6 +2,7 @@ import moment from 'moment';
 import sequelize from 'sequelize';
 import model from '../models';
 import Validator from '../middleware/validator';
+import sendEmail from '../middleware/email';
 
 /**
  * Class handling events routing
@@ -201,7 +202,8 @@ export default class Events {
       .Events
       .findOne({
         where: {
-          id
+          id,
+          createdBy: parseInt(this.req.verified.id, 10),
         }
       })
       .then((result) => {
@@ -318,17 +320,32 @@ export default class Events {
     const { id } = this.req.params;
     return model
       .Events
-      .findAll({
+      .findOne({
         where: {
           id: parseInt(id, 10)
-        }
+        },
+        include: [
+          {
+            model: model.Users,
+            attributes: [
+              'firstName',
+              'surname',
+              'email'
+            ]
+          }
+        ]
       })
       .then((result) => {
-        if (result.length === 0) {
+        if (result === null) {
           return this
             .res
             .status(400)
             .json({ msg: 'Event not found' });
+        } else if (result.createdBy !== this.req.verified.id && !this.req.verified.isAdmin) {
+          return this
+            .res
+            .status(400)
+            .json({ msg: 'Unauthorized user' });
         }
         return model
           .Events
@@ -339,10 +356,19 @@ export default class Events {
           })
           .then((row) => {
             if (row < 1) {
-              this
+              return this
                 .res
                 .status(500)
                 .json({ msg: 'Error deleting events' });
+            }
+            if (result.createdBy !== this.req.verified.id) {
+              // send email notification
+              sendEmail('info@daisy.io', result.User.email, 'Event Cancelled', `Hello ${result.User.firstName},
+            
+            This is to inform you that your event: "${result.name.toUpper()}"" has been cancelled by an administrator.
+            
+            sincerly,
+            Admin Team`);
             }
             return this
               .res

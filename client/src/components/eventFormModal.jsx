@@ -51,8 +51,8 @@ class EventModal extends Component {
     const data = {
       name: inputData.name,
       location: inputData.location.id,
-      startDate: moment(inputData.startDate).format('DD-MM-YYYY HH:mm'),
-      endDate: moment(inputData.endDate).format('DD-MM-YYYY HH:mm')
+      startDate: moment(inputData.startDate).format('DD-MM-YYYY HH:mm').toString(),
+      endDate: moment(inputData.endDate).format('DD-MM-YYYY HH:mm').toString()
     };
     if (this.props.isCreate) {
       this.props.handleSubmit(data);

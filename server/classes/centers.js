@@ -118,12 +118,11 @@ export default class Centers {
  * @returns {string} Strigifies an array
  * @memberof Centers
  */
-  splitArray(word) {
-    this.word = word;
+  static splitArray(word) {
     if (!word) {
       return [];
     }
-    const strArr = this.word
+    const strArr = word
       .split(',')
       .map(s => s.trim().toLowerCase())
       .filter(s => s !== '');
@@ -207,11 +206,11 @@ export default class Centers {
         this.res.status(500).send({ msg: 'Server Error', error }));
   }
   /**
- * Modifies a specific centeer
- *
- * @returns {Object} JSON response
- * @memberof Centers
- */
+   * Modifies a specific centeer
+   *
+   * @returns {Object} JSON response
+   * @memberof Centers
+   */
   updateCenter() {
     const id = parseInt(this.req.params.id, 10);
     const data = this.req.body;
@@ -289,11 +288,11 @@ export default class Centers {
   }
 
   /**
- *
- *
- * @returns {Object} JSON response
- * @memberof Centers
- */
+   *
+   *
+   * @returns {Object} JSON response
+   * @memberof Centers
+   */
   getStates() {
     return model.States
       .all({

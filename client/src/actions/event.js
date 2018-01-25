@@ -63,7 +63,9 @@ export const deleteEvent = id => (dispatch) => {
         }));
       } else {
         dispatch({ type: 'DELETE_EVENTS_FAILED', msg: 'Error deleting from to server. TRY AGAIN LATER' });
-        connectionError(dispatch, data.json());
+        data.json().then((res) => {
+          connectionError(dispatch, res.msg);
+        });
       }
     }, () => {
       dispatch({ type: 'DELETE_EVENTS_FAILED', msg: 'Error deleting from to server...' });

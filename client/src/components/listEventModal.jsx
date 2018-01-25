@@ -5,9 +5,11 @@ import $ from 'jquery';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
+import { isUserAdmin } from '../actions/authentication';
 import ListGroupItem from './listGroupItem';
 import SearchBlock from './searchForm';
-import { getEventsByCenter, filterEventsBy } from '../actions/event';
+import ConfirmDelete from './confirmAlert';
+import { getEventsByCenter, filterEventsBy, deleteEvent } from '../actions/event';
 /**
  *
  *
@@ -23,6 +25,8 @@ class ListEvent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showModal: false,
+      activeModalData: {},
       activePage: 1,
       perPage: 20,
       searchText: '',
@@ -33,6 +37,8 @@ class ListEvent extends Component {
     this.handlePageChange = this
       .handlePageChange
       .bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
   /**
    *
@@ -77,6 +83,26 @@ class ListEvent extends Component {
     this.setState({
       [event.target.name]: event.target.value
     });
+  }
+  /**
+   *
+   * @returns {null} no return
+   * @param {any} data
+   * @param {any} tabIndex
+   * @memberof ListEvent
+   */
+  handleDelete(data) {
+    this.setState({
+      showModal: true, activeModalData: data
+    });
+  }
+  /**
+   *
+   * @returns {null} no return
+   * @memberof ListEvent
+   */
+  handleClose() {
+    this.setState({ showModal: false });
   }
   /**
    *
@@ -158,9 +184,15 @@ class ListEvent extends Component {
                       name={event.name}
                       buttons={(
                         <div>
-                          <button type="button" className="mx-2 btn-sm btn-dark">
-                            Attend
-                          </button>
+                          {isUserAdmin() &&
+                            <button
+                              type="button"
+                              className="mx-2 btn-sm btn-dark"
+                              onClick={() => this.handleDelete(event)}
+                            >
+                              Cancel Event
+                            </button>
+                          }
                         </div>
                       )}
                     />))}
@@ -183,6 +215,15 @@ class ListEvent extends Component {
             </div>
           </div>
         </div>
+        {this.state.showModal &&
+          <div className="overlayModal">
+            <ConfirmDelete
+              name={this.state.activeModalData.name}
+              onConfirm={() => this.props.deleteEvent(this.state.activeModalData.id)}
+              onCancel={this.handleClose}
+            />
+          </div>
+        }
       </div>
     );
   }
@@ -197,6 +238,7 @@ const mapStateToProps = state => ({
 });
 const matchDispatchToProps = dispatch => bindActionCreators({
   getEventsByCenter,
+  deleteEvent,
   filterEventsBy
 }, dispatch);
 
@@ -205,6 +247,7 @@ ListEvent.propTypes = {
   onHide: PropTypes.func.isRequired,
   getEventsByCenter: PropTypes.func.isRequired,
   filterEventsBy: PropTypes.func.isRequired,
+  deleteEvent: PropTypes.func.isRequired,
   listOfEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
   listOfAllEvents: PropTypes.arrayOf(PropTypes.object).isRequired
 };
