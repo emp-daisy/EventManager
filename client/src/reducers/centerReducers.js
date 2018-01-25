@@ -5,7 +5,8 @@ const defaultState = {
   success: false,
   sucessMessage: '',
   centerList: [],
-  allCenterList: []
+  allCenterList: [],
+  pageItems: []
 };
 
 const centers = (state = defaultState, action) => {
@@ -39,6 +40,11 @@ const centers = (state = defaultState, action) => {
         isLoading: false,
         error: false,
         centerList: action.data
+      });
+      break;
+    case 'PAGINATE_CENTERS':
+      currentState = Object.assign({}, state, {
+        pageItems: state.centerList.slice(action.start, action.end)
       });
       break;
     default:

@@ -138,3 +138,10 @@ export const getCentersOptions = () => () => fetch(`${API_URL}centers`)
     const resCenters = (data.val || []).map(center => ({ name: `${center.name}, ${center.location}, ${center.state}`, id: center.id }));
     return { options: resCenters, complete: true };
   }, () => ({ options: [], complete: true }));
+
+export const nextCenterPage = (activePage, perPage) => (dispatch) => {
+  const end = activePage * perPage;
+  const start = end - perPage;
+
+  dispatch({ type: 'PAGINATE_CENTERS', start, end });
+};

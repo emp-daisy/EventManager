@@ -217,9 +217,9 @@ const mapStateToProps = state => ({
   loading: state.event.isLoading,
   alert: state.event.error,
   alertMessage: state.event.errorMessage,
-  listOfEvents: state.event.eventList,
+  listOfEvents: state.event.pageItems,
   listOfAllEvents: state.event.allEventList,
-  listOfCenters: state.center.centerList,
+  listOfCenters: state.center.pageItems,
   listOfAllCenters: state.center.allCenterList
 });
 const matchDispatchToProps = dispatch =>

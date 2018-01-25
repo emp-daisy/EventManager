@@ -5,7 +5,8 @@ const defaultState = {
   success: false,
   sucessMessage: '',
   eventList: [],
-  allEventList: []
+  allEventList: [],
+  pageItems: []
 };
 
 const events = (state = defaultState, action) => {
@@ -82,6 +83,11 @@ const events = (state = defaultState, action) => {
         isLoading: false,
         error: false,
         eventList: action.data
+      });
+      break;
+    case 'PAGINATE_EVENTS':
+      currentState = Object.assign({}, state, {
+        pageItems: state.eventList.slice(action.start, action.end)
       });
       break;
     default:

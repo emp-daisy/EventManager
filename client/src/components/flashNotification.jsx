@@ -31,7 +31,7 @@ class Notification extends Component {
    */
   render() {
     return (
-      <NotificationSystem ref={(e) => { this.notificationSystem = e; }} />
+      <NotificationSystem allowHTML ref={(e) => { this.notificationSystem = e; }} />
     );
   }
 }

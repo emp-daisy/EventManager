@@ -5,16 +5,15 @@ const addNotification = options => ({
 
 const connectionError = (dispatch, message) => {
   dispatch(addNotification({
-    message: message.toString() || 'Error connecting to server...',
+    message: message || 'Error connecting to server...',
     level: 'error',
     autoDismiss: 0
   }));
 };
-const validationError = (data) => {
-  return Object
-    .values(data.msg)
-    .join('\n');
-};
+
+const validationError = data => Object
+  .values(data.msg)
+  .join('<br />');
 
 export { addNotification, connectionError, validationError };
 

@@ -150,3 +150,10 @@ export const filterEventsBy = (searchValue, events) => (dispatch) => {
 
   dispatch({ type: 'FILTER_EVENTS_BY', data: filtered });
 };
+
+export const nextEventPage = (activePage, perPage) => (dispatch) => {
+  const end = activePage * perPage;
+  const start = end - perPage;
+
+  dispatch({ type: 'PAGINATE_EVENTS', start, end });
+};

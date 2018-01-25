@@ -9,8 +9,8 @@ import SearchBlock from './searchForm';
 import Tabs from './tabs';
 import TabContent from './tabContent';
 import { isUserAdmin } from '../actions/authentication';
-import { createEvent } from '../actions/event';
-import { createCenter, getCentersOptions } from '../actions/center';
+import { createEvent, nextEventPage, filterEventsBy } from '../actions/event';
+import { createCenter, getCentersOptions, nextCenterPage, filterCentersBy } from '../actions/center';
 import getStates from '../actions/states';
 import CenterModal from './centerFormModal';
 import EventModal from './eventFormModal';
@@ -40,6 +40,7 @@ class Dashboard extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
+    this.handlePageItems = this.handlePageItems.bind(this);
   }
   /**
    *
@@ -64,7 +65,17 @@ class Dashboard extends Component {
     }
     if (nextState.searchText !== this.state.searchText) {
       this.handlePageChange(1);
-      // this.props.filterEventsBy(nextState.searchText, this.props.listOfAllEvents);
+      if (this.state.activeTab === 1) {
+        this
+          .props
+          .filterEventsBy(nextState.searchText, this.props.listOfAllEvents);
+      } else {
+        this.props.filterCentersBy(
+          'all',
+          nextState.searchText,
+          this.props.listOfAllCenters
+        );
+      }
     }
   }
   /**
@@ -117,11 +128,25 @@ class Dashboard extends Component {
   }
   /**
    *
+   * @returns {null} no return
+   * @memberof Dashboard
+   */
+  handlePageItems() {
+    const { activePage, perPage, activeTab } = this.state;
+    if (activeTab === 1) {
+      this.props.nextEventPage(activePage, perPage);
+    } else {
+      this.props.nextCenterPage(activePage, perPage);
+    }
+  }
+  /**
+   *
    *
    * @returns {element} HTML element
    * @memberof Dashboard
    */
   render() {
+    this.handlePageItems();
     return (
       <div className="wrapper" id="wrapper">
         <Header />
@@ -133,7 +158,7 @@ class Dashboard extends Component {
             <div className="col-md-8 offset-md-2">
               <div className="sticky-top">
                 <div className="clearfix  w-50 ml-auto">
-                  <SearchBlock onChange={this.onSearchChange} showButton={false} />
+                  <SearchBlock onChange={this.onChange} showButton={false} />
                 </div>
                 <Tabs role={isUserAdmin()} onChange={this.handleTabChange} />
               </div>
@@ -162,7 +187,10 @@ class Dashboard extends Component {
             innerClass="pagination justify-content-center m-4"
             activePage={this.state.activePage}
             itemsCountPerPage={this.state.perPage}
-            totalItemsCount={50}
+            totalItemsCount={(this.state.activeTab === 1) ?
+            this.props.listOfEvents.length
+            :
+            this.props.listOfCenters.length}
             onChange={this.handlePageChange}
           />
         </section>
@@ -192,12 +220,22 @@ class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = state => ({ loggedIn: state.user.isLoggedIn });
+const mapStateToProps = state => ({
+  loggedIn: state.user.isLoggedIn,
+  listOfEvents: state.event.eventList,
+  listOfAllEvents: state.event.allEventList,
+  listOfCenters: state.center.centerList,
+  listOfAllCenters: state.center.allCenterList
+});
 const matchDispatchToProps = dispatch => bindActionCreators({
   createEvent,
   getStates,
   createCenter,
-  getCentersOptions
+  getCentersOptions,
+  nextEventPage,
+  nextCenterPage,
+  filterEventsBy,
+  filterCentersBy
 }, dispatch);
 
 Dashboard.propTypes = {
@@ -205,6 +243,14 @@ Dashboard.propTypes = {
   createEvent: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  filterCentersBy: PropTypes.func.isRequired,
+  listOfCenters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  listOfAllCenters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  filterEventsBy: PropTypes.func.isRequired,
+  listOfEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
+  listOfAllEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
+  nextCenterPage: PropTypes.func.isRequired,
+  nextEventPage: PropTypes.func.isRequired,
   getStates: PropTypes.func.isRequired,
   getCentersOptions: PropTypes.func.isRequired
 };
