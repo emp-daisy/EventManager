@@ -116,7 +116,9 @@ class ListEvent extends Component {
           <div className="modal-content">
             <div className="modal-header flex-column pb-0">
               <div className="d-flex flex-row justify-content-end ml-auto">
-                <SearchBlock onChange={this.onChange} showButton={false} />
+                {pageItems.length > 0 &&
+                  <SearchBlock onChange={this.onChange} showButton={false} />
+                }
                 <button
                   type="button"
                   className="close"
@@ -126,7 +128,6 @@ class ListEvent extends Component {
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
-
               </div>
               <div className="d-flex flex-row">
                 <h5 className="modal-title">{this.props.showValue.name}</h5>

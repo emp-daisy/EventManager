@@ -41,6 +41,7 @@ class Dashboard extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
     this.handlePageItems = this.handlePageItems.bind(this);
+    this.showSearchBar = this.showSearchBar.bind(this);
   }
   /**
    *
@@ -77,6 +78,8 @@ class Dashboard extends Component {
         );
       }
     }
+
+    this.handlePageItems();
   }
   /**
    *
@@ -141,12 +144,24 @@ class Dashboard extends Component {
   }
   /**
    *
+   * @returns {boolean} no return
+   * @memberof Dashboard
+   */
+  showSearchBar() {
+    const { activeTab } = this.state;
+    const { listOfEvents, listOfCenters } = this.props;
+    if ((activeTab === 1 && listOfEvents.length > 0)
+        || (activeTab === 2 && listOfCenters.length > 0)) {
+      return true;
+    } return false;
+  }
+  /**
+   *
    *
    * @returns {element} HTML element
    * @memberof Dashboard
    */
   render() {
-    this.handlePageItems();
     return (
       <div className="wrapper" id="wrapper">
         <Header />
@@ -158,7 +173,9 @@ class Dashboard extends Component {
             <div className="col-md-8 offset-md-2">
               <div className="sticky-top">
                 <div className="clearfix  w-50 ml-auto">
-                  <SearchBlock onChange={this.onChange} showButton={false} />
+                  { this.showSearchBar() &&
+                    <SearchBlock onChange={this.onChange} showButton={false} />
+                  }
                 </div>
                 <Tabs role={isUserAdmin()} onChange={this.handleTabChange} />
               </div>

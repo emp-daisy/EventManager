@@ -134,11 +134,12 @@ class Events extends Component {
           </h2>
           <div className="row text-center m-4 justify-content-center">
             <div className="col-md-6 col-sm-12 offset-md-6">
-              <SearchBlock
+              {pageItems.length > 0 && <SearchBlock
                 onChange={this.onChange}
                 showButton={false}
                 dropDownArray={['All', 'Name', 'Location', 'Facilities']}
               />
+            }
             </div>
           </div>
           {this.props.alert &&
