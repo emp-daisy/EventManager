@@ -214,6 +214,7 @@ class Dashboard extends Component {
             this.props.listOfCenters.length}
             onChange={this.handlePageChange}
           />
+        </section>
         <Footer />
         {this.state.showModal &&
           <div className="overlayModal">
