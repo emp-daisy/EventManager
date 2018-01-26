@@ -149,9 +149,9 @@ class Dashboard extends Component {
    */
   showSearchBar() {
     const { activeTab } = this.state;
-    const { listOfEvents, listOfCenters } = this.props;
-    if ((activeTab === 1 && listOfEvents.length > 0)
-        || (activeTab === 2 && listOfCenters.length > 0)) {
+    const { listOfAllEvents, listOfAllCenters } = this.props;
+    if ((activeTab === 1 && listOfAllEvents.length > 0)
+        || (activeTab === 2 && listOfAllCenters.length > 0)) {
       return true;
     } return false;
   }

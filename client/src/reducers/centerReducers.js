@@ -85,8 +85,14 @@ const centers = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false,
-        centerList: state.centerList.map(item => Object.assign({}, item, action.newData)),
-        allCenterList: state.allCenterList.map(item => Object.assign({}, item, action.newData))
+        centerList: state.centerList.map((item) => {
+          if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
+          return item;
+        }),
+        allCenterList: state.allCenterList.map((item) => {
+          if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
+          return item;
+        })
       });
       break;
     case 'UPDATE_CENTERS_FAILED':

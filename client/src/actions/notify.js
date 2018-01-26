@@ -11,9 +11,14 @@ const connectionError = (dispatch, message) => {
   }));
 };
 
-const validationError = data => Object
-  .values(data.msg)
-  .join('<br />');
+const validationError = (data) => {
+  if (typeof data.msg !== 'object') {
+    return data.msg;
+  }
+  return Object
+    .values(data.msg)
+    .join('<br />');
+};
 
 export { addNotification, connectionError, validationError };
 

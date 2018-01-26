@@ -106,8 +106,14 @@ const events = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false,
-        eventList: state.eventList.map(item => Object.assign({}, item, action.newData)),
-        allEventList: state.allEventList.map(item => Object.assign({}, item, action.newData))
+        eventList: state.eventList.map((item) => {
+          if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
+          return item;
+        }),
+        allEventList: state.allEventList.map((item) => {
+          if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
+          return item;
+        })
       });
       break;
     case 'UPDATE_EVENTS_FAILED':

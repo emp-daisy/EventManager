@@ -178,7 +178,17 @@ export default class Events {
             createdBy: parseInt(this.req.verified.id, 10),
             image: data.image
           })
-          .then(result => this.res.status(201).json({ val: result, msg: 'Event added successfully' }));
+          .then(value => this.constructor.getEvent(value.id))
+          .then((result) => {
+            if (result !== null) {
+              return this.res
+                .status(201)
+                .json({ val: result, msg: 'Event added successfully' });
+            }
+            return this.res
+              .status(500)
+              .json({ msg: 'Error creating an event' });
+          });
       })
       .catch((error) => {
         this
@@ -294,16 +304,17 @@ export default class Events {
                 }
               })
               .then((value) => {
-                if (value.length === 0) {
-                  return this
-                    .res
-                    .status(400)
-                    .json({ msg: 'Event update failed' });
+                if (value > 0) { return this.constructor.getEvent(id); }
+              })
+              .then((res) => {
+                if (res) {
+                  return this.res
+                    .status(200)
+                    .json({ val: res, msg: 'Event updated successfully' });
                 }
-                this
-                  .res
-                  .status(200)
-                  .json({ val: value, msg: 'Event updated successfully' });
+                return this.res
+                  .status(500)
+                  .json({ msg: 'Error updating an event' });
               });
           });
       })
@@ -377,5 +388,46 @@ export default class Events {
           });
       })
       .catch(error => this.res.status(500).send({ msg: 'Server Error', error }));
+  }
+
+  /**
+   * Returns detals of an event
+   *
+   * @returns {Object} JSON object for an event detail with status code
+   * @param {any} id
+   * @memberof Events
+   */
+  static getEvent(id) {
+    return model
+      .Events
+      .findOne({
+        where: {
+          id: parseInt(id, 10)
+        },
+        attributes: [
+          'id',
+          'name',
+          'location',
+          'startDate',
+          'endDate'
+        ],
+        include: [
+          {
+            attributes: [
+              'name',
+              'location'
+            ],
+            model: model.Centers,
+            include: [
+              {
+                model: model.States,
+                attributes: ['name']
+              }
+            ]
+          }
+        ]
+      })
+      .then(result => result)
+      .catch(() => {});
   }
 }

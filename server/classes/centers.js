@@ -19,11 +19,11 @@ export default class Centers {
     this.res = res;
   }
   /**
- *
- *
- * @returns {Object} JSON response
- * @memberof Centers
- */
+   *
+   *
+   * @returns {Object} JSON response
+   * @memberof Centers
+   */
   findAllCenter() {
     return model.Centers
       .all({
@@ -52,12 +52,13 @@ export default class Centers {
       .catch(error =>
         this.res.status(500).send({ msg: 'Server Error', error }));
   }
+
   /**
- *
- *
- * @returns {Object} JSON response
- * @memberof Centers
- */
+   *
+   *
+   * @returns {Object} JSON response
+   * @memberof Centers
+   */
   findOneCenter() {
     const { id } = this.req.params;
     return model.Centers
@@ -111,13 +112,14 @@ export default class Centers {
       .catch(error =>
         this.res.status(500).send({ msg: 'Server Error', error }));
   }
+
   /**
- * Convers an array to a stringseprated by comma
- *
- * @param {array} word
- * @returns {string} Strigifies an array
- * @memberof Centers
- */
+   * Convers an array to a stringseprated by comma
+   *
+   * @param {array} word
+   * @returns {string} Strigifies an array
+   * @memberof Centers
+   */
   static splitArray(word) {
     if (!word) {
       return [];
@@ -128,12 +130,13 @@ export default class Centers {
       .filter(s => s !== '');
     return strArr;
   }
+
   /**
- * Creates a new center
- *
- * @returns {Object} JSON response
- * @memberof Centers
- */
+   * Creates a new center
+   *
+   * @returns {Object} JSON response
+   * @memberof Centers
+   */
   createCenter() {
     const data = this.req.body;
     data.facilities = this.constructor.splitArray(data.facilities);
@@ -156,19 +159,27 @@ export default class Centers {
         createdBy: parseInt(this.req.verified.id, 10),
         updatedBy: parseInt(this.req.verified.id, 10)
       })
-      .then(result =>
-        this.res
-          .status(201)
-          .json({ val: result, msg: 'Center added successfully' }))
+      .then(value => this.constructor.getCenter(value.id))
+      .then((result) => {
+        if (result !== null) {
+          return this.res
+            .status(201)
+            .json({ val: result, msg: 'Center added successfully' });
+        }
+        return this.res
+          .status(500)
+          .json({ msg: 'Error creating a center' });
+      })
       .catch(error =>
         this.res.status(500).send({ msg: 'Server Error', error }));
   }
+
   /**
- * Deletes a center
- *
- * @returns {Object} JSON response
- * @memberof Centers
- */
+   * Deletes a center
+   *
+   * @returns {Object} JSON response
+   * @memberof Centers
+   */
   deleteCenter() {
     const id = parseInt(this.req.params.id, 10);
 
@@ -205,6 +216,7 @@ export default class Centers {
       .catch(error =>
         this.res.status(500).send({ msg: 'Server Error', error }));
   }
+
   /**
    * Modifies a specific centeer
    *
@@ -277,10 +289,17 @@ export default class Centers {
             }
           )
           .then((value) => {
-            if (value.length === 0) {
-              return this.res.status(400).json({ msg: 'Center update failed' });
+            if (value > 0) { return this.constructor.getCenter(id); }
+          })
+          .then((res) => {
+            if (res) {
+              return this.res
+                .status(200)
+                .json({ val: res, msg: 'Center updated successfully' });
             }
-            this.res.status(200).json({ msg: 'Center updated successfully' });
+            return this.res
+              .status(500)
+              .json({ msg: 'Error updating a center' });
           });
       })
       .catch(error =>
@@ -309,5 +328,38 @@ export default class Centers {
       })
       .catch(error =>
         this.res.status(500).send({ msg: 'Server Error', error }));
+  }
+
+  /**
+   *
+   *
+   * @returns {Object} JSON response
+   * @param {any} id
+   * @memberof Centers
+   */
+  static getCenter(id) {
+    return model.Centers
+      .findOne({
+        attributes: [
+          'id',
+          'name',
+          'location',
+          'facilities',
+          'image',
+          [sequelize.col('Centers.states'), 'stateId'],
+          [sequelize.col('State.name'), 'state']
+        ],
+        where: {
+          id: +id
+        },
+        include: [
+          {
+            attributes: [],
+            model: model.States
+          }
+        ]
+      })
+      .then(result => result)
+      .catch(() => {});
   }
 }
