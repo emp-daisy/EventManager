@@ -78,8 +78,10 @@ class Dashboard extends Component {
         );
       }
     }
-
-    this.handlePageItems();
+    if (nextProps.listOfAllEvents !== this.props.listOfAllEvents ||
+      nextProps.listOfAllCenters !== this.props.listOfAllCenters) {
+      this.handlePageItems();
+    }
   }
   /**
    *
@@ -100,7 +102,9 @@ class Dashboard extends Component {
    */
   handlePageChange(pageNumber) {
     this.tabList.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    this.setState({ activePage: pageNumber });
+    this.setState({ activePage: pageNumber }, () => {
+      this.handlePageItems();
+    });
   }
   /**
    *
@@ -210,7 +214,6 @@ class Dashboard extends Component {
             this.props.listOfCenters.length}
             onChange={this.handlePageChange}
           />
-        </section>
         <Footer />
         {this.state.showModal &&
           <div className="overlayModal">
