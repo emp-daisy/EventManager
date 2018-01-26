@@ -32,7 +32,7 @@ export const deleteCenter = id => (dispatch) => {
     .then(res => res)
     .then((data) => {
       if (data.status === 200) {
-        dispatch({ type: 'DELETE_CENTERS_GRANTED', id: +id });
+        dispatch({ type: 'DELETE_CENTERS_GRANTED', id });
         dispatch(addNotification({
           message: 'Delete successful',
           level: 'success',
@@ -62,7 +62,14 @@ export const createCenter = centerData => (dispatch) => {
     .then((data) => {
       const dataBody = data.json();
       if (data.status === 201) {
-        dispatch({ type: 'CREATE_CENTERS_GRANTED' });
+        dataBody.then((res) => {
+          dispatch({ type: 'CREATE_CENTERS_GRANTED', newData: res.val });
+        });
+        dispatch(addNotification({
+          message: 'New Center added successful',
+          level: 'success',
+          autoDismiss: 10
+        }));
       } else {
         dispatch({ type: 'CREATE_CENTERS_FAILED', msg: 'Error creating new event. TRY AGAIN LATER' });
         dataBody.then((res) => {
@@ -90,7 +97,14 @@ export const updateCenter = (centerData, id) => (dispatch) => {
     .then((data) => {
       const dataBody = data.json();
       if (data.status === 200) {
-        dispatch({ type: 'UPDATE_CENTERS_GRANTED' });
+        dataBody.then((res) => {
+          dispatch({ type: 'UPDATE_CENTERS_GRANTED', newData: res.val });
+        });
+        dispatch(addNotification({
+          message: 'Center update  successful',
+          level: 'success',
+          autoDismiss: 10
+        }));
       } else {
         dispatch({ type: 'UPDATE_CENTERS_FAILED', msg: 'Error updating event. TRY AGAIN LATER' });
         dataBody.then((res) => {

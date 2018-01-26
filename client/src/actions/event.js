@@ -55,7 +55,7 @@ export const deleteEvent = id => (dispatch) => {
     .then(res => res)
     .then((data) => {
       if (data.status === 200) {
-        dispatch({ type: 'DELETE_EVENTS_GRANTED', id: +id });
+        dispatch({ type: 'DELETE_EVENTS_GRANTED', id });
         dispatch(addNotification({
           message: 'Delete successful',
           level: 'success',
@@ -88,7 +88,10 @@ export const createEvent = eventData => (dispatch) => {
     .then((data) => {
       const dataBody = data.json();
       if (data.status === 201) {
-        dispatch({ type: 'CREATE_EVENTS_GRANTED' }); dispatch(addNotification({
+        dataBody.then((res) => {
+          dispatch({ type: 'CREATE_EVENTS_GRANTED', newData: res.val });
+        });
+        dispatch(addNotification({
           message: 'New Event added successful',
           level: 'success',
           autoDismiss: 10
@@ -120,7 +123,10 @@ export const updateEvent = (eventData, id) => (dispatch) => {
     .then((data) => {
       const dataBody = data.json();
       if (data.status === 200) {
-        dispatch({ type: 'UPDATE_EVENTS_GRANTED' }); dispatch(addNotification({
+        dataBody.then((res) => {
+          dispatch({ type: 'UPDATE_EVENTS_GRANTED', newData: res.val });
+        });
+        dispatch(addNotification({
           message: 'Update successful',
           level: 'success',
           autoDismiss: 10

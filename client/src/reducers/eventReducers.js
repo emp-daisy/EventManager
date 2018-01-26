@@ -61,15 +61,56 @@ const events = (state = defaultState, action) => {
       });
       break;
     case 'DELETE_EVENTS_GRANTED':
-
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false,
-        eventList: state.eventList.filter(el => el.name !== action.id),
-        allEventList: state.allEventList.filter(el => el.name !== action.id)
+        eventList: state.eventList.filter(el => el.id.toString() !== action.id.toString()),
+        allEventList: state.allEventList.filter(el => el.id.toString() !== action.id.toString())
       });
       break;
     case 'DELETE_EVENTS_FAILED':
+      currentState = Object.assign({}, state, {
+        isLoading: false,
+        error: true,
+        errorMessage: action.msg
+      });
+      break;
+    case 'CREATE_EVENTS':
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false
+      });
+      break;
+    case 'CREATE_EVENTS_GRANTED':
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false,
+        eventList: [...state.eventList, action.newData],
+        allEventList: [...state.allEventList, action.newData]
+      });
+      break;
+    case 'CREATE_EVENTS_FAILED':
+      currentState = Object.assign({}, state, {
+        isLoading: false,
+        error: true,
+        errorMessage: action.msg
+      });
+      break;
+    case 'UPDATE_EVENTS':
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false
+      });
+      break;
+    case 'UPDATE_EVENTS_GRANTED':
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false,
+        eventList: state.eventList.map(item => Object.assign({}, item, action.newData)),
+        allEventList: state.allEventList.map(item => Object.assign({}, item, action.newData))
+      });
+      break;
+    case 'UPDATE_EVENTS_FAILED':
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: true,
