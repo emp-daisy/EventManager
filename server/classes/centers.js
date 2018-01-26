@@ -136,7 +136,7 @@ export default class Centers {
  */
   createCenter() {
     const data = this.req.body;
-    data.facilities = this.splitArray(data.facilities);
+    data.facilities = this.constructor.splitArray(data.facilities);
 
     const validateRes = Validator.validateCenter(data);
     if (validateRes !== true) {
@@ -251,7 +251,7 @@ export default class Centers {
         const newValues = {
           name: data.name || resJson.name,
           location: data.location || resJson.location,
-          facilities: this.splitArray(data.facilities) || resJson.facilities,
+          facilities: this.constructor.splitArray(data.facilities) || resJson.facilities,
           states: parseInt(data.states, 10) || resJson.states,
           image: data.image || resJson.image
         };
