@@ -8,8 +8,11 @@ const Centers = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
     },
     location: {
       type: DataTypes.STRING,

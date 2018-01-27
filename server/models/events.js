@@ -10,6 +10,10 @@ const Events = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     location: {
       type: DataTypes.INTEGER,
       allowNull: false

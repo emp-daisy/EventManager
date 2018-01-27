@@ -8,8 +8,11 @@ module.exports = {
     },
     name: {
       type: Sequelize.STRING,
-      allowNull: false,
-      unique: true,
+      allowNull: false
+    },
+    description: {
+      type: Sequelize.TEXT,
+      allowNull: true
     },
     location: {
       type: Sequelize.STRING,
