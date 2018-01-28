@@ -102,14 +102,6 @@ class Register extends Component {
         >
           <div className="col-md-6 col-12 text-center align-items-center">
             <h2 className="text-white text-center">REGISTER</h2>
-            {this.props.alert &&
-              <div className="alert alert-danger">
-                {this.props.alertMessage}
-              </div>}
-            {this.props.success &&
-              <div className="alert alert-success">
-                {this.props.successMessage}
-              </div>}
             {this.props.success &&
               <div className="alert alert-info">
                 Redirecting in {this.props.counter}&nbsp;second{this.props.counter > 1 && 's'}...
@@ -196,10 +188,7 @@ class Register extends Component {
 const mapStateToProps = state => ({
   loading: state.user.isLoading,
   loggedIn: state.user.isLoggedIn,
-  alert: state.user.error,
-  alertMessage: state.user.errorMessage,
   success: state.user.success,
-  successMessage: state.user.successMessage,
   counter: state.user.countDown
 });
 const matchDispatchToProps = dispatch =>
@@ -213,10 +202,7 @@ const matchDispatchToProps = dispatch =>
 Register.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
-  alert: PropTypes.bool.isRequired,
-  alertMessage: PropTypes.string.isRequired,
   success: PropTypes.bool.isRequired,
-  successMessage: PropTypes.string.isRequired,
   register: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   counter: PropTypes.number.isRequired

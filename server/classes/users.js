@@ -32,8 +32,7 @@ export default class Users {
     const validationResponse = Validator.validateUser(data);
     if (validationResponse !== true) {
       return this.res.status(400).json({
-        msg: 'Validation failed',
-        errors: validationResponse
+        msg: validationResponse
       });
     }
     return userDb

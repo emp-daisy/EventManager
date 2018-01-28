@@ -45,21 +45,22 @@ const authentication = (state = defaultState, action) => {
       currentState = Object.assign({}, state, { isLoggedIn: false });
       break;
     case 'REGISTER_USER':
-      currentState = Object.assign({}, state, { isLoading: true });
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false,
+        success: false
+      });
       break;
     case 'REGISTER_USER_FAILED':
       currentState = Object.assign({}, state, {
         isLoading: false,
-        error: true,
-        errorMessage: action.msg
+        error: true
       });
       break;
     case 'REGISTER_USER_GRANTED':
       currentState = Object.assign({}, state, {
         isLoading: false,
-        error: false,
         success: true,
-        successMessage: action.msg
       });
       break;
     case 'CLEAR_MESSAGE':

@@ -2,8 +2,61 @@ import jwtDecode from 'jwt-decode';
 import URLSearchParams from 'url-search-params';
 import { API_URL } from '../store/setupStore';
 import { history } from './history';
+import { addNotification, connectionError, validationError } from './notify';
+
+const saveToken = (token) => {
+  localStorage.setItem('jwt-token', token);
+};
+
+const removeToken = () => {
+  localStorage.removeItem('jwt-token');
+};
+
+const checkTokenExpiry = () => {
+  const jwt = localStorage.getItem('jwt-token');
+  if (jwt) {
+    const jwtExp = jwtDecode(jwt).exp;
+    const expiryDate = new Date(0);
+    expiryDate.setUTCSeconds(jwtExp);
+
+    if (new Date() < expiryDate) {
+      return true;
+    }
+  }
+  removeToken();
+  return false;
+};
+
+export const getToken = () => {
+  checkTokenExpiry();
+  return localStorage.getItem('jwt-token');
+};
+
+export const isUserAdmin = () => {
+  const jwt = getToken();
+  if (jwt) {
+    const admin = jwtDecode(jwt).isAdmin;
+    return admin;
+  }
+  return false;
+};
+
+const countdownFrom = (n, dispatch, redirectURL) => {
+  dispatch({ type: 'INC_TIMER', time: n });
+  setTimeout(() => {
+    n -= 1;
+    dispatch({ type: 'DEC_TIMER' });
+    if (n > 0) {
+      countdownFrom(n, dispatch);
+    } else {
+      history.replace(redirectURL);
+      dispatch({ type: 'CLEAR_MESSAGE' });
+    }
+  }, 1000);
+};
 
 export const login = (email, password) => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'LOGIN_USER' });
 
   const payload = new URLSearchParams();
@@ -30,6 +83,7 @@ export const login = (email, password) => (dispatch) => {
 };
 
 export const register = credientials => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'REGISTER_USER' });
 
   const payload = new URLSearchParams();
@@ -49,33 +103,24 @@ export const register = credientials => (dispatch) => {
   }).then(res => res)
     .then((response) => {
       const data = response.json();
-      if (data.status === 201) {
-        dispatch({ type: 'REGISTER_USER_GRANTED', msg: data.msg });
-        dispatch({ type: 'INC_TIMER', time: 5 });
-        const counter = Array.from(new Array(5), () => countDown(dispatch));
-        return counter.reduce((promiseChain, currentTask) => promiseChain.then(currentTask), Promise.resolve());
-      }
-      let message = data.msg;
-      if (data.errors) {
-        message = Object
-          .values(data.errors)
-          .join('\n');
-      }
-      dispatch({ type: 'REGISTER_USER_FAILED', msg: message });
-      return false;
-    }).then((success) => {
-      if (success) {
-        history.replace('/login');
-        dispatch({ type: 'CLEAR_MESSAGE' });
+      if (response.status === 201) {
+        dispatch({ type: 'REGISTER_USER_GRANTED' });
+        dispatch(addNotification({
+          message: 'Registration successful',
+          level: 'success',
+          autoDismiss: 5
+        }));
+        countdownFrom(5, dispatch, '/login');
+      } else {
+        dispatch({ type: 'REGISTER_USER_FAILED' });
+        data.then((res) => {
+          connectionError(dispatch, validationError(res));
+        });
       }
     })
-    .catch((error) => {
-      dispatch({
-        type: 'REGISTER_USER_FAILED',
-        msg: error.msg
-          ? error.msg
-          : error
-      });
+    .catch(() => {
+      dispatch({ type: 'REGISTER_USER_FAILED', msg: 'Error registering user...' });
+      connectionError(dispatch);
     });
 };
 
@@ -83,47 +128,3 @@ export const logOut = () => (dispatch) => {
   removeToken();
   dispatch({ type: 'LOGOUT_USER' });
 };
-
-export const getToken = () => {
-  checkTokenExpiry();
-  return localStorage.getItem('jwt-token');
-};
-
-const saveToken = (token) => {
-  localStorage.setItem('jwt-token', token);
-};
-
-const removeToken = () => {
-  localStorage.removeItem('jwt-token');
-};
-
-const checkTokenExpiry = () => {
-  const jwt = localStorage.getItem('jwt-token');
-  if (jwt) {
-    const jwtExp = jwtDecode(jwt).exp;
-    const expiryDate = new Date(0);
-    expiryDate.setUTCSeconds(jwtExp);
-
-    if (new Date() < expiryDate) {
-      return true;
-    }
-  }
-  removeToken();
-  return false;
-};
-
-export const isUserAdmin = () => {
-  const jwt = getToken();
-  if (jwt) {
-    const admin = jwtDecode(jwt).isAdmin;
-    return admin;
-  }
-  return false;
-};
-
-const countDown = dispatch => new Promise((resolve) => {
-  setTimeout(() => {
-    dispatch({ type: 'DEC_TIMER' });
-    resolve();
-  }, 1000);
-});
