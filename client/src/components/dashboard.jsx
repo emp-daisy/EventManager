@@ -124,6 +124,7 @@ class Dashboard extends Component {
    */
   handleCreate() {
     this.setState({ showModal: true, modalAction: 'create' });
+    document.body.classList.add('modal-open');
   }
   /**
    *
@@ -132,6 +133,7 @@ class Dashboard extends Component {
    */
   handleClose() {
     this.setState({ showModal: false });
+    document.body.classList.remove('modal-open');
   }
   /**
    *
@@ -175,7 +177,7 @@ class Dashboard extends Component {
         >
           <div className="row align-content-center">
             <div className="col-md-8 offset-md-2">
-              <div className="sticky-top">
+              <div>
                 <div className="clearfix  w-50 ml-auto">
                   { this.showSearchBar() &&
                     <SearchBlock onChange={this.onChange} showButton={false} />

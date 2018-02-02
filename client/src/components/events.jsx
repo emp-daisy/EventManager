@@ -98,6 +98,7 @@ class Events extends Component {
   showModal(id) {
     this.setState({ showEventKey: id });
     this.setState({ showEvent: true });
+    document.body.classList.add('modal-open');
   }
   /**
    *
@@ -107,6 +108,7 @@ class Events extends Component {
   hideModal() {
     this.setState({ showEventKey: '' });
     this.setState({ showEvent: false });
+    document.body.classList.remove('modal-open');
   }
   /**
    *

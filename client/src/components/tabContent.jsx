@@ -78,6 +78,7 @@ class TabContent extends Component {
     this.setState({
       showModal: true, activeModal: tabIndex, activeModalData: data, modalAction: 'delete'
     });
+    document.body.classList.add('modal-open');
   }
   /**
    *
@@ -90,6 +91,7 @@ class TabContent extends Component {
     this.setState({
       showModal: true, activeModal: tabIndex, activeModalData: data, modalAction: 'edit'
     });
+    document.body.classList.add('modal-open');
   }
   /**
    *
@@ -98,6 +100,7 @@ class TabContent extends Component {
    */
   handleClose() {
     this.setState({ showModal: false });
+    document.body.classList.remove('modal-open');
   }
   /**
    *
