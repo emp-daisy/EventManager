@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import isEmail from 'validator/lib/isEmail';
 import { login } from '../actions/authentication';
 import Spinner from './spinner';
 import Header from './header';
 import Footer from './footer';
+import ForgottenPassword from './forgotPasswordModal';
 /**
  *
  *
@@ -22,11 +24,14 @@ class Login extends Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      errors: { email: false },
+      showModal: false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeState = this.onChangeState.bind(this);
-    this.canSubmit = this.canSubmit.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.onShowModal = this.onShowModal.bind(this);
   }
   /**
    *
@@ -60,22 +65,40 @@ class Login extends Component {
   }
   /**
    *
+   *
+   * @returns {null} hide reset modal
+   * @memberof Login
+   */
+  onCancel() {
+    this.setState({ showModal: false });
+  }
+  /**
+   *
+   *
+   * @returns {boolean} show reset modal and avoid navigation
+   * @memberof Login
+   */
+  onShowModal() {
+    this.setState({ showModal: true });
+    return false;
+  }
+  /**
+   *
    * @param {any} event
    * @returns {null} no return
    * @memberof Login
    */
   onSubmit(event) {
     event.preventDefault();
-    this.props.login(this.state.email, this.state.password);
-  }
-  /**
-   *
-   *
-   * @returns {boolean} checks if fields are empty
-   * @memberof Login
-   */
-  canSubmit() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    const { errors } = this.state;
+
+    errors.email = !isEmail(this.state.email);
+
+    this.setState({ errors }, () => {
+      if (!this.state.errors.email) {
+        this.props.login(this.state.email, this.state.password);
+      }
+    });
   }
   /**
    *
@@ -84,13 +107,15 @@ class Login extends Component {
    * @memberof Login
    */
   render() {
-    const isEnabled = this.canSubmit();
+    const isEnabled =
+      this.state.email.length > 0 && this.state.password.length > 0;
 
     return (
       <div className="wrapper d-flex flex-column h-100">
         <Header />
         <section
-          className="align-items-center d-flex flex-column flex-grow background-img"
+          className={'align-items-center d-flex flex-column ' +
+                  'flex-grow background-img justify-content-center'}
           id="login"
         >
           <div className="col-md-6 text-center">
@@ -110,6 +135,8 @@ class Login extends Component {
                   placeholder="Email"
                   name="email"
                 />
+                {this.state.errors.email &&
+                  <span className="error">Invalid email address</span>}
               </div>
               <div className="form-group">
                 <input
@@ -135,14 +162,32 @@ class Login extends Component {
             <div className="text-white">
               <div>
                 <p>
-                  {"I don't have an account?"}
-                  <a href="/register">Click here</a>
+                  {'Forgotten password? '}
+                  <span
+                    className="span-link"
+                    role="button"
+                    tabIndex="0"
+                    onKeyPress={this.onShowModal}
+                    onClick={this.onShowModal}
+                  >
+                    Click here
+                  </span>
+                </p>
+                <p>
+                  {"I don't have an account? "}
+                  <a className="span-link" href="/register">
+                    Click here
+                  </a>
                 </p>
               </div>
             </div>
           </div>
         </section>
         <Footer />
+        {this.state.showModal &&
+          <div className="overlayModal">
+            <ForgottenPassword onCancel={this.onCancel} />
+          </div>}
       </div>
     );
   }

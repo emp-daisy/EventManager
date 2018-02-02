@@ -7,7 +7,11 @@ const sendEmail = (from, to, subject, text) => {
     html: `<p>${text.replace(/\n/g, '<br />')}</p>`
   };
 
-  global.emailTransport.sendMail(email);
+  try {
+    global.emailTransport.sendMail(email);
+  } catch (errror) {
+    console.log();
+  }
   /* , (err, info) => {
     if (err) {
       console.log('EMAIL FAILED ', err);

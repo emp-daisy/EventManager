@@ -19,7 +19,7 @@ class Notification extends Component {
   componentWillReceiveProps(newProps) {
     if (newProps.notification.clear) {
       this.notificationSystem.clearNotifications();
-    } else {
+    } else if (newProps.notification.config) {
       this.notificationSystem.addNotification(newProps.notification.config);
     }
   }

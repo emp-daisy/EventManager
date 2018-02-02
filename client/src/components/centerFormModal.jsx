@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import validator from 'validator';
 import { Creatable, Async } from 'react-select';
 import 'react-select/dist/react-select.css';
 /**
@@ -28,24 +29,31 @@ class CenterModal extends Component {
         name: this.props.prevData.name,
         description: this.props.prevData.description,
         location: this.props.prevData.location,
-        state: this.props.prevData.stateId,
+        state: { id: this.props.prevData.stateId, name: this.props.prevData.state },
         facilities: faciliesObject
       };
     }
     this.state = {
       formData: formUpdate ||
       {
-        facilities: [],
-        state: {},
         name: '',
+        description: '',
         location: '',
-        description: ''
+        state: { id: '', name: '' },
+        facilities: []
+      },
+      errors: {
+        name: { isInvalid: false, message: '' },
+        location: { isInvalid: false, message: '' },
+        state: { isInvalid: false, message: '' }
       }
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.isFormInvalid = this.isFormInvalid.bind(this);
+    this.resetValidation = this.resetValidation.bind(this);
   }
   /**
    *
@@ -53,20 +61,23 @@ class CenterModal extends Component {
    * @memberof CenterModal
    */
   onSubmit() {
-    const inputData = this.state.formData;
+    this.resetValidation();
+    if (!this.isFormInvalid()) {
+      const inputData = this.state.formData;
 
-    const data = {
-      name: inputData.name,
-      location: inputData.location,
-      facilities: inputData.facilities.map(f => f.value).join(','),
-      states: inputData.state.id
-    };
-    if (this.props.isCreate) {
-      this.props.handleSubmit(data);
-    } else {
-      this.props.handleSubmit(data, inputData.id);
+      const data = {
+        name: inputData.name,
+        location: inputData.location,
+        facilities: inputData.facilities.map(f => f.value).join(','),
+        states: inputData.state.id
+      };
+      if (this.props.isCreate) {
+        this.props.handleSubmit(data);
+      } else {
+        this.props.handleSubmit(data, inputData.id);
+      }
     }
-    this.props.onClose();
+    // this.props.onClose();
   }
   /**
    *
@@ -94,6 +105,45 @@ class CenterModal extends Component {
         [name]: option
       })
     });
+  }
+  /**
+   *
+   *
+   * @returns {boolean} if form field is valid
+   * @memberof CenterModal
+   */
+  isFormInvalid() {
+    const { errors } = this.state;
+    if (!validator.isLength(this.state.formData.name, { min: 3, max: undefined })) {
+      errors.name.isInvalid = true;
+      errors.name.message = 'Center name should be more than 3 characters';
+    }
+    if (!validator.isLength(this.state.formData.location, { min: 3, max: undefined })) {
+      errors.location.isInvalid = true;
+      errors.location.message = 'Address should be more than 10 characters';
+    }
+    if (this.state.formData.state === null || !validator.isNumeric(this.state.formData.state.id.toString())) {
+      errors.state.isInvalid = true;
+      errors.state.message = 'Select a state from the list';
+    }
+    this.setState({ errors });
+    return Object.keys(errors).some(value => errors[value].isInvalid);
+  }
+  /**
+   *
+   *
+   * @returns {null} Reset form errors
+   * @memberof CenterModal
+   */
+  resetValidation() {
+    const { errors } = this.state;
+
+    Object.keys(errors).map((key) => {
+      errors[key].isInvalid = false;
+      errors[key].message = '';
+      return errors[key];
+    });
+    this.setState({ errors });
   }
   /**
    *
@@ -129,6 +179,9 @@ class CenterModal extends Component {
                         defaultValue={this.state.formData.name}
                       />
                     </div>
+                    {this.state.errors.name.isInvalid &&
+                      <span className="error">{this.state.errors.location.message}
+                      </span>}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -155,6 +208,9 @@ class CenterModal extends Component {
                         defaultValue={this.state.formData.location}
                       />
                     </div>
+                    {this.state.errors.location.isInvalid &&
+                      <span className="error">{this.state.errors.location.message}
+                      </span>}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -173,6 +229,9 @@ class CenterModal extends Component {
                         loadOptions={this.props.allStates}
                       />
                     </div>
+                    {this.state.errors.state.isInvalid &&
+                      <span className="error">{this.state.errors.state.message}
+                      </span>}
                   </div>
                   <div className="form-group">
                     <div className="input-group">

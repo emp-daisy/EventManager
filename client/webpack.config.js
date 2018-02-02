@@ -9,6 +9,7 @@ exports.default = {
     hotUpdateChunkFilename: 'dist/hot/hot-update.js',
     hotUpdateMainFilename: 'dist/hot/hot-update.json'
   },
+  devtool: 'source-map',
   devServer: {
     publicPath: '/',
     contentBase: './public',

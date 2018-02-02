@@ -13,7 +13,7 @@ class EventModal extends Component {
    * Creates an instance of EventModal.
    * @param {any} props
    * @memberof EventModal
- */
+  */
   constructor(props) {
     super(props);
     let formUpdate;
@@ -22,7 +22,7 @@ class EventModal extends Component {
         id: this.props.prevData.id,
         name: this.props.prevData.name,
         description: this.props.prevData.description,
-        location: this.props.prevData.location,
+        location: { id: this.props.prevData.location, name: this.props.prevData.Center.name },
         startDate: this.props.prevData.startDate,
         endDate: this.props.prevData.endDate
       };
@@ -34,11 +34,19 @@ class EventModal extends Component {
         location: { id: '', name: '' },
         startDate: '',
         endDate: ''
+      },
+      errors: {
+        name: { isInvalid: false, message: '' },
+        location: { isInvalid: false, message: '' },
+        startDate: { isInvalid: false, message: '' },
+        endDate: { isInvalid: false, message: '' }
       }
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.isFormInvalid = this.isFormInvalid.bind(this);
+    this.resetValidation = this.resetValidation.bind(this);
   }
   /**
    *
@@ -46,20 +54,23 @@ class EventModal extends Component {
    * @memberof EventModal
    */
   onSubmit() {
-    const inputData = this.state.formData;
+    this.resetValidation();
+    if (!this.isFormInvalid()) {
+      const inputData = this.state.formData;
 
-    const data = {
-      name: inputData.name,
-      location: inputData.location.id,
-      startDate: moment(inputData.startDate).format('DD-MM-YYYY HH:mm').toString(),
-      endDate: moment(inputData.endDate).format('DD-MM-YYYY HH:mm').toString()
-    };
-    if (this.props.isCreate) {
-      this.props.handleSubmit(data);
-    } else {
-      this.props.handleSubmit(data, inputData.id);
+      const data = {
+        name: inputData.name,
+        location: inputData.location.id,
+        startDate: moment(inputData.startDate).format('DD-MM-YYYY HH:mm').toString(),
+        endDate: moment(inputData.endDate).format('DD-MM-YYYY HH:mm').toString()
+      };
+      if (this.props.isCreate) {
+        this.props.handleSubmit(data);
+      } else {
+        this.props.handleSubmit(data, inputData.id);
+      }
+      // this.props.onClose();
     }
-    this.props.onClose();
   }
   /**
    *
@@ -87,6 +98,52 @@ class EventModal extends Component {
         [name]: option
       })
     });
+  }
+  /**
+   *
+   *
+   * @returns {boolean} if form field is valid
+   * @memberof EventModal
+   */
+  isFormInvalid() {
+    const { errors } = this.state;
+    if (this.state.formData.name.length < 3) {
+      errors.name.isInvalid = true;
+      errors.name.message = 'Event name should be more than 3 characters';
+    }
+    if (this.state.formData.location === null ||
+      this.state.formData.location.id === '') {
+      errors.location.isInvalid = true;
+      errors.location.message = 'Select a center from the list';
+    }
+    if (this.state.formData.startDate.length === 0 ||
+      !moment(this.state.formData.startDate).isAfter()) {
+      errors.startDate.isInvalid = true;
+      errors.startDate.message = 'Invalid start date for event';
+    }
+    if (this.state.formData.endDate.length === 0 ||
+      !moment(this.state.formData.endDate).isAfter(this.state.formData.startDate)) {
+      errors.endDate.isInvalid = true;
+      errors.endDate.message = 'Invalid end date for event. Date must be after the start date';
+    }
+    this.setState({ errors });
+    return Object.keys(errors).some(value => errors[value].isInvalid);
+  }
+  /**
+   *
+   *
+   * @returns {null} Reset form errors
+   * @memberof EventModal
+   */
+  resetValidation() {
+    const { errors } = this.state;
+
+    Object.keys(errors).map((key) => {
+      errors[key].isInvalid = false;
+      errors[key].message = '';
+      return errors[key];
+    });
+    this.setState({ errors });
   }
   /**
    *
@@ -122,6 +179,9 @@ class EventModal extends Component {
                         defaultValue={this.state.formData.name}
                       />
                     </div>
+                    {this.state.errors.name.isInvalid &&
+                      <span className="error">{this.state.errors.name.message}
+                      </span>}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -154,6 +214,9 @@ class EventModal extends Component {
                         loadOptions={this.props.allCenters}
                       />
                     </div>
+                    {this.state.errors.location.isInvalid &&
+                      <span className="error">{this.state.errors.location.message}
+                      </span>}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -162,12 +225,15 @@ class EventModal extends Component {
                         className="form-control"
                         type="datetime-local"
                         placeholder="Start Date"
-                        min={moment()}
+                        min={moment().format('YYYY-MM-DDTHH:mm')}
                         onChange={this.handleChange}
                         name="startDate"
-                        defaultValue={moment(this.state.formData.startDate).format('YYYY-MM-DDTHH:mm:ss')}
+                        defaultValue={moment(this.state.formData.startDate).format('YYYY-MM-DDTHH:mm')}
                       />
                     </div>
+                    {this.state.errors.startDate.isInvalid &&
+                      <span className="error">{this.state.errors.startDate.message}
+                      </span>}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -176,12 +242,15 @@ class EventModal extends Component {
                         className="form-control"
                         type="datetime-local"
                         placeholder="End Date"
-                        min={moment()}
+                        min={moment().format('YYYY-MM-DDTHH:mm')}
                         onChange={this.handleChange}
                         name="endDate"
-                        defaultValue={moment(this.state.formData.endDate).format('YYYY-MM-DDTHH:mm:ss')}
+                        defaultValue={moment(this.state.formData.endDate).format('YYYY-MM-DDTHH:mm')}
                       />
                     </div>
+                    {this.state.errors.endDate.isInvalid &&
+                      <span className="error">{this.state.errors.endDate.message}
+                      </span>}
                   </div>
                   <div className="form-row">
                     <div className="form-group col col-md-6">

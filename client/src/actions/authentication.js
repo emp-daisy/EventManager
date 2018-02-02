@@ -27,6 +27,20 @@ const checkTokenExpiry = () => {
   return false;
 };
 
+export const isResetTokenValid = (token) => {
+  try {
+    const jwtExp = jwtDecode(token).exp;
+    const expiryDate = new Date(0);
+    expiryDate.setUTCSeconds(jwtExp);
+    if (new Date() < expiryDate) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    return false;
+  }
+};
+
 export const getToken = () => {
   checkTokenExpiry();
   return localStorage.getItem('jwt-token');
@@ -41,15 +55,16 @@ export const isUserAdmin = () => {
   return false;
 };
 
-const countdownFrom = (n, dispatch, redirectURL) => {
+const countdownFrom = (n, dispatch) => {
   dispatch({ type: 'INC_TIMER', time: n });
-  setTimeout(() => {
+  return setTimeout(() => {
     n -= 1;
     dispatch({ type: 'DEC_TIMER' });
     if (n > 0) {
       countdownFrom(n, dispatch);
     } else {
-      history.replace(redirectURL);
+      dispatch({ type: 'CLEAR_NOTIFICATION' });
+      history.replace('/login');
       dispatch({ type: 'CLEAR_MESSAGE' });
     }
   }, 1000);
@@ -110,7 +125,7 @@ export const register = credientials => (dispatch) => {
           level: 'success',
           autoDismiss: 5
         }));
-        countdownFrom(5, dispatch, '/login');
+        countdownFrom(5, dispatch);
       } else {
         dispatch({ type: 'REGISTER_USER_FAILED' });
         data.then((res) => {
@@ -120,6 +135,89 @@ export const register = credientials => (dispatch) => {
     })
     .catch(() => {
       dispatch({ type: 'REGISTER_USER_FAILED', msg: 'Error registering user...' });
+      connectionError(dispatch);
+    });
+};
+
+export const forgottenPassword = email => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
+  dispatch({ type: 'FORGOTTEN_PASSWORD' });
+
+  const payload = new URLSearchParams();
+  payload.set('email', email);
+  fetch(`${API_URL}users/reset`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: payload
+  })
+    .then(resBody => resBody.json()
+      .then(v => (
+        {
+          status: resBody.status,
+          data: v
+        }
+      )))
+    .then((response) => {
+      if (response.status === 200) {
+        dispatch({ type: 'FORGOTTEN_PASSWORD_GRANTED' });
+        dispatch(addNotification({
+          message: 'Check your email to continue',
+          level: 'success',
+          autoDismiss: 15
+        }));
+        console.log('LINKKKKK', response.data.link);
+      } else {
+        dispatch({ type: 'FORGOTTEN_PASSWORD_FAILED', msg: response.data.msg });
+      }
+    }, () => {
+      dispatch({ type: 'FORGOTTEN_PASSWORD_FAILED', msg: 'Error resetting password...' });
+      connectionError(dispatch);
+    });
+};
+
+export const resetPassword = (credientials, token) => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
+  dispatch({ type: 'RESET_PASSWORD' });
+  const payload = new URLSearchParams();
+  payload.set('password', credientials.password);
+  payload.set('confirmPassword', credientials.passwordconfirm);
+  fetch(`${API_URL}users/reset/${token}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: payload
+  })
+    .then(resBody => resBody.json()
+      .then(v => (
+        {
+          status: resBody.status,
+          data: v
+        }
+      )))
+    .then((res) => {
+      if (res.status === 200) {
+        dispatch({ type: 'RESET_PASSWORD_GRANTED' });
+        history.replace('/login');
+        dispatch(addNotification({
+          message: 'Password reset successful',
+          level: 'success',
+          autoDismiss: 10
+        }));
+      } else {
+        dispatch(addNotification({
+          message: res.data.msg,
+          level: 'error',
+          autoDismiss: 0
+        }));
+        dispatch({ type: 'RESET_PASSWORD_FAILED', msg: res.data.msg });
+      }
+    }, () => {
+      dispatch({ type: 'RESET_PASSWORD_FAILED', msg: 'Error registering user...' });
       connectionError(dispatch);
     });
 };

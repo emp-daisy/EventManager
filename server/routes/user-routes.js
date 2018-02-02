@@ -13,5 +13,13 @@ userRouter.post('/users/login', (req, res) => {
   new Users(req, res).login();
 });
 
+// RESET A USERS PASSWORD - SEND TOKEN
+userRouter.post('/users/reset', (req, res) => {
+  new Users(req, res).sendReset();
+});
 
+// RESETTING A USERS PASSWORD
+userRouter.post('/users/reset/:token', (req, res) => {
+  new Users(req, res).reset();
+});
 export default userRouter;

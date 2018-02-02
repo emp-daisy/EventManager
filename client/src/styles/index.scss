@@ -90,11 +90,15 @@ body {
 #register {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/13.png) no-repeat center center fixed;
 }
-
+#errorPage, #reset{
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)) no-repeat center center fixed;
+}
 #dashboard, #event {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/21.png) no-repeat center center fixed;
 }
-
+.error{
+  color: red;
+}
 .intro h2,
 .intro h3 {
   color: #fff;
@@ -138,6 +142,17 @@ body {
   color: white;
 }
 
+.span-link {
+  color: blue;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.span-link:hover {
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
 .page-link {
   color: black;
 }
@@ -165,19 +180,20 @@ body {
     opacity: 1;
   }
 }
-.overlayModal {
+.overlayModal, .spinner {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: center;
   align-items: center;
   opacity: 0;
   animation: overlayFadeIn 0.5s 0.2s forwards;
+  z-index: 1500 !important;
 }
-.react-confirm-alert-overlay, .overlayModal{
-  z-index: 1500 !important
+.Select.form-control.has-value.is-open {
+  z-index: 5 !important;
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import validator from 'validator';
 import { register } from '../actions/authentication';
 import Spinner from './spinner';
 import Header from './header';
@@ -25,11 +26,20 @@ class Register extends Component {
       lastname: '',
       email: '',
       password: '',
-      passwordconfirm: ''
+      passwordconfirm: '',
+      errors: {
+        firstname: { isInvalid: false, message: '' },
+        surname: { isInvalid: false, message: '' },
+        email: { isInvalid: false, message: '' },
+        password: { isInvalid: false, message: '' },
+        passwordconfirm: { isInvalid: false, message: '' }
+      }
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeState = this.onChangeState.bind(this);
     this.canSubmit = this.canSubmit.bind(this);
+    this.isFormInvalid = this.isFormInvalid.bind(this);
+    this.resetValidation = this.resetValidation.bind(this);
   }
   /**
    *
@@ -74,7 +84,17 @@ class Register extends Component {
    */
   onSubmit(event) {
     event.preventDefault();
-    this.props.register(this.state);
+    this.resetValidation();
+    if (!this.isFormInvalid()) {
+      const value = {
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        email: this.state.email,
+        password: this.state.password,
+        passwordconfirm: this.state.passwordconfirm
+      };
+      this.props.register(value);
+    }
   }
   /**
    *
@@ -83,7 +103,64 @@ class Register extends Component {
    * @memberof Register
    */
   canSubmit() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return (
+      this.state.email.length > 0 &&
+      this.state.password.length > 0 &&
+      this.state.passwordconfirm.length > 0 &&
+      this.state.firstname.length > 0 &&
+      this.state.lastname.length > 0
+    );
+  }
+  /**
+   *
+   *
+   * @returns {boolean} if form field is valid
+   * @memberof Register
+   */
+  isFormInvalid() {
+    const { errors } = this.state;
+
+    if (!validator.isEmail(this.state.email)) {
+      errors.email.isInvalid = true;
+      errors.email.message = 'Invalid email address';
+    }
+    if (!validator.isLength(this.state.firstname, { min: 3, max: undefined })) {
+      errors.firstname.isInvalid = true;
+      errors.firstname.message = 'First name should be more than 3 characters';
+    }
+    if (!validator.isLength(this.state.lastname, { min: 3, max: undefined })) {
+      errors.surname.isInvalid = true;
+      errors.surname.message = 'Surname should be more than 3 characters';
+    }
+    if (!validator.isLength(this.state.password, { min: 6, max: undefined })) {
+      errors.password.isInvalid = true;
+      errors.password.message = 'Password must contain 6 or more characters';
+    } else if (
+      !validator.equals(this.state.password, this.state.passwordconfirm)
+    ) {
+      errors.password.isInvalid = true;
+      errors.passwordconfirm.isInvalid = true;
+      errors.password.message = 'Password does not match';
+      errors.passwordconfirm.message = 'Password does not match';
+    }
+    this.setState({ errors });
+    return Object.keys(errors).some(value => errors[value].isInvalid);
+  }
+  /**
+   *
+   *
+   * @returns {null} Reset form errors
+   * @memberof Register
+   */
+  resetValidation() {
+    const { errors } = this.state;
+
+    Object.keys(errors).map((key) => {
+      errors[key].isInvalid = false;
+      errors[key].message = '';
+      return errors[key];
+    });
+    this.setState({ errors });
   }
   /**
    *
@@ -97,7 +174,8 @@ class Register extends Component {
       <div className="wrapper d-flex flex-column h-100">
         <Header />
         <section
-          className="align-items-center d-flex flex-column flex-grow background-img"
+          className={'align-items-center d-flex flex-column ' +
+                    'flex-grow background-img justify-content-center'}
           id="register"
         >
           <div className="col-md-6 col-12 text-center align-items-center">
@@ -119,6 +197,10 @@ class Register extends Component {
                   onChange={this.onChangeState}
                   placeholder="First Name"
                 />
+                {this.state.errors.firstname.isInvalid &&
+                  <span className="error">
+                    {this.state.errors.firstname.message}
+                  </span>}
               </div>
               <div className="form-group">
                 <input
@@ -128,6 +210,10 @@ class Register extends Component {
                   onChange={this.onChangeState}
                   placeholder="Surname"
                 />
+                {this.state.errors.surname.isInvalid &&
+                  <span className="error">
+                    {this.state.errors.surname.message}
+                  </span>}
               </div>
               <div className="form-group">
                 <input
@@ -137,6 +223,10 @@ class Register extends Component {
                   name="email"
                   placeholder="Email"
                 />
+                {this.state.errors.email.isInvalid &&
+                  <span className="error">
+                    {this.state.errors.email.message}
+                  </span>}
               </div>
               <div className="form-group">
                 <input
@@ -146,6 +236,10 @@ class Register extends Component {
                   name="password"
                   placeholder="Password"
                 />
+                {this.state.errors.password.isInvalid &&
+                  <span className="error">
+                    {this.state.errors.password.message}
+                  </span>}
               </div>
               <div className="form-group">
                 <input
@@ -155,6 +249,10 @@ class Register extends Component {
                   onChange={this.onChangeState}
                   placeholder="Confirm Password"
                 />
+                {this.state.errors.passwordconfirm.isInvalid &&
+                  <span className="error">
+                    {this.state.errors.passwordconfirm.message}
+                  </span>}
               </div>
               <div className="form-group">
                 <button
@@ -172,8 +270,10 @@ class Register extends Component {
             <div className="text-white">
               <div>
                 <p>
-                  I have an account?
-                  <a href="/login">Click here</a>
+                  {'I have an account? '}
+                  <a className="span-link" href="/login">
+                    Click here
+                  </a>
                 </p>
               </div>
             </div>
