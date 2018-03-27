@@ -105,7 +105,7 @@ class CenterModal extends Component {
         this.props.handleSubmit(data, inputData.id);
       }
     }
-    // this.props.onClose();
+    this.props.onClose();
   }
   /**
    *
