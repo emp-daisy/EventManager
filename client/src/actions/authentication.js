@@ -92,6 +92,26 @@ export const login = (email, password) => (dispatch) => {
         dispatch({ type: 'LOGIN_USER_GRANTED', data });
         history.replace('/dashboard');
       } else {
+        if (data.unverified) {
+          dispatch(addNotification({
+            message: 'Verify account now',
+            level: 'warning',
+            autoDismiss: 0,
+            action: {
+              label: 'Re-Send link',
+              callback: () => {
+                fetch(`${API_URL}users/verify`, {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                  },
+                  body: payload
+                });
+              }
+            }
+          }));
+        }
         dispatch({ type: 'LOGIN_USER_FAILED', msg: data.msg });
       }
     }, err => dispatch({ type: 'LOGIN_USER_FAILED', msg: err }));

@@ -14,7 +14,7 @@ import { history } from '../actions/history';
  * @class HomePage
  * @extends {Component}
  */
-class HomePage extends Component {
+export class HomePage extends Component {
   /**
    * Creates an instance of HomePage.
    * @param {any} props

@@ -235,7 +235,14 @@ export default class Centers {
       .findOne({
         where: {
           id
-        }
+        },
+        attributes: [
+          'id',
+          'name',
+          'location',
+          'facilities',
+          'image'
+        ]
       })
       .then((result) => {
         if (result === null) {
@@ -302,8 +309,10 @@ export default class Centers {
               .json({ msg: 'Error updating a center' });
           });
       })
-      .catch(error =>
-        this.res.status(500).send({ msg: 'Server Error', error }));
+      .catch(error =>        
+        {console.log('ERRRRRR', error);
+
+        this.res.status(500).send({ msg: 'Server Error', error })});
   }
 
   /**

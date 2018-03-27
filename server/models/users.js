@@ -27,6 +27,11 @@ const Users = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    verify: {
+      allowNull: true,
+      type: DataTypes.STRING,
+      defaultValue: 'unverified',
     }
   }, {
     tableName: 'Users'

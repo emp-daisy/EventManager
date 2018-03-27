@@ -4,7 +4,12 @@ import event from '../assets/event.jpg';
 
 const CardBlock = props => (
   <div className="card" id={props.id}>
-    <img className="card-img-top" src={props.src} alt={props.title} />
+    <img
+      className="card-img-top"
+      src={props.src}
+      alt={props.title}
+      style={{ height: '150px' }}
+    />
     <div className="card-body">
       <h4 className="card-title">
         {props.title}

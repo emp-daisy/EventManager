@@ -30,7 +30,8 @@ class CenterModal extends Component {
         description: this.props.prevData.description,
         location: this.props.prevData.location,
         state: { id: this.props.prevData.stateId, name: this.props.prevData.state },
-        facilities: faciliesObject
+        facilities: faciliesObject,
+        image: this.props.prevData.image
       };
     }
     this.state = {
@@ -40,7 +41,9 @@ class CenterModal extends Component {
         description: '',
         location: '',
         state: { id: '', name: '' },
-        facilities: []
+        facilities: [],
+        filesToUpload: undefined,
+        image: ''
       },
       errors: {
         name: { isInvalid: false, message: '' },
@@ -54,6 +57,29 @@ class CenterModal extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.isFormInvalid = this.isFormInvalid.bind(this);
     this.resetValidation = this.resetValidation.bind(this);
+    this.onFileChange = this.onFileChange.bind(this);
+  }
+  /**
+    * @returns {null} no return
+    * @param {any} event
+    * @memberof CenterModal
+    */
+  onFileChange(event) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.imgPreview.src = e.target.result;
+    };
+    const filesToUpload = event.target.files[0];
+
+    if (filesToUpload && filesToUpload.type.match('image.*')) {
+      reader.readAsDataURL(filesToUpload);
+    }
+
+    this.setState({
+      formData: Object.assign({}, this.state.formData, {
+        filesToUpload
+      })
+    });
   }
   /**
    *
@@ -69,7 +95,9 @@ class CenterModal extends Component {
         name: inputData.name,
         location: inputData.location,
         facilities: inputData.facilities.map(f => f.value).join(','),
-        states: inputData.state.id
+        states: inputData.state.id,
+        image: inputData.image,
+        filesToUpload: inputData.filesToUpload
       };
       if (this.props.isCreate) {
         this.props.handleSubmit(data);
@@ -251,6 +279,48 @@ class CenterModal extends Component {
                         onChange={option => this.handleSelectChange(option, 'facilities')}
                         options={[]}
                       />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group col col-md-6">
+                      <div className="custom-file">
+                        <label
+                          className="custom-file-label"
+                          htmlFor="customFile"
+                        >
+                          <input
+                            type="file"
+                            onChange={e => this.onFileChange(e)}
+                            accept=".png, .jpg, .jpeg"
+                            className="custom-file-input"
+                            id="customFile"
+                          />
+                          <span className="btn">Click to choose an image...</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col col-md-6">
+                      <img
+                        ref={(e) => {
+                          this.imgPreview = e;
+                        }}
+                        className="img-responsive center-block"
+                        style={{ backgroundImage: 'url(https://placehold.it/180)', width: '180px', height: '180px' }}
+                        src={this.state.formData.image || 'https://placehold.it/180'}
+                        alt="preview"
+                        id="img-preview"
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-dark"
+                        onClick={() => {
+                          this.imgPreview.src = undefined;
+                          if (!this.props.isCreate) {
+                            this.state.formData.image = null;
+                          }
+                        }}
+                      >Remove
+                      </button>
                     </div>
                   </div>
                   <div className="form-row">

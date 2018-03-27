@@ -22,7 +22,11 @@ exports.default = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      CLOUDINARY_API: JSON.stringify(process.env.CLOUDINARY_API),
+      CLOUDINARY_PRESET: JSON.stringify(process.env.CLOUDINARY_PRESET)
+    })
   ],
   module: {
     loaders: [

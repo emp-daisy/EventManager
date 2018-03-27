@@ -87,7 +87,7 @@ body {
 
 #login,
 #register {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/13.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/14.png) no-repeat center center fixed;
 }
 #errorPage, #reset{
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)) no-repeat center center fixed;
@@ -142,13 +142,13 @@ body {
 }
 
 .span-link {
-  color: blue;
+  color: white;
   cursor: pointer;
   text-decoration: none;
 }
 
 .span-link:hover {
-  color: white;
+  color: rgb(66, 66, 66);
   cursor: pointer;
   text-decoration: none;
 }

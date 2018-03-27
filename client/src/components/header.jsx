@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { a } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { logOut } from '../actions/authentication';
@@ -10,7 +9,7 @@ import { logOut } from '../actions/authentication';
  * @class Header
  * @extends {Component}
  */
-class Header extends Component {
+export class Header extends Component {
   /**
    * Creates an instance of Header.
    * @param {any} props
