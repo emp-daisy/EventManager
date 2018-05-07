@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Footer = () => (
-  <section className="footer" id="footer">
+  <section className="footer p-2" id="footer">
     <div className="justify-content-center align-content-end">
       <div className="text-center">
         <ul className="nav list-inline ml-auto justify-content-center social-links">
@@ -28,7 +28,7 @@ const Footer = () => (
         </ul>
       </div>
       <div className="text-center">
-        <p className="text-white">&copy; Jessica Madufor (Andela 2017)</p>
+        <p className="text-white m-0">&copy; Jessica Madufor (Andela 2017)</p>
       </div>
     </div>
   </section>);

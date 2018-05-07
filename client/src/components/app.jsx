@@ -10,7 +10,7 @@ import ResetPassword from './resetPassword';
 import Events from './events';
 import NotFound from './notFound';
 import Notification from './flashNotification';
-import { history } from '../actions/history';
+import history from '../actions/history';
 
 const App = () => (
   <Router history={history}>

@@ -18,7 +18,7 @@
     "test:server": "nyc --reporter=lcov --reporter=html --reporter=text mocha --exit ./server/tests/api-test.js --compilers js:babel-register || ECHO.",
     "start:server": "babel-watch server/app.js",
     "build:client": "webpack --config client/webpack.config.js",
-    "client:dev": "webpack --watch --config client/webpack.config.js",
+    "client:dev": "webpack --watch --config client/webpack.dev.config.js",
     "dev": "concurrently \"npm run client:dev\" \"npm run start:server\""
   },
   "jest": {

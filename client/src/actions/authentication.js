@@ -1,7 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import URLSearchParams from 'url-search-params';
 import { API_URL } from '../store/setupStore';
-import { history } from './history';
+import history from './history';
 import { addNotification, connectionError, validationError } from './notify';
 
 const saveToken = (token) => {

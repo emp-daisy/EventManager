@@ -1,25 +1,30 @@
 const webpack = require('webpack');
 const path = require('path');
 
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'development';
 
 module.exports = {
   entry: [path.resolve(__dirname, './src/index.jsx')],
   output: {
     path: path.resolve(__dirname),
-    filename: 'dist/bundle.js'
+    filename: 'dist/bundle.js',
+    hotUpdateChunkFilename: 'dist/hot/hot-update.js',
+    hotUpdateMainFilename: 'dist/hot/hot-update.json'
+  },
+  devtool: 'source-map',
+  devServer: {
+    publicPath: '/',
+    contentBase: './public',
+    hot: true,
+    historyApiFallback: true
   },
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx']
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      compress: {
-        warnings: false,
-      },
-    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       CLOUDINARY_API: JSON.stringify(process.env.CLOUDINARY_API),
       CLOUDINARY_PRESET: JSON.stringify(process.env.CLOUDINARY_PRESET)

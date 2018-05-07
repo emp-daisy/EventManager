@@ -4,10 +4,9 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import Footer from './footer';
 import Header from './header';
-import Contact from './contact';
 import CardBlock from './cards';
 import { getCenters } from '../actions/center';
-import { history } from '../actions/history';
+import history from '../actions/history';
 /**
  *
  *
@@ -121,14 +120,6 @@ export class HomePage extends Component {
               onClick={this.onEventClick}
             >Explore more
             </button>
-          </div>
-        </section>
-        <section className="contact parallex-img" id="contact">
-          <div className="row align-items-center">
-            <div className="col-sm-6 offset-sm-3 col-12 text-center align-items-center">
-              <h2 className="display-4 text-white">GET IN TOUCH</h2>
-              <Contact />
-            </div>
           </div>
         </section>
         <Footer />
