@@ -9,7 +9,7 @@
     "migrate": "sequelize db:migrate",
     "seed": "sequelize db:seed:all",
     "start": "npm run build:client && npm run start:server",
-    "test": "npm run test:client && npm run test:server",
+    "test": "npm run test:server",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "start:dev": "npm run test && coverage",
