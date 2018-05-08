@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/emp-daisy/EventManager.svg?branch=ft-server-api)](https://travis-ci.org/emp-daisy/EventManager)
+[![Build Status](https://travis-ci.org/emp-daisy/EventManager.svg?branch=-develop)](https://travis-ci.org/emp-daisy/EventManager)
 [![Coverage Status](https://coveralls.io/repos/github/emp-daisy/EventManager/badge.svg)](https://coveralls.io/github/emp-daisy/EventManager)
 [![Maintainability](https://api.codeclimate.com/v1/badges/591a74ef49e750779bcf/maintainability)](https://codeclimate.com/github/emp-daisy/EventManager/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/591a74ef49e750779bcf/test_coverage)](https://codeclimate.com/github/emp-daisy/EventManager/test_coverage)
