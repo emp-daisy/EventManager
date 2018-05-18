@@ -10,7 +10,7 @@ const sendEmail = (from, to, subject, text) => {
   try {
     global.emailTransport.sendMail(email);
   } catch (errror) {
-    console.log();
+    // console.log();
   }
   /* , (err, info) => {
     if (err) {

@@ -1,5 +1,5 @@
 import express from 'express';
-import Events from '../classes/events';
+import Events from '../controllers/events';
 import authenticationToken from '../middleware/auth';
 
 const eventRouter = express.Router();

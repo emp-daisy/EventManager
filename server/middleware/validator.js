@@ -31,9 +31,7 @@ class Validation {
     };
     Validator.register(
       'customDate',
-      value => {
-        return moment(value, moment.ISO_8601, true) !== null;
-        },
+      value => moment(value, moment.ISO_8601, true) !== null,
       'The :attribute is not a valid date in correct format'
     );
 

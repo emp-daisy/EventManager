@@ -19,7 +19,7 @@ const uploadToCloudinary = (file) => {
     .catch(() => null);
 };
 
-const deleteFromClodinary = (file) => {
+const deleteFromClodinary = () => {
 
 };
 
@@ -71,7 +71,8 @@ export const deleteCenter = id => (dispatch) => {
 
 export const createCenter = centerData => (dispatch) => {
   dispatch({ type: 'CREATE_CENTERS' });
-  const checkImage = () => ((centerData.filesToUpload !== undefined) ? uploadToCloudinary(centerData.filesToUpload) : Promise.resolve());
+  const checkImage = () => ((centerData.filesToUpload !== undefined)
+    ? uploadToCloudinary(centerData.filesToUpload) : Promise.resolve());
   checkImage()
     .then((fileURL) => {
       if (fileURL !== null) {
@@ -118,7 +119,8 @@ export const updateCenter = (centerData, id) => (dispatch) => {
   dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'UPDATE_CENTERS' });
   const oldImage = centerData.image;
-  const checkImage = () => ((centerData.filesToUpload !== undefined) ? uploadToCloudinary(centerData.filesToUpload) : Promise.resolve());
+  const checkImage = () => ((centerData.filesToUpload !== undefined)
+    ? uploadToCloudinary(centerData.filesToUpload) : Promise.resolve());
   checkImage()
     .then((fileURL) => {
       if (fileURL !== null) {

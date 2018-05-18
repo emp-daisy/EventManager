@@ -19,9 +19,10 @@
     "import/no-unresolved": [
       2,
       {
-        "commonjs": true
+        "commonjs": false
       }
     ],
+    "import/extensions": ["error", "never", { "packages": "always" }],    
     "no-shadow": [
       "error",
       {

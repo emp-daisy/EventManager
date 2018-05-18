@@ -62,9 +62,9 @@ export default class Users {
             isAdmin: data.isAdmin
           })
           .then((value) => {
-            this.sendVerificationEmail(value.email);
+            sendVerificationEmail(value.email);
 
-            this.res.status(201).json({
+            return this.res.status(201).json({
               msg: 'User added successfully. Check email to verify'
             });
           })
@@ -248,53 +248,53 @@ export default class Users {
       })
       .catch(error => this.res.status(500).send(error));
   }
-  /**
+}
+
+/**
    * Send verification emailto user
    *
    * @param {string} email user email
    * @returns {Object} JSON response
-   * @memberof Users
    */
-  sendVerificationEmail(email) {
-    userDb
-      .findOne({
-        where: {
-          email,
-          verify: { [sequelize.Op.not]: null }
+const sendVerificationEmail = (email) => {
+  userDb
+    .findOne({
+      where: {
+        email,
+        verify: { [sequelize.Op.not]: null }
+      }
+    })
+    .then((value) => {
+      const token = jwt.sign(
+        {
+          id: value.id
+        },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: '15m'
         }
-      })
-      .then((value) => {
-        const token = jwt.sign(
-          {
+      );
+      userDb
+        .update({
+          verify: token
+        }, {
+          where: {
             id: value.id
-          },
-          process.env.SECRET_KEY,
-          {
-            expiresIn: '15m'
           }
-        );
-        userDb
-          .update({
-            verify: token
-          }, {
-            where: {
-              id: value.id
-            }
-          })
-          .then((resp) => {
-            if (resp > 0) {
-              return this.res.status(200).send('Registration failed');
-            }
-            const verifyLink = `${(process.env.VERIFY_URL || 'http://localhost:3088/v1/verify')}/${token}`;
+        })
+        .then((resp) => {
+          if (resp > 0) {
+            // return this.res.status(200).send('Registration failed');
+          }
+          const verifyLink = `${(process.env.VERIFY_URL || 'http://localhost:3088/v1/verify')}/${token}`;
 
-            sendEmail('noreply@daisy.io', value.email, 'Account Verification', `Welcome ${value.firstName},
-    
-            Please use this link below to verify account. Expires in 15 minutes.
-            ${verifyLink}
-            
-            sincerly,
-            Admin Team`);
-          });
-      });
-  }
-}
+          sendEmail('noreply@daisy.io', value.email, 'Account Verification', `Welcome ${value.firstName},
+      
+              Please use this link below to verify account. Expires in 15 minutes.
+              ${verifyLink}
+              
+              sincerly,
+              Admin Team`);
+        });
+    });
+};

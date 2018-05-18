@@ -1,5 +1,5 @@
 import express from 'express';
-import Centers from '../classes/centers';
+import Centers from '../controllers/centers';
 import authenticationToken from '../middleware/auth';
 
 const centerRouter = express.Router();

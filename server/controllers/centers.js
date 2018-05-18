@@ -266,6 +266,7 @@ export default class Centers {
               }
             });
         }
+
         const resJson = result.toJSON();
         const newValues = {
           name: data.name || resJson.name,
@@ -309,10 +310,9 @@ export default class Centers {
               .json({ msg: 'Error updating a center' });
           });
       })
-      .catch(error =>        
-        {console.log('ERRRRRR', error);
-
-        this.res.status(500).send({ msg: 'Server Error', error })});
+      .catch((error) => {
+        this.res.status(500).send({ msg: 'Server Error', error });
+      });
   }
 
   /**

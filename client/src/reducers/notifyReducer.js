@@ -1,4 +1,4 @@
-const notify =(state = {}, action) => {
+const notify = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_NOTIFICATION':
       return Object.assign({}, state, {
@@ -12,5 +12,5 @@ const notify =(state = {}, action) => {
     default:
       return state;
   }
-}
+};
 export default notify;
