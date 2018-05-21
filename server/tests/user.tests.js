@@ -96,7 +96,7 @@ describe('User API Testing', () => {
               .status(400);
             expect(res.body.msg)
               .to
-              .equal('User exists');
+              .equal('User email exists');
             done();
           });
       });

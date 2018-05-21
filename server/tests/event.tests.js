@@ -94,7 +94,7 @@ describe('Event API Testing', () => {
             .address
             .streetAddress(),
           facilities: 'faker,random,words',
-          states: faker
+          state: faker
             .random
             .number({ min: 1, max: 37 }),
           image: faker

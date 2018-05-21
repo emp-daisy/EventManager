@@ -1,374 +1,312 @@
+/**
+ * CENTER ROUTE CONTROLLER
+ */
 import sequelize from 'sequelize';
 import model from '../models';
-import Validator from '../middleware/validator';
+import PaginationMeta, {
+  handleQuery
+} from './pagination';
+
+const getCenter = id => model.Centers
+  .findOne({
+    attributes: [
+      'id',
+      'name',
+      'location',
+      'facilities',
+      'image', [sequelize.col('Centers.state'), 'stateId'],
+      [sequelize.col('State.name'), 'state']
+    ],
+    where: {
+      id: +id
+    },
+    include: [{
+      attributes: [],
+      model: model.States
+    }]
+  })
+  .then(result => result);
+
+
+const splitArray = (word) => {
+  if (!word) {
+    return [];
+  }
+  const strArr = word
+    .split(',')
+    .map(s => s.trim().toLowerCase())
+    .filter(s => s !== '');
+  return strArr;
+};
+
 /**
- * Handles the center routes
- *
- * @export
- * @class Centers
+ * Find center by ID
+ * @param {object} req
+ * @param {object} res
+ * @return {Promises} JSON response
  */
-export default class Centers {
-  /**
-   * Creates an instance of Centers.
-   * @param {any} req
-   * @param {any} res
-   * @memberof Centers
-   */
-  constructor(req, res) {
-    this.req = req;
-    this.res = res;
-  }
-  /**
-   *
-   *
-   * @returns {Object} JSON response
-   * @memberof Centers
-   */
-  findAllCenter() {
-    return model.Centers
-      .all({
-        attributes: [
-          'id',
-          'name',
-          'location',
-          'facilities',
-          'image',
-          [sequelize.col('Centers.states'), 'stateId'],
-          [sequelize.col('State.name'), 'state']
-        ],
-        include: [
-          {
-            attributes: [],
-            model: model.States
-          }
-        ]
-      })
-      .then((result) => {
-        if (result.length === 0) {
-          return this.res.status(200).json({ msg: 'No center available' });
-        }
-        this.res.status(200).json({ val: result, msg: 'Centers returned' });
-      })
-      .catch(error =>
-        this.res.status(500).send({ msg: 'Server Error', error }));
-  }
-
-  /**
-   *
-   *
-   * @returns {Object} JSON response
-   * @memberof Centers
-   */
-  findOneCenter() {
-    const { id } = this.req.params;
-    return model.Centers
-      .findOne({
-        attributes: [
-          'id',
-          'name',
-          'location',
-          'facilities',
-          'image',
-          [sequelize.col('Centers.states'), 'stateId'],
-          [sequelize.col('State.name'), 'state']
-        ],
-        where: {
-          id: parseInt(id, 10)
-        },
-        include: [
-          {
-            attributes: ['id', 'name', 'startDate', 'endDate'],
-            model: model.Events,
-            as: 'events',
-            include: [
-              {
-                model: model.Users,
-                attributes: [
-                  [
-                    sequelize.fn(
-                      'CONCAT',
-                      sequelize.col('firstName'),
-                      ' ',
-                      sequelize.col('surname')
-                    ),
-                    'organiser'
-                  ]
-                ]
-              }
-            ]
-          },
-          {
-            attributes: [],
-            model: model.States
-          }
-        ]
-      })
-      .then((result) => {
-        if (result === null) {
-          return this.res.status(400).json({ msg: 'Center not found' });
-        }
-        this.res.status(200).json({ val: result, msg: 'Center found' });
-      })
-      .catch(error =>
-        this.res.status(500).send({ msg: 'Server Error', error }));
-  }
-
-  /**
-   * Convers an array to a stringseprated by comma
-   *
-   * @param {array} word
-   * @returns {string} Strigifies an array
-   * @memberof Centers
-   */
-  static splitArray(word) {
-    if (!word) {
-      return [];
-    }
-    const strArr = word
-      .split(',')
-      .map(s => s.trim().toLowerCase())
-      .filter(s => s !== '');
-    return strArr;
-  }
-
-  /**
-   * Creates a new center
-   *
-   * @returns {Object} JSON response
-   * @memberof Centers
-   */
-  createCenter() {
-    const data = this.req.body;
-    data.facilities = this.constructor.splitArray(data.facilities);
-
-    const validateRes = Validator.validateCenter(data);
-    if (validateRes !== true) {
-      return this.res.status(400).json({ msg: validateRes });
-    }
-    if (!this.req.verified.isAdmin) {
-      return this.res.status(403).json({ msg: 'Not logged in as an Admin' });
-    }
-
-    return model.Centers
-      .create({
-        name: data.name,
-        location: data.location,
-        facilities: data.facilities,
-        states: parseInt(data.states, 10),
-        image: data.image,
-        createdBy: parseInt(this.req.verified.id, 10),
-        updatedBy: parseInt(this.req.verified.id, 10)
-      })
-      .then(value => this.constructor.getCenter(value.id))
-      .then((result) => {
-        if (result !== null) {
-          return this.res
-            .status(201)
-            .json({ val: result, msg: 'Center added successfully' });
-        }
-        return this.res
-          .status(500)
-          .json({ msg: 'Error creating a center' });
-      })
-      .catch(error =>
-        this.res.status(500).send({ msg: 'Server Error', error }));
-  }
-
-  /**
-   * Deletes a center
-   *
-   * @returns {Object} JSON response
-   * @memberof Centers
-   */
-  deleteCenter() {
-    const id = parseInt(this.req.params.id, 10);
-
-    if (!this.req.verified.isAdmin) {
-      return this.res.status(403).json({ msg: 'Not logged in as an Admin' });
-    }
-    return model.Centers
-      .findOne({
-        where: {
-          id
-        }
-      })
-      .then((result) => {
-        if (result === null) {
-          return this.res.status(400).json({ msg: 'Center not found' });
-        }
-        return model.Centers
-          .destroy({
-            where: {
-              id
-            }
-          })
-          .then((row) => {
-            if (row < 1) {
-              return this.res
-                .status(500)
-                .json({ msg: 'Error deleting center' });
-            }
-            return this.res.status(200).json({ msg: 'Center deleted' });
-          })
-          .catch(error =>
-            this.res.status(500).send({ msg: 'Server Error', error }));
-      })
-      .catch(error =>
-        this.res.status(500).send({ msg: 'Server Error', error }));
-  }
-
-  /**
-   * Modifies a specific centeer
-   *
-   * @returns {Object} JSON response
-   * @memberof Centers
-   */
-  updateCenter() {
-    const id = parseInt(this.req.params.id, 10);
-    const data = this.req.body;
-
-    if (!this.req.verified.isAdmin) {
-      return this.res.status(403).json({ msg: 'Not logged in as an Admin' });
-    }
-
-    return model.Centers
-      .findOne({
-        where: {
-          id
-        },
-        attributes: [
-          'id',
-          'name',
-          'location',
-          'facilities',
-          'image'
-        ]
-      })
-      .then((result) => {
-        if (result === null) {
-          return this.res.status(400).json({ msg: 'Center not found' });
-        }
-        if (data.name) {
-          model.Centers
-            .findOne({
-              where: {
-                name: data.name,
-                [sequelize.Op.not]: {
-                  id
-                }
-              }
-            })
-            .then((doesExist) => {
-              if (doesExist !== null) {
-                return this.res
-                  .status(400)
-                  .json({ msg: 'Center name is not unique' });
-              }
-            });
-        }
-
-        const resJson = result.toJSON();
-        const newValues = {
-          name: data.name || resJson.name,
-          location: data.location || resJson.location,
-          facilities: this.constructor.splitArray(data.facilities) || resJson.facilities,
-          states: parseInt(data.states, 10) || resJson.states,
-          image: data.image || resJson.image
-        };
-
-        const validateRes = Validator.validateCenter(newValues);
-        if (validateRes !== true) {
-          return this.res.status(400).json({ msg: validateRes });
-        }
-        return model.Centers
-          .update(
-            {
-              name: newValues.name,
-              location: newValues.location,
-              facilities: newValues.facilities,
-              states: newValues.states,
-              image: newValues.image,
-              updatedBy: parseInt(this.req.verified.id, 10)
-            },
-            {
-              where: {
-                id
-              }
-            }
-          )
-          .then((value) => {
-            if (value > 0) { return this.constructor.getCenter(id); }
-          })
-          .then((res) => {
-            if (res) {
-              return this.res
-                .status(200)
-                .json({ val: res, msg: 'Center updated successfully' });
-            }
-            return this.res
-              .status(500)
-              .json({ msg: 'Error updating a center' });
-          });
-      })
-      .catch((error) => {
-        this.res.status(500).send({ msg: 'Server Error', error });
+const findOneCenter = (req, res) => {
+  const {
+    id
+  } = req.params;
+  return getCenter(id)
+    .then((result) => {
+      if (result === null) {
+        return res.status(400).json({
+          msg: 'Center not found'
+        });
+      }
+      res.status(200).json({
+        val: result,
+        msg: 'Center found'
       });
-  }
-
-  /**
-   *
-   *
-   * @returns {Object} JSON response
-   * @memberof Centers
-   */
-  getStates() {
-    return model.States
-      .all({
-        attributes: [
-          'id',
-          'name'
-        ]
-      })
-      .then((result) => {
-        if (result.length === 0) {
-          return this.res.status(200).json({ msg: 'No state available' });
-        }
-        this.res.status(200).json({ val: result, msg: 'States returned' });
-      })
-      .catch(error =>
-        this.res.status(500).send({ msg: 'Server Error', error }));
-  }
-
-  /**
-   *
-   *
-   * @returns {Object} JSON response
-   * @param {any} id
-   * @memberof Centers
-   */
-  static getCenter(id) {
-    return model.Centers
-      .findOne({
-        attributes: [
-          'id',
-          'name',
-          'location',
-          'facilities',
-          'image',
-          [sequelize.col('Centers.states'), 'stateId'],
-          [sequelize.col('State.name'), 'state']
-        ],
-        where: {
-          id: +id
+    })
+    .catch(error =>
+      res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
+};
+/**
+ * Find all centers
+ * @param {object} req
+ * @param {object} res
+ * @return {Promises} JSON response
+ */
+const findAllCenter = (req, res) => {
+  const {
+    limit,
+    offset,
+    page
+  } = handleQuery(req.query);
+  return model.Centers
+    .findAndCountAll({
+      limit,
+      offset,
+      attributes: [
+        'id',
+        'name',
+        'location',
+        'facilities',
+        'image', [sequelize.col('Centers.state'), 'stateId'],
+        [sequelize.col('State.name'), 'state']
+      ],
+      include: [{
+        attributes: [],
+        model: model.States
+      }]
+    })
+    .then((result) => {
+      const {
+        rows,
+        count
+      } = result;
+      const meta = {
+        pageSize: rows.length,
+        total: count,
+        limit,
+        offset,
+        page,
+        url: `${req.protocol}://${req.headers.host}${req.path}`
+      };
+      res.status(200).json({
+        val: {
+          centers: rows,
+          meta: PaginationMeta(meta)
         },
-        include: [
-          {
-            attributes: [],
-            model: model.States
-          }
-        ]
-      })
-      .then(result => result)
-      .catch(() => {});
-  }
-}
+        msg: 'Centers returned'
+      });
+    })
+    .catch(error =>
+      res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
+};
+/**
+ * Create new center
+ * @param {object} req
+ * @param {object} res
+ * @return {Promises} JSON response
+ */
+const createCenter = (req, res) => {
+  const data = req.body;
+  data.facilities = splitArray(data.facilities);
+
+  return model.Centers
+    .create({
+      name: data.name,
+      location: data.location,
+      facilities: data.facilities,
+      state: parseInt(data.state, 10),
+      image: data.image,
+      createdBy: parseInt(req.verified.id, 10),
+      updatedBy: parseInt(req.verified.id, 10)
+    })
+    .then(value => getCenter(value.id))
+    .then((result) => {
+      if (result !== null) {
+        return res
+          .status(201)
+          .json({
+            val: result,
+            msg: 'Center added successfully'
+          });
+      }
+    })
+    .catch(error =>
+      res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
+};
+/**
+ * Handle validation before updating
+ * @param {object} req
+ * @param {object} res
+ * @param {callback} next
+ * @return {Promises} JSON response
+ */
+const preUpdate = (req, res, next) => {
+  const id = parseInt(req.params.id, 10);
+  const data = req.body;
+  return getCenter(id)
+    .then((result) => {
+      if (result === null) {
+        return res.status(400).json({
+          msg: 'Center not found'
+        });
+      }
+      const resJson = result.toJSON();
+      const newValues = {
+        name: data.name || resJson.name,
+        location: data.location || resJson.location,
+        facilities: data.facilities || resJson.facilities.join(','),
+        state: data.state ? parseInt(data.state, 10) : resJson.stateId,
+        image: data.image || resJson.image
+      };
+      req.body = {
+        name: newValues.name,
+        location: newValues.location,
+        facilities: newValues.facilities,
+        state: newValues.state,
+        image: newValues.image,
+      };
+      return next();
+    });
+};
+/**
+ * Update center
+ * @param {object} req
+ * @param {object} res
+ * @return {Promises} JSON response
+ */
+const updateCenter = (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const {
+    name,
+    location,
+    state,
+    image
+  } = req.body;
+  const facilities = splitArray(req.body.facilities);
+
+  return model.Centers
+    .update({
+      name,
+      location,
+      facilities,
+      state,
+      image,
+      updatedBy: parseInt(req.verified.id, 10)
+    }, {
+      where: {
+        id
+      }
+    })
+    .then((value) => {
+      if (value > 0) {
+        return getCenter(id);
+      }
+    })
+    .then((resp) => {
+      if (resp) {
+        return res
+          .status(200)
+          .json({
+            val: resp,
+            msg: 'Center updated successfully'
+          });
+      }
+    })
+    .catch((error) => {
+      res.status(500).send({
+        msg: 'Server Error',
+        error
+      });
+    });
+};
+/**
+ * Delete center
+ * @param {object} req
+ * @param {object} res
+ * @return {Promises} JSON response
+ */
+const deleteCenter = (req, res) => {
+  const id = parseInt(req.params.id, 10);
+
+  return getCenter(id)
+    .then((result) => {
+      if (result === null) {
+        return res.status(400).json({
+          msg: 'Center not found'
+        });
+      }
+      return model.Centers
+        .destroy({
+          where: { id }
+        })
+        .then(() => res.status(200).json({ msg: 'Center deleted' }));
+    })
+    .catch(error =>
+      res.status(500).send({
+        msg: 'Server Error',
+        error
+      }));
+};
+/**
+ * Get all states
+ * @param {object} req
+ * @param {object} res
+ * @return {Promises} JSON response
+ */
+const getStates = (req, res) => model.States
+  .all({
+    attributes: [
+      'id',
+      'name'
+    ]
+  })
+  .then((result) => {
+    res.status(200).json({
+      val: result,
+      msg: 'States returned'
+    });
+  })
+  .catch(error =>
+    res.status(500).send({
+      msg: 'Server Error',
+      error
+    }));
+
+
+// Export all functions
+export {
+  findOneCenter,
+  findAllCenter,
+  createCenter,
+  updateCenter,
+  preUpdate,
+  deleteCenter,
+  getStates
+};

@@ -18,7 +18,7 @@ const States = (sequelize, DataTypes) => {
 
   StatesModel.associate = (models) => {
     StatesModel.hasMany(models.Centers, {
-      foreignKey: 'states',
+      foreignKey: 'state',
     });
   };
 

@@ -96,7 +96,7 @@ describe('Center API Testing', () => {
               .address
               .streetAddress(),
             facilities: 'faker,random,words',
-            states: faker
+            state: faker
               .random
               .number({
                 min: 1,
@@ -132,7 +132,7 @@ describe('Center API Testing', () => {
               .address
               .streetAddress(),
             facilities: 'faker,random,words',
-            states: faker
+            state: faker
               .random
               .number({
                 min: 1,
@@ -166,7 +166,7 @@ describe('Center API Testing', () => {
               .random
               .words(),
             facilities: 'faker,random,words',
-            states: faker
+            state: faker
               .random
               .number({
                 min: 1,
@@ -198,7 +198,7 @@ describe('Center API Testing', () => {
               .address
               .streetAddress(),
             facilities: 'faker,random,words',
-            states: faker
+            state: faker
               .random
               .number({
                 min: 1,
@@ -293,7 +293,7 @@ describe('Center API Testing', () => {
               .address
               .streetAddress(),
             facilities: 'faker,random,words',
-            states: faker
+            state: faker
               .random
               .number({
                 min: 1,
@@ -326,7 +326,7 @@ describe('Center API Testing', () => {
               .address
               .streetAddress(),
             facilities: 'faker,random,words',
-            states: faker
+            state: faker
               .random
               .number({
                 min: 1,

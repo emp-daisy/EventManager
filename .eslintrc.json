@@ -6,7 +6,8 @@
     "es6": true,
     "mocha": true,
     "browser": true,
-    "jest": true
+    "jest": true,
+    "jquery": true
   },
   "rules": {
     "one-var": 0,
@@ -16,12 +17,7 @@
     "no-param-reassign": 0,
     "comma-dangle": 0,
     "curly": ["error", "multi-line"],
-    "import/no-unresolved": [
-      2,
-      {
-        "commonjs": false
-      }
-    ],
+    "import/no-unresolved": "off",
     "import/extensions": ["error", "never", { "packages": "always" }],    
     "no-shadow": [
       "error",

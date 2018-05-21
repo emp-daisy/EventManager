@@ -12,7 +12,7 @@ describe('Negative URL Testing', () => {
     it('Returns a 404 for invalid url', () => {
       chai
         .request(app)
-        .get('/no-url')
+        .get('/v1/no-url')
         .end((err, res) => {
           expect(res)
             .to
@@ -36,6 +36,17 @@ describe('Negative URL Testing', () => {
           expect(res.body.error)
             .to
             .equal('Invalid URL Request');
+        });
+    });
+    it('Returns a 200 for non-api url', () => {
+      chai
+        .request(app)
+        .get('/no-url')
+        .end((err, res) => {
+          expect(res)
+            .to
+            .be
+            .status(200);
         });
     });
 

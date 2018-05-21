@@ -40,7 +40,7 @@ app.use('/v1/', eventRouter);
 app.use('/v1/', userRouter);
 
 // ========= DEFAULT API ROUTE==========
-app.get('/v1/*', (req, res) => {
+app.use('/v1/*', (req, res) => {
   // Invalid request
   res.status(404).json({
     error: {

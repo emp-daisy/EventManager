@@ -1,32 +1,31 @@
 import express from 'express';
-import Events from '../controllers/events';
+import {
+  findAllEvent,
+  findOneEvent,
+  createEvent,
+  updateEvent,
+  preUpdate,
+  deleteEvent
+} from '../controllers/events';
 import authenticationToken from '../middleware/auth';
+import { validateEvent,
+  validateId } from '../middleware/validator';
 
 const eventRouter = express.Router();
 
 // GET ALL EVENT FOR A USER
-eventRouter.get('/events', authenticationToken, (req, res) => {
-  new Events(req, res).findAllEvent();
-});
+eventRouter.get('/events', authenticationToken, findAllEvent);
 
 // GET AN EVENT
-eventRouter.get('/events/:id', (req, res) => {
-  new Events(req, res).findOneEvent();
-});
+eventRouter.get('/events/:id', validateId, findOneEvent);
 
 // CREATES AN EVENT
-eventRouter.post('/events', authenticationToken, (req, res) => {
-  new Events(req, res).createEvent();
-});
+eventRouter.post('/events', authenticationToken, validateEvent, createEvent);
 
 // EDIT AN EVENT
-eventRouter.put('/events/:id', authenticationToken, (req, res) => {
-  new Events(req, res).updateEvent();
-});
+eventRouter.put('/events/:id', authenticationToken, validateId, preUpdate, validateEvent, updateEvent);
 
 // DELETE AN EVENT
-eventRouter.delete('/events/:id', authenticationToken, (req, res) => {
-  new Events(req, res).deleteEvent();
-});
+eventRouter.delete('/events/:id', authenticationToken, validateId, deleteEvent);
 
 export default eventRouter;

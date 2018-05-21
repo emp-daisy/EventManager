@@ -27,13 +27,13 @@ module.exports = {
       type: Sequelize.STRING,
       alloWNull: true,
     },
-    states: {
+    state: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'States',
         key: 'id',
-        as: 'states',
+        as: 'state',
       }
     },
     createdBy: {

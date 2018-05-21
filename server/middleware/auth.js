@@ -8,11 +8,24 @@ const authenticateToken = (req, res, next) => {
         return res.status(403).send(err);
       }
       req.verified = user;
-      return next();
+      next();
     });
   } else {
-    res.status(403).send('Token not provided');
+    return res.status(403).send('Token not provided');
   }
 };
 
+const isAdmin = (req, res, next) => {
+  if (!req.verified.isAdmin) {
+    return res.status(403).json({
+      msg: 'Not logged in as an Admin'
+    });
+  }
+  next();
+};
+
+export {
+  // authenticateToken,
+  isAdmin
+};
 export default authenticateToken;

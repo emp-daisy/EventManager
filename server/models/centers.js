@@ -1,5 +1,5 @@
-const Centers = (sequelize, DataTypes) => {
-  const CenterModel = sequelize.define('Centers', {
+const createCenterObject = DataTypes => (
+  {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -27,7 +27,7 @@ const Centers = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       alloWNull: true
     },
-    states: {
+    state: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -39,7 +39,10 @@ const Centers = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     }
-  }, { tableName: 'Centers' });
+  });
+
+const Centers = (sequelize, DataTypes) => {
+  const CenterModel = sequelize.define('Centers', createCenterObject(DataTypes), { tableName: 'Centers' });
 
   CenterModel.associate = (models) => {
     CenterModel.hasMany(models.Events, {
@@ -47,9 +50,9 @@ const Centers = (sequelize, DataTypes) => {
       as: 'events',
       onDelete: 'CASCADE'
     });
-    CenterModel.belongsTo(models.States, { foreignKey: 'states' });
-    CenterModel.belongsTo(models.Events, { foreignKey: 'createdBy' });
-    CenterModel.belongsTo(models.Events, { foreignKey: 'updatedBy' });
+    CenterModel.belongsTo(models.States, { foreignKey: 'state' });
+    CenterModel.belongsTo(models.Users, { foreignKey: 'createdBy' });
+    CenterModel.belongsTo(models.Users, { foreignKey: 'updatedBy' });
   };
 
   return CenterModel;

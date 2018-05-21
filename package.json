@@ -7,6 +7,7 @@
   "license": "ISC",
   "scripts": {
     "migrate": "sequelize db:migrate",
+    "undo:migrate": "sequelize db:migrate:undo:all",
     "seed": "sequelize db:seed:all",
     "start": "npm run build:client && npm run start:server",
     "test": "npm run test:server",
@@ -33,6 +34,10 @@
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
+  },
+  "nyc": {
+    "include": "server",
+    "exclude": "**/*.tests.js" 
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-destructuring": "^6.23.0",
