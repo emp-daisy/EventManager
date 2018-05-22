@@ -120,6 +120,41 @@ describe('Center API Testing', () => {
             done();
           });
       });
+      it('Creates center without facilities', (done) => {
+        chai
+          .request(app)
+          .post(`/v1/centers/?token=${adminToken}`)
+          .send({
+            name: faker
+              .random
+              .words(),
+            location: faker
+              .address
+              .streetAddress(),
+            state: faker
+              .random
+              .number({
+                min: 1,
+                max: 37
+              }),
+            image: faker
+              .system
+              .directoryPath()
+          })
+          .end((err, res) => {
+            if (res.body.val) {
+              centerId = res.body.val.id;
+            }
+            expect(res)
+              .to
+              .be
+              .status(201);
+            expect(res.body.msg)
+              .to
+              .equal('Center added successfully');
+            done();
+          });
+      });
       it('Returns the error as user is not an Admin', (done) => {
         chai
           .request(app)
@@ -223,10 +258,35 @@ describe('Center API Testing', () => {
     });
 
     describe('/GET Center URL', () => {
-      it('Returns all centers as an array of objects (if any)', (done) => {
+      it('Returns all centers as an array of objects', (done) => {
         chai
           .request(app)
           .get('/v1/centers')
+          .end((err, res) => {
+            if (res.body.val) {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('Centers returned');
+            } else {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('No center available');
+            }
+            done();
+          });
+      });
+      it('Returns all centers as an array of objects with limit and offset set', (done) => {
+        chai
+          .request(app)
+          .get('/v1/centers/?limit=1000&offset=2')
           .end((err, res) => {
             if (res.body.val) {
               expect(res)
@@ -275,6 +335,21 @@ describe('Center API Testing', () => {
             expect(res.body.msg)
               .to
               .equal('Center not found');
+            done();
+          });
+      });
+      it('Returns an error status for invalid id type', (done) => {
+        chai
+          .request(app)
+          .get('/v1/centers/c')
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('Invalid center Id');
             done();
           });
       });
@@ -347,6 +422,59 @@ describe('Center API Testing', () => {
             done();
           });
       });
+      it('Returns error for missing token', (done) => {
+        chai
+          .request(app)
+          .put(`/v1/centers/${centerId}`)
+          .send({
+            name: faker
+              .random
+              .words(),
+            location: faker
+              .address
+              .streetAddress(),
+            facilities: 'faker,random,words',
+            state: faker
+              .random
+              .number({
+                min: 1,
+                max: 37
+              }),
+            image: faker
+              .system
+              .directoryPath()
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(403);
+            expect(res.text)
+              .to
+              .equal('Token not provided');
+            done();
+          });
+      });
+      it('Update with missing fields', (done) => {
+        chai
+          .request(app)
+          .put(`/v1/centers/${centerId}/?token=${adminToken}`)
+          .send({
+            image: faker
+              .system
+              .directoryPath()
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('Center updated successfully');
+            done();
+          });
+      });
     });
 
     describe('/DELETE Center URL', () => {
@@ -378,6 +506,24 @@ describe('Center API Testing', () => {
             expect(res.body.msg)
               .to
               .equal('Center not found');
+            done();
+          });
+      });
+    });
+
+    describe('GET all states fron database', () => {
+      it('Returns all states as an array of objects (if any)', (done) => {
+        chai
+          .request(app)
+          .get('/v1/states')
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('States returned');
             done();
           });
       });

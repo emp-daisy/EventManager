@@ -11,7 +11,8 @@ chai.use(chaiHttp);
 let adminToken,
   nonAdminToken,
   centerId,
-  eventId;
+  eventId,
+  eventIdDup;
 const user = {},
   adminUser = {};
 
@@ -110,7 +111,7 @@ describe('Event API Testing', () => {
     });
 
     describe('/POST Event URL', () => {
-      it('Returns the new event as an object', (done) => {
+      it('Returns the new event as an object (ADMIN)', (done) => {
         chai
           .request(app)
           .post(`/v1/events/?token=${adminToken}`)
@@ -137,7 +138,60 @@ describe('Event API Testing', () => {
             done();
           });
       });
-
+      it('Returns the new event as an object (NON-ADMIN', (done) => {
+        chai
+          .request(app)
+          .post(`/v1/events/?token=${nonAdminToken}`)
+          .send({
+            name: faker
+              .random
+              .words(),
+            startDate: '20/12/2088',
+            endDate: '24/12/2088',
+            location: centerId,
+            image: 'file://...'
+          })
+          .end((err, res) => {
+            if (res.body.val) {
+              eventIdDup = res.body.val.id;
+            }
+            expect(res)
+              .to
+              .be
+              .status(201);
+            expect(res.body.msg)
+              .to
+              .equal('Event added successfully');
+            done();
+          });
+      });
+      it('Returns 404 for already booked center', (done) => {
+        chai
+          .request(app)
+          .post(`/v1/events/?token=${adminToken}`)
+          .send({
+            name: faker
+              .random
+              .words(),
+            startDate: '20/12/2099',
+            endDate: '24/12/2099',
+            location: centerId,
+            image: 'file://...'
+          })
+          .end((err, res) => {
+            if (res.body.val) {
+              eventId = res.body.val.id;
+            }
+            expect(res)
+              .to
+              .be
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('Center already booked for this period');
+            done();
+          });
+      });
       it('Returns an error due to missing location field', (done) => {
         chai
           .request(app)
@@ -162,7 +216,6 @@ describe('Event API Testing', () => {
             done();
           });
       });
-
       it('Returns an error due to missing title field', (done) => {
         chai
           .request(app)
@@ -258,6 +311,27 @@ describe('Event API Testing', () => {
             done();
           });
       });
+      it('Returns all events as an array of objects with limt and offset', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/events/?token=${adminToken}&offset=2&limit=10&page=2`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(200);
+            if (res.body.val === undefined) {
+              expect(res.body.msg)
+                .to
+                .equal('No event available');
+            } else {
+              expect(res.body.msg)
+                .to
+                .equal('Events returned');
+            }
+            done();
+          });
+      });
       it('Returns an object array for the event', (done) => {
         chai
           .request(app)
@@ -285,6 +359,21 @@ describe('Event API Testing', () => {
             expect(res.body.msg)
               .to
               .equal('Event not found');
+            done();
+          });
+      });
+      it('Returns an error status for invalid id type', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/events/e/?token=${adminToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('Invalid center Id');
             done();
           });
       });
@@ -339,13 +428,105 @@ describe('Event API Testing', () => {
             done();
           });
       });
+      it('Returns error for wrong token', (done) => {
+        chai
+          .request(app)
+          .put(`/v1/events/${eventId}/?token=adminToken`)
+          .send({
+            name: faker
+              .random
+              .words(),
+            startDate: '20/02/2099',
+            endDate: '24/02/2099',
+            location: centerId,
+            image: 'file://...'
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(403);
+            done();
+          });
+      });
+      it('Returns the updated event as an object with missing params', (done) => {
+        chai
+          .request(app)
+          .put(`/v1/events/${eventId}/?token=${adminToken}`)
+          .send({
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('Event updated successfully');
+            done();
+          });
+      });
+      it('Returns an message if the new date is booked', (done) => {
+        chai
+          .request(app)
+          .put(`/v1/events/${eventIdDup}/?token=${nonAdminToken}`)
+          .send({
+            name: faker
+              .random
+              .words(),
+            startDate: '20/02/2099',
+            endDate: '24/02/2099',
+            location: centerId,
+            image: 'file://...'
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('Center already booked for this period');
+            done();
+          });
+      });
     });
 
     describe('/DELETE Event URL', () => {
-      it('Returns the message for deleted object', (done) => {
+      it('Returns the error message when trying to delete another users event', (done) => {
+        chai
+          .request(app)
+          .delete(`/v1/events/${eventId}/?token=${nonAdminToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('Unauthorized user');
+            done();
+          });
+      });
+      it('Returns the message for deleted event', (done) => {
         chai
           .request(app)
           .delete(`/v1/events/${eventId}/?token=${adminToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('Event deleted');
+            done();
+          });
+      });
+      it('Returns the message for deleted object by an admin', (done) => {
+        chai
+          .request(app)
+          .delete(`/v1/events/${eventIdDup}/?token=${adminToken}`)
           .end((err, res) => {
             expect(res)
               .to
@@ -375,12 +556,22 @@ describe('Event API Testing', () => {
     });
   });
 
-  after((done) => {
-    model.Users.destroy({
-      where: {
-        email: [user.email, adminUser.email]
-      }
-    });
+  after(done => async.parallel({
+    1: (callback) => {
+      model.Users.destroy({
+        where: {
+          email: [user.email, adminUser.email]
+        }
+      }); callback(null, 1);
+    },
+    2: (callback) => {
+      model.Centers.destroy({
+        where: {
+          id: centerId
+        }
+      }); callback(null, 2);
+    }
+  }, () => {
     done();
-  });
+  }));
 });

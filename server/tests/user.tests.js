@@ -4,10 +4,14 @@ import faker from 'faker';
 import app from '../app';
 import model from '../models';
 
-const { expect } = chai;
+const {
+  expect
+} = chai;
 chai.use(chaiHttp);
 const user = {},
   adminUser = {};
+let regToken = '';
+const resetToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiaWF0IjoxNTI3MDIzODYyfQ.ox6b8Hs-3GszsCPrfrF0KOSu3IaJwszIOhE6fUGZKQg';
 
 describe('User API Testing', () => {
   before(() => {
@@ -71,6 +75,35 @@ describe('User API Testing', () => {
             done();
           });
       });
+      it('Returns an error message for missing password and 400 status code', (done) => {
+        chai
+          .request(app)
+          .post('/v1/users')
+          .send({
+            firstName: faker
+              .name
+              .firstName(),
+            surname: faker
+              .name
+              .lastName(),
+            email: user.email,
+            password: 'TESTpwd',
+            isAdmin: faker
+              .random
+              .boolean()
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .be
+              .an('object');
+            done();
+          });
+      });
       it('Returns an error message since the user exists and 400 status code', (done) => {
         chai
           .request(app)
@@ -100,14 +133,114 @@ describe('User API Testing', () => {
             done();
           });
       });
+      after((done) => {
+        model.Users.findOne({
+          where: {
+            email: user.email
+          }
+        }).then((res) => {
+          regToken = res.verify;
+          done();
+        });
+      });
     });
 
-    describe('Login', () => {
+    describe('Login Unverified user', () => {
+      it('Returns error messgae for unverified users', (done) => {
+        chai
+          .request(app)
+          .post('/v1/users/login')
+          .send({
+            email: user.email,
+            password: 'TESTpwd'
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('Account unverified');
+            done();
+          });
+      });
+    });
+
+    describe('Email Verification', () => {
+      it('it should send verification email', (done) => {
+        chai
+          .request(app)
+          .post('/v1/users/verify')
+          .send({
+            email: user.email
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('Link sent to email');
+            done();
+          });
+      });
+      it('it should return error for invalid token', (done) => {
+        chai
+          .request(app)
+          .get('/v1/verify/regToken')
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(403);
+            expect(res.body.msg)
+              .to
+              .equal('Invalid link');
+            done();
+          });
+      });
+      it('it should verify user', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/verify/${regToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(200);
+            expect(res.text)
+              .to
+              .equal('Account verified successful');
+            done();
+          });
+      });
+      it('it should return message for non-existing account or already verified', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/verify/${regToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(404);
+            expect(res.text)
+              .to
+              .equal('Account not found or already verified');
+            done();
+          });
+      });
+    });
+
+    describe('Login verified user', () => {
       before((done) => {
         model.Users.update({
           verify: null
         }, {
-          where: { email: [user.email, adminUser.email] }
+          where: {
+            email: [adminUser.email]
+          }
         }).then(() => {
           done();
         });
@@ -117,7 +250,10 @@ describe('User API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({ email: user.email, password: 'TESTpwd' })
+          .send({
+            email: user.email,
+            password: 'TESTpwd'
+          })
           .end((err, res) => {
             expect(res)
               .to
@@ -137,7 +273,10 @@ describe('User API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({ email: adminUser.email, password: 'TESTpwd' })
+          .send({
+            email: adminUser.email,
+            password: 'TESTpwd'
+          })
           .end((err, res) => {
             expect(res)
               .to
@@ -157,7 +296,10 @@ describe('User API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({ email: 'abc@abc.io', password: 'TESTpwd' })
+          .send({
+            email: 'abc@abc.io',
+            password: 'TESTpwd'
+          })
           .end((err, res) => {
             expect(res)
               .to
@@ -173,7 +315,10 @@ describe('User API Testing', () => {
         chai
           .request(app)
           .post('/v1/users/login')
-          .send({ email: user.email, password: 'tester' })
+          .send({
+            email: user.email,
+            password: 'tester'
+          })
           .end((err, res) => {
             expect(res)
               .to
@@ -184,6 +329,103 @@ describe('User API Testing', () => {
               .equal('Invalid Username or Password');
             done();
           });
+      });
+    });
+
+    describe('Password Reset', () => {
+      describe('Send Reset email', () => {
+        it('it should send reset password', (done) => {
+          chai
+            .request(app)
+            .post('/v1/users/reset')
+            .send({
+              email: user.email
+            })
+            .end((err, res) => {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('An email has been sent to the requested email address.');
+              done();
+            });
+        });
+        it('it should error for non-existing user', (done) => {
+          chai
+            .request(app)
+            .post('/v1/users/reset')
+            .send({
+              email: 'user.email'
+            })
+            .end((err, res) => {
+              expect(res)
+                .to
+                .be
+                .status(404);
+              expect(res.body.msg)
+                .to
+                .equal('User not found');
+              done();
+            });
+        });
+      });
+      describe('Reset password', () => {
+        it('it should send error on invalid token', (done) => {
+          chai
+            .request(app)
+            .post('/v1/users/reset/resetToken')
+            .send({
+              password: 'testPWD'
+            })
+            .end((err, res) => {
+              expect(res)
+                .to
+                .be
+                .status(403);
+              expect(res.body.msg)
+                .to
+                .equal('Invalid link');
+              done();
+            });
+        });
+        it('it should send reset password', (done) => {
+          chai
+            .request(app)
+            .post(`/v1/users/reset/${regToken}`)
+            .send({
+              password: 'testPWD'
+            })
+            .end((err, res) => {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('Password reset successful');
+              done();
+            });
+        });
+        it('it should error for non-existing user', (done) => {
+          chai
+            .request(app)
+            .post(`/v1/users/reset/${resetToken}`)
+            .send({
+              password: 'testPWD'
+            })
+            .end((err, res) => {
+              expect(res)
+                .to
+                .be
+                .status(404);
+              expect(res.body.msg)
+                .to
+                .equal('User not found');
+              done();
+            });
+        });
       });
     });
   });
