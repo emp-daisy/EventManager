@@ -197,14 +197,24 @@ const createEvent = (req, res) => {
     .findOne({
       where: {
         location: parseInt(data.location, 10),
-        [sequelize.Op.or]: {
-          startDate: {
-            [sequelize.Op.between]: [data.startDate, data.endDate]
-          },
-          endDate: {
-            [sequelize.Op.between]: [data.startDate, data.endDate]
+        [sequelize.Op.or]: [
+          {
+            startDate: {
+              [sequelize.Op.between]: [data.startDate, data.endDate]
+            }
+          }, {
+            endDate: {
+              [sequelize.Op.between]: [data.startDate, data.endDate]
+            }
+          }, {
+            startDate: {
+              [sequelize.Op.lte]: data.startDate
+            },
+            endDate: {
+              [sequelize.Op.gte]: data.endDate
+            }
           }
-        }
+        ]
       }
     })
     .then((doesExist) => {
@@ -307,14 +317,24 @@ const updateEvent = (req, res) => {
     .findOne({
       where: {
         location,
-        [sequelize.Op.or]: {
-          startDate: {
-            [sequelize.Op.between]: [startDate, endDate]
-          },
-          endDate: {
-            [sequelize.Op.between]: [startDate, endDate]
+        [sequelize.Op.or]: [
+          {
+            startDate: {
+              [sequelize.Op.between]: [startDate, endDate]
+            }
+          }, {
+            endDate: {
+              [sequelize.Op.between]: [startDate, endDate]
+            }
+          }, {
+            startDate: {
+              [sequelize.Op.lte]: startDate
+            },
+            endDate: {
+              [sequelize.Op.gte]: endDate
+            }
           }
-        },
+        ],
         [sequelize.Op.not]: {
           id
         }
