@@ -24,6 +24,13 @@ export const handleQuery = (query) => {
   let limit = parseInt(query.limit, 10) || 20;
   const offset = parseInt(query.offset, 10) || 0;
   let page = parseInt(query.page, 10) || 0;
+  const name = query.name || '';
+  const location = query.location || '';
+  let facilities = query.facilities || [''];
+
+  if (!Array.isArray(facilities)) {
+    facilities = facilities.split(',');
+  }
 
   if (limit > 100) {
     limit = 20;
@@ -32,7 +39,9 @@ export const handleQuery = (query) => {
   if (!page) {
     page = Math.ceil((offset + limit) / limit);
   }
-  return { limit, offset, page };
+  return {
+    limit, offset, page, name, location, facilities
+  };
 };
 
 export default paginationMeta;

@@ -50,7 +50,8 @@ const findAllEvent = (req, res) => {
   const {
     limit,
     offset,
-    page
+    page,
+    name
   } = handleQuery(req.query);
 
   return model
@@ -69,13 +70,8 @@ const findAllEvent = (req, res) => {
         [sequelize.col('Center->State.name'), 'state']
       ],
       where: {
-        createdBy: parseInt(req.verified.id, 10),
-        startDate: {
-          [sequelize.Op.gte]: moment()
-        },
-        endDate: {
-          [sequelize.Op.gte]: moment()
-        }
+        name: { [sequelize.Op.iLike]: `%${name}%` },
+        createdBy: parseInt(req.verified.id, 10)
       },
       include: [{
         attributes: [],

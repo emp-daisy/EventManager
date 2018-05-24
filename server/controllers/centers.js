@@ -77,12 +77,26 @@ const findAllCenter = (req, res) => {
   const {
     limit,
     offset,
-    page
+    page,
+    name,
+    location,
+    facilities
   } = handleQuery(req.query);
+  // facilities.map((facility) => { facilities: { [sequelize.Op.iLike]: `%${facility}%` }});
+  // facilities.map(facility => `%${facility}%`);
+
   return model.Centers
     .findAndCountAll({
       limit,
       offset,
+      where: {
+        name: { [sequelize.Op.iLike]: `%${name}%` },
+        location: { [sequelize.Op.iLike]: `%${location}%` },
+        // [sequelize.Op.or]: facilities
+        facilities: {
+          [sequelize.Op.overlap]: facilities
+        }
+      },
       attributes: [
         'id',
         'name',
