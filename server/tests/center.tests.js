@@ -308,6 +308,31 @@ describe('Center API Testing', () => {
             done();
           });
       });
+      it('Returns search result of centers as an array of objects by facilities', (done) => {
+        chai
+          .request(app)
+          .get('/v1/centers/?facilities=foo,buzz')
+          .end((err, res) => {
+            if (res.body.val) {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('Centers returned');
+            } else {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('No center available');
+            }
+            done();
+          });
+      });
       it('Returns details of a center', (done) => {
         chai
           .request(app)
