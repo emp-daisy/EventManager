@@ -1,5 +1,5 @@
-const Events = (sequelize, DataTypes) => {
-  const EventModel = sequelize.define('Events', {
+const createEventObject = DataTypes => (
+  {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -8,8 +8,11 @@ const Events = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
     },
     location: {
       type: DataTypes.INTEGER,
@@ -27,7 +30,10 @@ const Events = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     }
-  }, {
+  });
+
+const Events = (sequelize, DataTypes) => {
+  const EventModel = sequelize.define('Events', createEventObject(DataTypes), {
     tableName: 'Events'
   });
 

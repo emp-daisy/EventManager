@@ -8,8 +8,11 @@ module.exports = {
     },
     name: {
       type: Sequelize.STRING,
-      allowNull: false,
-      unique: true,
+      allowNull: false
+    },
+    description: {
+      type: Sequelize.TEXT,
+      allowNull: true
     },
     location: {
       type: Sequelize.STRING,
@@ -24,13 +27,13 @@ module.exports = {
       type: Sequelize.STRING,
       alloWNull: true,
     },
-    states: {
+    state: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'States',
         key: 'id',
-        as: 'states',
+        as: 'state',
       }
     },
     createdBy: {
@@ -63,5 +66,5 @@ module.exports = {
     },
 
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Centers')
+  down: queryInterface => queryInterface.dropTable('Centers')
 };

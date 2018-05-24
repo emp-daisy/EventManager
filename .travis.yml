@@ -1,10 +1,11 @@
 language: node_js
 node_js:
-- "9.4.0"
+  - "9.4.0"
 services:
   - postgresql
 before_script:
   - psql -c 'create database db_events_test;' -U postgres
+  - npm run migrate
   - npm run seed
 cache:
   directories:
@@ -15,5 +16,6 @@ env:
 install:
   - npm install
 script:
-  - npm test
+  - npm run test
+  - npm run coverage
 after_success: npm run coveralls

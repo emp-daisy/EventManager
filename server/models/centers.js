@@ -1,30 +1,33 @@
-const Centers = (sequelize, DataTypes) => {
-  const CenterModel = sequelize.define('Centers', {
+const createCenterObject = DataTypes => (
+  {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
     },
     location: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     facilities: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       alloWNull: true,
-      defaultValue: [],
+      defaultValue: []
     },
     image: {
       type: DataTypes.STRING,
-      alloWNull: true,
+      alloWNull: true
     },
-    states: {
+    state: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -36,25 +39,20 @@ const Centers = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     }
-  }, {
-    tableName: 'Centers'
   });
 
+const Centers = (sequelize, DataTypes) => {
+  const CenterModel = sequelize.define('Centers', createCenterObject(DataTypes), { tableName: 'Centers' });
 
   CenterModel.associate = (models) => {
     CenterModel.hasMany(models.Events, {
       foreignKey: 'location',
-      onDelete: 'CASCADE',
+      as: 'events',
+      onDelete: 'CASCADE'
     });
-    CenterModel.belongsTo(models.States, {
-      foreignKey: 'states',
-    });
-    CenterModel.belongsTo(models.Events, {
-      foreignKey: 'createdBy',
-    });
-    CenterModel.belongsTo(models.Events, {
-      foreignKey: 'updatedBy',
-    });
+    CenterModel.belongsTo(models.States, { foreignKey: 'state' });
+    CenterModel.belongsTo(models.Users, { foreignKey: 'createdBy' });
+    CenterModel.belongsTo(models.Users, { foreignKey: 'updatedBy' });
   };
 
   return CenterModel;

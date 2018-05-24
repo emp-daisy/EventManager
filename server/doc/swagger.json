@@ -5,7 +5,6 @@
     "title": "Jess Event Manager",
     "description": "My event manager API for a Bootcamp project"
   },
-  "host": "jess-event-system.herokuapp.com",
   "basePath": "/v1",
   "schemes": [
     "http",

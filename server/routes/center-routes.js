@@ -1,32 +1,36 @@
 import express from 'express';
-import Centers from '../classes/centers';
-import authenticationToken from '../middleware/auth';
+import {
+  findAllCenter,
+  findOneCenter,
+  createCenter,
+  preUpdate,
+  updateCenter,
+  deleteCenter,
+  getStates
+} from '../controllers/centers';
+import authenticationToken, {
+  isAdmin
+} from '../middleware/auth';
+import { validateCenter, validateId } from '../middleware/validator';
 
 const centerRouter = express.Router();
 
 // GET ALL CENTERS
-centerRouter.get('/centers', (req, res) => {
-  new Centers(req, res).findAllCenter();
-});
+centerRouter.get('/centers', findAllCenter);
 
 // GET DETAILS OF A CENTER
-centerRouter.get('/centers/:id', (req, res) => {
-  new Centers(req, res).findOneCenter();
-});
+centerRouter.get('/centers/:id', validateId, findOneCenter);
 
 // ADD A NEW CENTER
-centerRouter.post('/centers', authenticationToken, (req, res) => {
-  new Centers(req, res).createCenter();
-});
+centerRouter.post('/centers', authenticationToken, isAdmin, validateCenter, createCenter);
 
 // MODIFIES DETAIS OF A CENTER
-centerRouter.put('/centers/:id', authenticationToken, (req, res) => {
-  new Centers(req, res).updateCenter();
-});
+centerRouter.put('/centers/:id', authenticationToken, isAdmin, validateId, preUpdate, validateCenter, updateCenter);
 
 // DELETE A CENTER
-centerRouter.delete('/centers/:id', authenticationToken, (req, res) => {
-  new Centers(req, res).deleteCenter();
-});
+centerRouter.delete('/centers/:id', authenticationToken, isAdmin, validateId, deleteCenter);
+
+// GET ALL STATES
+centerRouter.get('/states', getStates);
 
 export default centerRouter;
