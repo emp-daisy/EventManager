@@ -1,5 +1,8 @@
 const paginationMeta = (meta) => {
-  const { url } = meta;
+  const {
+    url,
+    searchQuery
+  } = meta;
   const data = {
     limit: meta.limit,
     offset: meta.offset,
@@ -11,13 +14,18 @@ const paginationMeta = (meta) => {
     current: '',
     next: ''
   };
+
+  const searchQueryString = (searchQuery !== '' && searchQuery.length > 0) ? `&${searchQuery}` : '';
+
   data.pages = Math.ceil(data.total / data.limit);
   data.page = data.page > data.pages ? data.pages : data.page;
-  data.previous = data.page !== 1 ? `${url}?limit=${data.limit}&offset=${data.offset - data.limit}` : undefined;
-  data.current = `${url}?limit=${data.limit}&offset=${data.offset}`;
-  data.next = data.page === data.pages ? undefined : `${url}?limit=${data.limit}&offset=${data.offset + data.limit}`;
+  data.previous = data.page !== 1 ? `${url}?limit=${data.limit}&offset=${data.offset - data.limit}${searchQueryString}` : undefined;
+  data.current = `${url}?limit=${data.limit}&offset=${data.offset}${searchQueryString}`;
+  data.next = data.page === data.pages ? undefined : `${url}?limit=${data.limit}&offset=${data.offset + data.limit}${searchQueryString}`;
 
-  return { pagination: data };
+  return {
+    pagination: data
+  };
 };
 
 export const handleQuery = (query) => {
@@ -31,6 +39,23 @@ export const handleQuery = (query) => {
   if (!Array.isArray(facilities)) {
     facilities = facilities.split(',');
   }
+  // HANDLE SEARCH QUERY
+  const searchParams = {
+    name,
+    location,
+    facilities
+  };
+
+  const searchQuery = Object.keys(searchParams).reduce((arr, key) => {
+    if (searchParams[key] === '' || (Array.isArray(searchParams[key]) && searchParams[key].length === 0)) {
+      return arr;
+    }
+    arr.push(`${key}=${searchParams[key]}`);
+
+    return arr;
+  }, []).join('&');
+  // END SEARCH QUERY
+
 
   if (limit > 100) {
     limit = 20;
@@ -40,7 +65,13 @@ export const handleQuery = (query) => {
     page = Math.ceil((offset + limit) / limit);
   }
   return {
-    limit, offset, page, name, location, facilities
+    limit,
+    offset,
+    page,
+    searchQuery,
+    name,
+    location,
+    facilities
   };
 };
 

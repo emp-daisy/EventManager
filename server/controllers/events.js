@@ -51,7 +51,8 @@ const findAllEvent = (req, res) => {
     limit,
     offset,
     page,
-    name
+    name,
+    searchQuery
   } = handleQuery(req.query);
 
   return model
@@ -88,12 +89,14 @@ const findAllEvent = (req, res) => {
         count
       } = result;
       const meta = {
+        name,
         pageSize: rows.length,
         total: count,
         limit,
         offset,
         page,
-        url: `${req.protocol}://${req.headers.host}${req.path}`
+        url: `${req.protocol}://${req.headers.host}${req.path}`,
+        searchQuery
       };
 
       if (rows.length === 0) {
