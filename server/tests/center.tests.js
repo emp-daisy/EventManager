@@ -258,7 +258,34 @@ describe('Center API Testing', () => {
     });
 
     describe('/GET Center URL', () => {
-      it('Returns all centers as an array of objects', (done) => {
+      before((done) => {
+        chai
+          .request(app)
+          .post(`/v1/centers/?token=${adminToken}`)
+          .send({
+            name: faker
+              .random
+              .words(),
+            location: faker
+              .address
+              .streetAddress(),
+            facilities: 'faker,random,words',
+            state: faker
+              .random
+              .number({
+                min: 1,
+                max: 37
+              }),
+            image: faker
+              .system
+              .directoryPath()
+          })
+          .end(() => {
+            done();
+          });
+      });
+
+      it('Returns 20 or less centers as an array of objects', (done) => {
         chai
           .request(app)
           .get('/v1/centers')
@@ -283,10 +310,57 @@ describe('Center API Testing', () => {
             done();
           });
       });
-      it('Returns all centers as an array of objects with limit and offset set', (done) => {
+      it('Returns 100 or less centers as an array of objects with limit and offset set', (done) => {
         chai
           .request(app)
           .get('/v1/centers/?limit=1000&offset=2')
+          .end((err, res) => {
+            if (res.body.val) {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('Centers returned');
+            } else {
+              expect(res)
+                .to
+                .be
+                .status(200);
+              expect(res.body.msg)
+                .to
+                .equal('No center available');
+            }
+            done();
+          });
+      });
+      it('Returns centers as an array of objects with next button', (done) => {
+        chai
+          .request(app)
+          .get('/v1/centers/?limit=1')
+          .end((err, res) => {
+            expect(res.body.val.meta.pagination.next)
+              .to.not
+              .equal(undefined);
+            done();
+          });
+      });
+      it('Returns centers as an array of objects with previous button', (done) => {
+        chai
+          .request(app)
+          .get('/v1/centers/?limit=1&offset=2')
+          .end((err, res) => {
+            expect(res.body.val.meta.pagination.previous)
+              .to.not
+              .equal(undefined);
+            done();
+          });
+      });
+      it('Returns search result of centers as an array of objects by facilities', (done) => {
+        chai
+          .request(app)
+          .get('/v1/centers/?facilities=foo,buzz')
           .end((err, res) => {
             if (res.body.val) {
               expect(res)

@@ -50,7 +50,9 @@ const findAllEvent = (req, res) => {
   const {
     limit,
     offset,
-    page
+    page,
+    name,
+    searchQuery
   } = handleQuery(req.query);
 
   return model
@@ -69,13 +71,8 @@ const findAllEvent = (req, res) => {
         [sequelize.col('Center->State.name'), 'state']
       ],
       where: {
-        createdBy: parseInt(req.verified.id, 10),
-        startDate: {
-          [sequelize.Op.gte]: moment()
-        },
-        endDate: {
-          [sequelize.Op.gte]: moment()
-        }
+        name: { [sequelize.Op.iLike]: `%${name}%` },
+        createdBy: parseInt(req.verified.id, 10)
       },
       include: [{
         attributes: [],
@@ -92,12 +89,14 @@ const findAllEvent = (req, res) => {
         count
       } = result;
       const meta = {
+        name,
         pageSize: rows.length,
         total: count,
         limit,
         offset,
         page,
-        url: `${req.protocol}://${req.headers.host}${req.path}`
+        url: `${req.protocol}://${req.headers.host}${req.path}`,
+        searchQuery
       };
 
       if (rows.length === 0) {

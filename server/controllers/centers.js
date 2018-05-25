@@ -77,12 +77,35 @@ const findAllCenter = (req, res) => {
   const {
     limit,
     offset,
-    page
+    page,
+    name,
+    location,
+    facilities,
+    searchQuery
   } = handleQuery(req.query);
+  const search = (facilities.length === 0) ? {
+    name: {
+      [sequelize.Op.iLike]: `%${name}%`
+    },
+    location: {
+      [sequelize.Op.iLike]: `%${location}%`
+    }
+  } : {
+    name: {
+      [sequelize.Op.iLike]: `%${name}%`
+    },
+    location: {
+      [sequelize.Op.iLike]: `%${location}%`
+    },
+    facilities: {
+      [sequelize.Op.overlap]: facilities
+    }
+  };
   return model.Centers
     .findAndCountAll({
       limit,
       offset,
+      where: search,
       attributes: [
         'id',
         'name',
@@ -102,6 +125,7 @@ const findAllCenter = (req, res) => {
         count
       } = result;
       const meta = {
+        searchQuery,
         pageSize: rows.length,
         total: count,
         limit,
@@ -264,9 +288,13 @@ const deleteCenter = (req, res) => {
       }
       return model.Centers
         .destroy({
-          where: { id }
+          where: {
+            id
+          }
         })
-        .then(() => res.status(200).json({ msg: 'Center deleted' }));
+        .then(() => res.status(200).json({
+          msg: 'Center deleted'
+        }));
     })
     .catch(error =>
       res.status(500).send({

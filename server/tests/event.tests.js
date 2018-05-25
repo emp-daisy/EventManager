@@ -332,6 +332,28 @@ describe('Event API Testing', () => {
             done();
           });
       });
+      it('Returns events as an array of objects with no previous option', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/events/?token=${adminToken}&offset=0&limit=10`)
+          .end((err, res) => {
+            expect(res.body.val.meta.pagination.previous)
+              .to
+              .equal(undefined);
+            done();
+          });
+      });
+      it('Returns events as an array of objects with no next option', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/events/?token=${adminToken}&offset=0&limit=10000`)
+          .end((err, res) => {
+            expect(res.body.val.meta.pagination.next)
+              .to
+              .equal(undefined);
+            done();
+          });
+      });
       it('Returns an object array for the event', (done) => {
         chai
           .request(app)
