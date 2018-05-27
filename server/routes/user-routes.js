@@ -3,12 +3,14 @@ import
 {
   register,
   login,
+  removeUser,
   sendReset,
   reset,
   verify,
   resendVerification
 } from '../controllers/users';
-import { validateUser } from '../middleware/validator';
+import authenticationToken from '../middleware/auth';
+import { validateUser, validateId } from '../middleware/validator';
 
 const userRouter = express.Router();
 
@@ -29,6 +31,9 @@ userRouter.post('/users/reset/:token', reset);
 
 // RESET A USERS PASSWORD - SEND TOKEN
 userRouter.post('/users/reset', sendReset);
+
+// DELETE USER FROM DATABASE
+userRouter.delete('/users/:id', authenticationToken, validateId, removeUser);
 
 
 export default userRouter;
