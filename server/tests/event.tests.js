@@ -401,6 +401,35 @@ describe('Event API Testing', () => {
       });
     });
 
+    describe('/GET Event by Center ID', () => {
+      it('Returns paginated events by location ID', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/events/center/${centerId}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('Events returned');
+            done();
+          });
+      });
+      it('Returns events as an array of objects with no previous option', (done) => {
+        chai
+          .request(app)
+          .get(`/v1/events/center/${centerId}`)
+          .end((err, res) => {
+            expect(res.body.val.meta.pagination.previous)
+              .to
+              .equal(undefined);
+            done();
+          });
+      });
+    });
+
     describe('/PUT Event URL', () => {
       it('Returns the error code due to wrong id', (done) => {
         chai
