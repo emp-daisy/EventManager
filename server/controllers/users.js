@@ -284,6 +284,36 @@ const resendVerification = (req, res) => {
   });
 };
 
+/**
+ * Resend verification email
+ * @param {object} req
+ * @param {object} res
+ * @returns {Object} JSON response
+ */
+const makeAnAdmin = (req, res) => {
+  const {
+    id
+  } = req.body;
+
+  return userDb
+    .findOne({
+      where: { id }
+    })
+    .then((result) => {
+      if (result === null) {
+        return res.status(400).json({
+          msg: 'User not found'
+        });
+      }
+      return userDb
+        .update({ isAdmin: true }, {
+          where: { id }
+        })
+        .then(() => res.status(200).json({ msg: 'User role updated' }));
+    })
+    .catch(error => res.status(500).send(error));
+};
+
 export {
   register,
   login,
@@ -291,5 +321,6 @@ export {
   sendReset,
   reset,
   verify,
+  makeAnAdmin,
   resendVerification
 };

@@ -343,6 +343,10 @@ describe('User API Testing', () => {
             done();
           });
       });
+      after(() => {
+        user.id = jwt.decode(nonAdminToken).id;
+        adminUser.id = jwt.decode(adminToken).id;
+      });
     });
 
     describe('Password Reset', () => {
@@ -442,12 +446,64 @@ describe('User API Testing', () => {
       });
     });
 
-    describe('Delete User', () => {
-      before(() => {
-        user.id = jwt.decode(nonAdminToken).id;
-        adminUser.id = jwt.decode(adminToken).id;
+    describe('Update user role to ADMIN', () => {
+      it('it should throw error for non-existing user', (done) => {
+        chai
+          .request(app)
+          .post(`/v1/users/role/?token=${adminToken}`)
+          .send({
+            id: 0
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('User not found');
+            done();
+          });
       });
+      it('it should throw error when accessed by non-admin', (done) => {
+        chai
+          .request(app)
+          .post(`/v1/users/role/?token=${nonAdminToken}`)
+          .send({
+            id: user.id
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(403);
+            expect(res.body.msg)
+              .to
+              .equal('Not logged in as an Admin');
+            done();
+          });
+      });
+      it('it should update the user role to admin', (done) => {
+        chai
+          .request(app)
+          .post(`/v1/users/role/?token=${adminToken}`)
+          .send({
+            id: user.id
+          })
+          .end((err, res) => {
+            expect(res)
+              .to
+              .be
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('User role updated');
+            done();
+          });
+      });
+    });
 
+    describe('Delete User', () => {
       it('Returns the error message when trying to delete another user', (done) => {
         chai
           .request(app)

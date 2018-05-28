@@ -7,9 +7,10 @@ import
   sendReset,
   reset,
   verify,
-  resendVerification
+  resendVerification,
+  makeAnAdmin
 } from '../controllers/users';
-import authenticationToken from '../middleware/auth';
+import authenticationToken, { isAdmin } from '../middleware/auth';
 import { validateUser, validateId } from '../middleware/validator';
 
 const userRouter = express.Router();
@@ -33,7 +34,9 @@ userRouter.post('/users/reset/:token', reset);
 userRouter.post('/users/reset', sendReset);
 
 // DELETE USER FROM DATABASE
-userRouter.delete('/users/:id', authenticationToken, validateId, removeUser);
+userRouter.post('/users/role', authenticationToken, isAdmin, makeAnAdmin);
 
+// MAKE USER NA ADMIN
+userRouter.delete('/users/:id', authenticationToken, validateId, removeUser);
 
 export default userRouter;
