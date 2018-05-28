@@ -1,5 +1,6 @@
 import chaiHttp from 'chai-http';
 import chai from 'chai';
+import jwt from 'jsonwebtoken';
 import faker from 'faker';
 import app from '../app';
 import model from '../models';
@@ -11,6 +12,8 @@ chai.use(chaiHttp);
 const user = {},
   adminUser = {};
 let regToken = '';
+let adminToken = '';
+let nonAdminToken = '';
 const resetToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiaWF0IjoxNTI3MDIzODYyfQ.ox6b8Hs-3GszsCPrfrF0KOSu3IaJwszIOhE6fUGZKQg';
 
 describe('User API Testing', () => {
@@ -239,10 +242,18 @@ describe('User API Testing', () => {
           verify: null
         }, {
           where: {
-            email: [adminUser.email]
+            email: [adminUser.email, user.email]
           }
         }).then(() => {
-          done();
+          model.Users.update({
+            isAdmin: true
+          }, {
+            where: {
+              email: [adminUser.email]
+            }
+          }).then(() => {
+            done();
+          });
         });
       });
 
@@ -255,6 +266,7 @@ describe('User API Testing', () => {
             password: 'TESTpwd'
           })
           .end((err, res) => {
+            nonAdminToken = res.body.token;
             expect(res)
               .to
               .be
@@ -278,6 +290,7 @@ describe('User API Testing', () => {
             password: 'TESTpwd'
           })
           .end((err, res) => {
+            adminToken = res.body.token;
             expect(res)
               .to
               .be
@@ -426,6 +439,59 @@ describe('User API Testing', () => {
               done();
             });
         });
+      });
+    });
+
+    describe('Delete User', () => {
+      before(() => {
+        user.id = jwt.decode(nonAdminToken).id;
+        adminUser.id = jwt.decode(adminToken).id;
+      });
+
+      it('Returns the error message when trying to delete another user', (done) => {
+        chai
+          .request(app)
+          .delete(`/v1/users/${adminUser.id}/?token=${nonAdminToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(401);
+            expect(res.body.msg)
+              .to
+              .equal('Unauthorized user');
+            done();
+          });
+      });
+      it('Returns the message for deleted user', (done) => {
+        chai
+          .request(app)
+          .delete(`/v1/users/${user.id}/?token=${nonAdminToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(200);
+            expect(res.body.msg)
+              .to
+              .equal('User deleted');
+            done();
+          });
+      });
+      it('Returns an error for invalid id', (done) => {
+        chai
+          .request(app)
+          .delete(`/v1/users/0/?token=${adminToken}`)
+          .end((err, res) => {
+            expect(res)
+              .to
+              .have
+              .status(400);
+            expect(res.body.msg)
+              .to
+              .equal('User not found');
+            done();
+          });
       });
     });
   });

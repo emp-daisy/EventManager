@@ -95,8 +95,7 @@ const register = (req, res) => {
           firstName: data.firstName,
           surname: data.surname,
           email: data.email,
-          password: bcrypt.hashSync(data.password, salt),
-          isAdmin: data.isAdmin
+          password: bcrypt.hashSync(data.password, salt)
         })
         .then((value) => {
           sendVerificationEmail(value.email);
@@ -139,6 +138,37 @@ const login = (req, res) => {
         ),
         msg: 'login successful'
       });
+    })
+    .catch(error => res.status(500).send(error));
+};
+/**
+ * Delete user
+ * @param {object} req
+ * @param {object} res
+ * @returns {Object} JSON response
+ */
+const removeUser = (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const tokenId = parseInt(req.verified.id, 10);
+
+  if (id !== tokenId && req.verified.isAdmin === false) {
+    return res.status(401).json({ msg: 'Unauthorized user' });
+  }
+  return userDb
+    .findOne({
+      where: { id }
+    })
+    .then((result) => {
+      if (result === null) {
+        return res.status(400).json({
+          msg: 'User not found'
+        });
+      }
+      return userDb
+        .destroy({
+          where: { id }
+        })
+        .then(() => res.status(200).json({ msg: 'User deleted' }));
     })
     .catch(error => res.status(500).send(error));
 };
@@ -257,6 +287,7 @@ const resendVerification = (req, res) => {
 export {
   register,
   login,
+  removeUser,
   sendReset,
   reset,
   verify,
