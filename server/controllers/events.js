@@ -65,13 +65,14 @@ const findAllEvent = (req, res) => {
         'name',
         'location',
         'startDate',
-        'endDate',
-        [sequelize.col('Center.name'), 'centerName'],
+        'endDate', [sequelize.col('Center.name'), 'centerName'],
         [sequelize.col('Center.location'), 'centerLocation'],
         [sequelize.col('Center->State.name'), 'state']
       ],
       where: {
-        name: { [sequelize.Op.iLike]: `%${name}%` },
+        name: {
+          [sequelize.Op.iLike]: `%${name}%`
+        },
         createdBy: parseInt(req.verified.id, 10)
       },
       include: [{
@@ -99,13 +100,6 @@ const findAllEvent = (req, res) => {
         searchQuery
       };
 
-      if (rows.length === 0) {
-        return res
-          .status(200)
-          .json({
-            msg: 'No event available'
-          });
-      }
       res
         .status(200)
         .json({
@@ -182,6 +176,82 @@ const findOneEvent = (req, res) => {
     }));
 };
 /**
+ * Get events by center ID
+ * @param {object} req
+ * @param {object} res
+ * @returns {Object} JSON response
+ */
+const findEventByCenter = (req, res) => {
+  const {
+    id
+  } = req.params;
+
+  const {
+    limit,
+    offset,
+    page,
+    name,
+    searchQuery
+  } = handleQuery(req.query);
+
+  return model
+    .Events
+    .findAndCountAll({
+      limit,
+      offset,
+      attributes: [
+        'id',
+        'name',
+        'location',
+        'startDate',
+        'endDate', [sequelize.col('Center.name'), 'centerName'],
+        [sequelize.col('Center.location'), 'centerLocation'],
+        [sequelize.col('Center->State.name'), 'state']
+      ],
+      where: {
+        location: parseInt(id, 10)
+      },
+      include: [{
+        attributes: [],
+        model: model.Centers,
+        include: [{
+          model: model.States,
+          attributes: []
+        }]
+      }]
+    })
+    .then((result) => {
+      const {
+        rows,
+        count
+      } = result;
+      const meta = {
+        name,
+        pageSize: rows.length,
+        total: count,
+        limit,
+        offset,
+        page,
+        url: `${req.protocol}://${req.headers.host}${req.path}`,
+        searchQuery
+      };
+
+      res
+        .status(200)
+        .json({
+          val: {
+            centers: rows,
+            meta: PaginationMeta(meta)
+          },
+          msg: 'Events returned'
+        });
+    })
+    .catch(error => res.status(500).send({
+      msg: 'Server Error',
+      error
+    }));
+};
+/**
  * Create new event
  * @param {object} req
  * @param {object} res
@@ -196,24 +266,22 @@ const createEvent = (req, res) => {
     .findOne({
       where: {
         location: parseInt(data.location, 10),
-        [sequelize.Op.or]: [
-          {
-            startDate: {
-              [sequelize.Op.between]: [data.startDate, data.endDate]
-            }
-          }, {
-            endDate: {
-              [sequelize.Op.between]: [data.startDate, data.endDate]
-            }
-          }, {
-            startDate: {
-              [sequelize.Op.lte]: data.startDate
-            },
-            endDate: {
-              [sequelize.Op.gte]: data.endDate
-            }
+        [sequelize.Op.or]: [{
+          startDate: {
+            [sequelize.Op.between]: [data.startDate, data.endDate]
           }
-        ]
+        }, {
+          endDate: {
+            [sequelize.Op.between]: [data.startDate, data.endDate]
+          }
+        }, {
+          startDate: {
+            [sequelize.Op.lte]: data.startDate
+          },
+          endDate: {
+            [sequelize.Op.gte]: data.endDate
+          }
+        }]
       }
     })
     .then((doesExist) => {
@@ -308,7 +376,11 @@ const preUpdate = (req, res, next) => {
 const updateEvent = (req, res) => {
   const id = parseInt(req.params.id, 10);
   const {
-    startDate, endDate, location, name, image
+    startDate,
+    endDate,
+    location,
+    name,
+    image
   } = req.body;
 
   return model
@@ -316,24 +388,22 @@ const updateEvent = (req, res) => {
     .findOne({
       where: {
         location,
-        [sequelize.Op.or]: [
-          {
-            startDate: {
-              [sequelize.Op.between]: [startDate, endDate]
-            }
-          }, {
-            endDate: {
-              [sequelize.Op.between]: [startDate, endDate]
-            }
-          }, {
-            startDate: {
-              [sequelize.Op.lte]: startDate
-            },
-            endDate: {
-              [sequelize.Op.gte]: endDate
-            }
+        [sequelize.Op.or]: [{
+          startDate: {
+            [sequelize.Op.between]: [startDate, endDate]
           }
-        ],
+        }, {
+          endDate: {
+            [sequelize.Op.between]: [startDate, endDate]
+          }
+        }, {
+          startDate: {
+            [sequelize.Op.lte]: startDate
+          },
+          endDate: {
+            [sequelize.Op.gte]: endDate
+          }
+        }],
         [sequelize.Op.not]: {
           id
         }
@@ -362,16 +432,16 @@ const updateEvent = (req, res) => {
         })
         .then((value) => {
           if (value > 0) {
-            return getEvent(id);
-          }
-        })
-        .then((resp) => {
-          if (resp) {
-            return res
-              .status(200)
-              .json({
-                val: resp,
-                msg: 'Event updated successfully'
+            return getEvent(id)
+              .then((resp) => {
+                if (resp) {
+                  return res
+                    .status(200)
+                    .json({
+                      val: resp,
+                      msg: 'Event updated successfully'
+                    });
+                }
               });
           }
         });
@@ -455,5 +525,6 @@ export {
   createEvent,
   preUpdate,
   updateEvent,
+  findEventByCenter,
   deleteEvent
 };
