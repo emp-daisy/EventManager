@@ -56,8 +56,10 @@ const findOneCenter = (req, res) => {
           msg: 'Center not found'
         });
       }
+
       res.status(200).json({
         val: result,
+        eventsUrl: `${req.protocol}://${req.headers.host}${req.baseUrl}/events/center/${id}`,
         msg: 'Center found'
       });
     })

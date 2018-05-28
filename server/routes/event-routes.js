@@ -3,6 +3,7 @@ import {
   findAllEvent,
   findOneEvent,
   createEvent,
+  findEventByCenter,
   updateEvent,
   preUpdate,
   deleteEvent
@@ -18,6 +19,9 @@ eventRouter.get('/events', authenticationToken, findAllEvent);
 
 // GET AN EVENT
 eventRouter.get('/events/:id', validateId, findOneEvent);
+
+// SEARCH FOR EVENTS BY  CENTER ID
+eventRouter.get('/events/center/:id', validateId, findEventByCenter);
 
 // CREATES AN EVENT
 eventRouter.post('/events', authenticationToken, validateEvent, createEvent);
