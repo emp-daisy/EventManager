@@ -1,3 +1,6 @@
+@import "~bootstrap/scss/bootstrap";
+@import '~font-awesome/css/font-awesome.css';
+
 html,
 body {
   font-family: sans-serif;
@@ -23,6 +26,9 @@ body {
   display:  flex;
   flex-direction:  column;
 }
+.jumbotron.home{
+  position: relative;
+}
 
 .full-height {
   min-height: 100vh;
@@ -43,6 +49,7 @@ body {
   bottom: 0;
   left: 0;
   text-align: center;
+  // position: absolute;
 }
 
 .flex-grow {
@@ -79,8 +86,11 @@ body {
 
 #latest {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/12.png) no-repeat center center fixed;
+min-height: 80vh;
 }
-
+.intro .flex-column {
+  height: 100vh;
+}
 #login,
 #register {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/14.png) no-repeat center center fixed;
@@ -98,7 +108,9 @@ body {
 .intro h3 {
   color: #fff;
 }
-
+.latest h3 {
+  text-decoration: underline;
+}
 .img-overlay {
   position: absolute;
   width: 100%;
@@ -112,7 +124,7 @@ body {
   min-height: 100vh;
   position: relative;
   width: 100%;
-  display: flex;
+  // display: flex;
   justify-content: center;
   text-align: center;
   flex-direction: column;
@@ -151,7 +163,12 @@ body {
 .page-link {
   color: black;
 }
-
+// h3.sub-banner {
+//   font-size: 1.5em;
+// }
+.center-deck{
+  margin: 20px 0;
+}
 .page-item.active .page-link {
   z-index: 2;
   color: #fff;
@@ -194,3 +211,5 @@ body {
 .Select.form-control.has-value.is-open {
   z-index: 5 !important;
 }
+
+// style={{ minHeight: '100vh' }}

@@ -4,9 +4,8 @@ const defaultState = {
   errorMessage: '',
   success: false,
   sucessMessage: '',
-  centerList: [],
   allCenterList: [],
-  pageItems: []
+  paginationMeta: {}
 };
 
 const centers = (state = defaultState, action) => {
@@ -22,8 +21,8 @@ const centers = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: false,
-        centerList: action.data,
-        allCenterList: action.data
+        allCenterList: action.data.centers,
+        paginationMeta: action.data.meta.pagination
       });
       break;
     case 'REQUEST_CENTERS_FAILED':
@@ -43,7 +42,6 @@ const centers = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false,
-        centerList: state.centerList.filter(el => el.id.toString() !== action.id.toString()),
         allCenterList: state.allCenterList.filter(el => el.id.toString() !== action.id.toString())
       });
       break;
@@ -64,7 +62,6 @@ const centers = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false,
-        centerList: [...state.centerList, action.newData],
         allCenterList: [...state.allCenterList, action.newData]
       });
       break;
@@ -85,10 +82,6 @@ const centers = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false,
-        centerList: state.centerList.map((item) => {
-          if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
-          return item;
-        }),
         allCenterList: state.allCenterList.map((item) => {
           if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
           return item;
@@ -100,20 +93,6 @@ const centers = (state = defaultState, action) => {
         isLoading: false,
         error: true,
         errorMessage: action.msg
-      });
-      break;
-    case 'FILTER_CENTERS_BY':
-      currentState = Object.assign({}, state, {
-        centerList: undefined
-      }, {
-        isLoading: false,
-        error: false,
-        centerList: action.data
-      });
-      break;
-    case 'PAGINATE_CENTERS':
-      currentState = Object.assign({}, state, {
-        pageItems: state.centerList.slice(action.start, action.end)
       });
       break;
     default:

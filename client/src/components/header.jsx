@@ -69,13 +69,13 @@ export class Header extends Component {
             </li>
             <li
               className={
-                path.includes('events')
+                path.includes('centers')
                   ? this.state.activeStyle
                   : this.state.linkStyle
               }
             >
-              <a href="/events" className="nav-item nav-link">
-                Events
+              <a href="/centers" className="nav-item nav-link">
+                Centers
               </a>
             </li>
             {this.props.loggedIn &&
@@ -125,8 +125,12 @@ const matchDispatchToProps = dispatch =>
     dispatch
   );
 
+Header.defaultProps = {
+  logOut: () => {},
+  loggedIn: false
+};
 Header.propTypes = {
-  logOut: PropTypes.func.isRequired,
-  loggedIn: PropTypes.bool.isRequired
+  logOut: PropTypes.func,
+  loggedIn: PropTypes.bool
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Header);
