@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import Footer from './footer';
-import Header from './header';
+import { Header } from './header';
 import CardBlock from './cards';
 import { getCenters } from '../actions/center';
 import history from '../actions/history';
@@ -21,10 +21,8 @@ export class HomePage extends Component {
    */
   constructor(props) {
     super(props);
-    this.eventURL = '/event';
-    this.OnEventClick = this
-      .onEventClick
-      .bind(this);
+    this.state = { centerUrl: '/centers' };
+    this.onCenterPageNavigate = this.onCenterPageNavigate.bind(this);
   }
   /**
    *
@@ -41,8 +39,8 @@ export class HomePage extends Component {
  * @returns{null} no return
  * @memberof HomePage
  */
-  onEventClick() {
-    history.push(this.eventURL);
+  onCenterPageNavigate() {
+    history.push(this.state.centerUrl);
   }
   /**
    *
@@ -52,24 +50,13 @@ export class HomePage extends Component {
    */
   render() {
     const { listOfCenters } = this.props;
-    const listSize = listOfCenters.length;
-    const pageItems = listOfCenters.slice((listSize - 6), listSize.length);
 
     return (
       <div className="wrapper" id="wrapper">
         <section className="intro parallex-img" id="intro">
-          <div
-            className="d-flex flex-column"
-            style={{ minHeight: '100vh' }}
-          >
+          <div className="d-flex flex-column" >
             <Header />
-            <div
-              className="jumbotron m-auto"
-              id="banner"
-              style={{
-              position: 'relative'
-            }}
-            >
+            <div className="jumbotron home m-auto" id="banner">
               <div className="container-fluid text-center">
                 <h2 className="d-none d-md-block display-2 font-weight-bold">
               Book your events at the speed of thought
@@ -92,9 +79,10 @@ export class HomePage extends Component {
           className="latest parallex-img"
           id="latest"
         >
-          {listSize > 0 &&
-          <div className="row justify-content-center">
-            {pageItems.map(center => (
+          <h3 className="text-white p-2">Latest Centers</h3>
+          {listOfCenters.length > 0 &&
+          <div className="row justify-content-center m-2">
+            {listOfCenters.slice(0, 6).map(center => (
               <div className="col-sm-6 col-md-4 col-lg-3 mt-2" key={center.id}>
                 <CardBlock
                   id={center.id}
@@ -102,25 +90,22 @@ export class HomePage extends Component {
                   ? center.image
                   : undefined}
                   title={center.name}
-                  onClick={this.onEventClick}
-                  buttonText="Show more"
+                  onClick={this.onCenterPageNavigate}
+                  buttonText="View"
                 >{center.location}
                 </CardBlock>
               </div>
             ))}
+            <div className="d-flex align-items-center" >
+              <button
+                className="btn btn-dark btn-lg border-1 text-white py-3"
+                onClick={this.onCenterPageNavigate}
+              >Explore Centers
+              <br />
+                <span className="fa fa-arrow-circle-o-right" />
+              </button>
+            </div>
           </div>}
-          <div
-            className="row justify-content-center m-4"
-            style={{
-              position: 'relative'
-            }}
-          >
-            <button
-              className="btn btn-dark btn-lg border-1 text-white py-3"
-              onClick={this.onEventClick}
-            >Explore more
-            </button>
-          </div>
         </section>
         <Footer />
       </div>

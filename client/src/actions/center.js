@@ -162,33 +162,25 @@ export const updateCenter = (centerData, id) => (dispatch) => {
     });
 };
 
-export const filterCentersBy = (filterValue, searchValue, centers) => (dispatch) => {
-  let filtered = [];
+export const filterCentersBy = (filterValue, searchValue) => (dispatch) => {
+  const query = { name: '', location: '', facilities: '' };
+  query[filterValue] = searchValue.toString().toLowerCase();
 
-  if (searchValue.length === 0) {
-    filtered = centers;
-  } else if (filterValue === 'all') {
-    filtered = centers.filter(o => Object.keys(o).some((k) => {
-      if (o[k]) {
-        return o[k]
-          .toString()
-          .toLowerCase()
-          .includes(searchValue.toString().toLowerCase());
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
+  dispatch({ type: 'REQUEST_CENTERS' });
+
+  fetch(`${API_URL}centers/?${filterValue}=${searchValue.toString().toLowerCase()}`)
+    .then(res => res.json())
+    .then((data) => {
+      let resCenters = [];
+      if (data.val) {
+        resCenters = data.val;
       }
-      return false;
-    }));
-  } else {
-    filtered = centers.filter(((k) => {
-      if (k[filterValue]) {
-        return k[filterValue]
-          .toString()
-          .toLowerCase()
-          .includes(searchValue.toString().toLowerCase());
-      }
-      return false;
-    }));
-  }
-  dispatch({ type: 'FILTER_CENTERS_BY', data: filtered });
+      dispatch({ type: 'REQUEST_CENTERS_GRANTED', data: resCenters });
+    }, () => {
+      dispatch({ type: 'REQUEST_CENTERS_FAILED', msg: 'Error connecting to server...' });
+      connectionError(dispatch);
+    });
 };
 
 export const getCentersOptions = () => () => fetch(`${API_URL}centers`)
@@ -197,10 +189,3 @@ export const getCentersOptions = () => () => fetch(`${API_URL}centers`)
     const resCenters = (data.val || []).map(center => ({ name: `${center.name}, ${center.location}, ${center.state}`, id: center.id }));
     return { options: resCenters, complete: true };
   }, () => ({ options: [], complete: true }));
-
-export const nextCenterPage = (activePage, perPage) => (dispatch) => {
-  const end = activePage * perPage;
-  const start = end - perPage;
-
-  dispatch({ type: 'PAGINATE_CENTERS', start, end });
-};
