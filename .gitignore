@@ -5,3 +5,5 @@
 /client/node_modules
 /client/dist
 /client/public/temp
+.DS_Store
+/__snapshots__

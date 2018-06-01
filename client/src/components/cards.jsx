@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import event from '../assets/event.jpg';
+import event from '../assets/imagenotavailable.png';
 
 const CardBlock = props => (
   <div className="card" id={props.id}>
@@ -19,11 +19,10 @@ const CardBlock = props => (
       </p>
       {props.facilities.length > 0 &&
         <ul className="list-inline">
-          Facilities:{' '}
           {props.facilities.map(facility => (
             <li className="list-inline-item" key={facility}>
-              <small className="font-weight-bold">
-                * {facility}
+              <small className="badge badge-pill btn-dark">
+                {facility}
               </small>
             </li>))}
         </ul>}

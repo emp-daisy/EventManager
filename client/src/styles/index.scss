@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/bootstrap';
+@import '~font-awesome/css/font-awesome.css';
 html,
 body {
   font-family: sans-serif;
@@ -17,11 +19,15 @@ body {
   background-size: cover;
 }
 
-.wrapper{  
-  min-height:  100vh;
-  position:  relative;
-  display:  flex;
-  flex-direction:  column;
+.wrapper {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.jumbotron.home {
+  position: relative;
 }
 
 .full-height {
@@ -42,7 +48,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  text-align: center;
+  text-align: center; // position: absolute;
 }
 
 .flex-grow {
@@ -74,29 +80,44 @@ body {
 }
 
 #intro {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/11.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../assets/11.png) no-repeat center center fixed;
 }
 
 #latest {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/12.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../assets/12.png) no-repeat center center fixed;
+  min-height: 80vh;
+}
+
+.intro .flex-column {
+  height: 100vh;
 }
 
 #login,
 #register {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/14.png) no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../assets/14.png) no-repeat center center fixed;
 }
-#errorPage, #reset{
+
+#errorPage,
+#reset {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)) no-repeat center center fixed;
 }
-#dashboard, #event {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../assets/21.png) no-repeat center center fixed;
+
+#dashboard,
+#event {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../assets/21.png) no-repeat center center fixed;
 }
-.error{
+
+.error {
   color: red;
 }
+
 .intro h2,
 .intro h3 {
   color: #fff;
+}
+
+.latest h3 {
+  text-decoration: underline;
 }
 
 .img-overlay {
@@ -111,8 +132,7 @@ body {
 .parallex-img {
   min-height: 100vh;
   position: relative;
-  width: 100%;
-  display: flex;
+  width: 100%; // display: flex;
   justify-content: center;
   text-align: center;
   flex-direction: column;
@@ -124,7 +144,7 @@ body {
 
 .background-img {
   display: flex;
-/*  justify-content: center; */
+  /*  justify-content: center; */
   text-align: center;
   flex-direction: column;
   -webkit-background-size: cover !important;
@@ -148,8 +168,13 @@ body {
   cursor: pointer;
   text-decoration: none;
 }
+
 .page-link {
   color: black;
+}
+
+.center-deck {
+  margin: 20px 0;
 }
 
 .page-item.active .page-link {
@@ -162,13 +187,16 @@ body {
 .page-link:hover {
   color: rgb(34, 34, 34);
 }
-.modal{
+
+.modal {
   overflow-y: auto;
 }
+
 .event-list {
   background: #343a40;
   color: white;
 }
+
 @keyframes overlayFadeIn {
   from {
     opacity: 0;
@@ -177,7 +205,9 @@ body {
     opacity: 1;
   }
 }
-.overlayModal, .spinner {
+
+.overlayModal,
+.spinner {
   position: fixed;
   top: 0;
   left: 0;
@@ -191,6 +221,7 @@ body {
   animation: overlayFadeIn 0.5s 0.2s forwards;
   z-index: 1500 !important;
 }
+
 .Select.form-control.has-value.is-open {
   z-index: 5 !important;
 }

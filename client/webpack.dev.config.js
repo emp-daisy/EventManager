@@ -28,6 +28,12 @@ module.exports = {
     new webpack.DefinePlugin({
       CLOUDINARY_API: JSON.stringify(process.env.CLOUDINARY_API),
       CLOUDINARY_PRESET: JSON.stringify(process.env.CLOUDINARY_PRESET)
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Tether: 'tether'
     })
   ],
   module: {
@@ -60,6 +66,13 @@ module.exports = {
         options: {
           limit: 10000,
           name: 'dist/asset/[name].[hash:8].[ext]'
+        }
+      },
+      {
+        test: /\.(woff2?|ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader',
+        options: {
+          name: 'dist/fonts/[name].[ext]?[hash]',
         }
       }
     ]
