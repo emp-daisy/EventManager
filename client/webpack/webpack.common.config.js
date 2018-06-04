@@ -1,28 +1,22 @@
 const webpack = require('webpack');
 const path = require('path');
 
-process.env.NODE_ENV = 'production';
-
 module.exports = {
-  entry: [path.resolve(__dirname, './src/index.jsx')],
+  entry: [path.resolve(__dirname, './../src/index.jsx')],
   output: {
-    path: path.resolve(__dirname),
-    filename: 'dist/bundle.js'
+    path: path.resolve(__dirname, './../dist'),
+    filename: 'bundle.js'
   },
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.js', '.jsx']
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      compress: {
-        warnings: false,
-      },
-    }),
     new webpack.DefinePlugin({
-      CLOUDINARY_API: JSON.stringify(process.env.CLOUDINARY_API),
-      CLOUDINARY_PRESET: JSON.stringify(process.env.CLOUDINARY_PRESET)
+      'process.env': {
+        CLOUDINARY_API: JSON.stringify(process.env.CLOUDINARY_API),
+        CLOUDINARY_PRESET: JSON.stringify(process.env.CLOUDINARY_PRESET)
+      },
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',

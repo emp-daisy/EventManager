@@ -77,7 +77,7 @@ export const login = (email, password) => (dispatch) => {
   const payload = new URLSearchParams();
   payload.set('email', email);
   payload.set('password', password);
-  fetch(`${API_URL}users/login`, {
+  return fetch(`${API_URL}users/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -128,7 +128,7 @@ export const register = credientials => (dispatch) => {
   payload.set('password', credientials.password);
   payload.set('confirmPassword', credientials.passwordconfirm);
 
-  fetch(`${API_URL}users`, {
+  return fetch(`${API_URL}users`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -165,7 +165,7 @@ export const forgottenPassword = email => (dispatch) => {
 
   const payload = new URLSearchParams();
   payload.set('email', email);
-  fetch(`${API_URL}users/reset`, {
+  return fetch(`${API_URL}users/reset`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -188,7 +188,6 @@ export const forgottenPassword = email => (dispatch) => {
           level: 'success',
           autoDismiss: 15
         }));
-        console.log('LINKKKKK', response.data.link);
       } else {
         dispatch({ type: 'FORGOTTEN_PASSWORD_FAILED', msg: response.data.msg });
       }
@@ -204,7 +203,7 @@ export const resetPassword = (credientials, token) => (dispatch) => {
   const payload = new URLSearchParams();
   payload.set('password', credientials.password);
   payload.set('confirmPassword', credientials.passwordconfirm);
-  fetch(`${API_URL}users/reset/${token}`, {
+  return fetch(`${API_URL}users/reset/${token}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
