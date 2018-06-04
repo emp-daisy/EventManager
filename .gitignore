@@ -6,4 +6,4 @@
 /client/dist
 /client/public/temp
 .DS_Store
-/__snapshots__
+__snapshots__

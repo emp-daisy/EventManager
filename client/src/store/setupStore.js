@@ -4,9 +4,9 @@ import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers/rootReducer';
 
 export const API_URL = '/v1/';
-export const CLOUDINARY_API_URL = 'CLOUDINARY_API_URL';
-export const CLOUDINARY_PRESET = 'CLOUDINARY_PRESET';
 
+export const { CLOUDINARY_PRESET } = process.env;
+export const CLOUDINARY_API_URL = process.env.CLOUDINARY_API;
 
 const loggerMiddleware = createLogger();
 

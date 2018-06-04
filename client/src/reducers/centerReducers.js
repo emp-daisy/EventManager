@@ -40,7 +40,7 @@ const centers = (state = defaultState, action) => {
       break;
     case 'DELETE_CENTERS_GRANTED':
       currentState = Object.assign({}, state, {
-        isLoading: true,
+        isLoading: false,
         error: false,
         allCenterList: state.allCenterList.filter(el => el.id.toString() !== action.id.toString())
       });
@@ -60,9 +60,8 @@ const centers = (state = defaultState, action) => {
       break;
     case 'CREATE_CENTERS_GRANTED':
       currentState = Object.assign({}, state, {
-        isLoading: true,
-        error: false,
-        allCenterList: [...state.allCenterList, action.newData]
+        isLoading: false,
+        error: false
       });
       break;
     case 'CREATE_CENTERS_FAILED':
@@ -80,7 +79,7 @@ const centers = (state = defaultState, action) => {
       break;
     case 'UPDATE_CENTERS_GRANTED':
       currentState = Object.assign({}, state, {
-        isLoading: true,
+        isLoading: false,
         error: false,
         allCenterList: state.allCenterList.map((item) => {
           if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }

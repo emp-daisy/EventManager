@@ -11,6 +11,7 @@ const saveToken = (token) => {
 const removeToken = () => {
   localStorage.removeItem('jwt-token');
 };
+const futureDate = date => new Date() < date;
 
 const checkTokenExpiry = () => {
   const jwt = localStorage.getItem('jwt-token');
@@ -19,9 +20,7 @@ const checkTokenExpiry = () => {
     const expiryDate = new Date(0);
     expiryDate.setUTCSeconds(jwtExp);
 
-    if (new Date() < expiryDate) {
-      return true;
-    }
+    return futureDate(expiryDate);
   }
   removeToken();
   return false;
@@ -32,10 +31,8 @@ export const isResetTokenValid = (token) => {
     const jwtExp = jwtDecode(token).exp;
     const expiryDate = new Date(0);
     expiryDate.setUTCSeconds(jwtExp);
-    if (new Date() < expiryDate) {
-      return true;
-    }
-    return false;
+
+    return futureDate(expiryDate);
   } catch (err) {
     return false;
   }
@@ -55,21 +52,6 @@ export const isUserAdmin = () => {
   return false;
 };
 
-const countdownFrom = (n, dispatch) => {
-  dispatch({ type: 'INC_TIMER', time: n });
-  return setTimeout(() => {
-    n -= 1;
-    dispatch({ type: 'DEC_TIMER' });
-    if (n > 0) {
-      countdownFrom(n, dispatch);
-    } else {
-      dispatch({ type: 'CLEAR_NOTIFICATION' });
-      history.replace('/login');
-      dispatch({ type: 'CLEAR_MESSAGE' });
-    }
-  }, 1000);
-};
-
 export const login = (email, password) => (dispatch) => {
   dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'LOGIN_USER' });
@@ -77,7 +59,7 @@ export const login = (email, password) => (dispatch) => {
   const payload = new URLSearchParams();
   payload.set('email', email);
   payload.set('password', password);
-  fetch(`${API_URL}users/login`, {
+  return fetch(`${API_URL}users/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -128,7 +110,7 @@ export const register = credientials => (dispatch) => {
   payload.set('password', credientials.password);
   payload.set('confirmPassword', credientials.passwordconfirm);
 
-  fetch(`${API_URL}users`, {
+  return fetch(`${API_URL}users`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -141,11 +123,10 @@ export const register = credientials => (dispatch) => {
       if (response.status === 201) {
         dispatch({ type: 'REGISTER_USER_GRANTED' });
         dispatch(addNotification({
-          message: 'Registration successful',
+          message: 'Registration successful. CHECk EMAIL TO VERIFY',
           level: 'success',
-          autoDismiss: 5
+          autoDismiss: 20
         }));
-        countdownFrom(5, dispatch);
       } else {
         dispatch({ type: 'REGISTER_USER_FAILED' });
         data.then((res) => {
@@ -165,7 +146,7 @@ export const forgottenPassword = email => (dispatch) => {
 
   const payload = new URLSearchParams();
   payload.set('email', email);
-  fetch(`${API_URL}users/reset`, {
+  return fetch(`${API_URL}users/reset`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -188,7 +169,6 @@ export const forgottenPassword = email => (dispatch) => {
           level: 'success',
           autoDismiss: 15
         }));
-        console.log('LINKKKKK', response.data.link);
       } else {
         dispatch({ type: 'FORGOTTEN_PASSWORD_FAILED', msg: response.data.msg });
       }
@@ -204,7 +184,7 @@ export const resetPassword = (credientials, token) => (dispatch) => {
   const payload = new URLSearchParams();
   payload.set('password', credientials.password);
   payload.set('confirmPassword', credientials.passwordconfirm);
-  fetch(`${API_URL}users/reset/${token}`, {
+  return fetch(`${API_URL}users/reset/${token}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

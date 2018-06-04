@@ -11,7 +11,10 @@ const history = {
 const mockProps = {
   listOfCenters: [],
   getCenters: jest.fn(),
-  history
+  history,
+  location: {
+    pathname: '/'
+  }
 };
 
 describe('HomePage Component', () => {
@@ -44,14 +47,14 @@ describe('HomePage Component', () => {
     });
   });
 
-  describe('Connected HomePagecomponent', () => {
+  describe('Connected HomePage component', () => {
     it('should render connected component', () => {
       const store = mockStore({
         center: {
           allCenterList: []
         }
       });
-      wrapper = shallow(<ConnectedHomePage store={store} history={history} />);
+      wrapper = shallow(<ConnectedHomePage store={store} history={history} location={mockProps.location} />);
       expect(wrapper.length).toBe(1);
     });
   });
