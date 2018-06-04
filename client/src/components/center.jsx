@@ -93,7 +93,7 @@ class Center extends Component {
 
     return (
       <div className="wrapper">
-        <Header />
+        <Header location={this.props.location.pathname} />
         <section
           className="container-fluid full-height-80 background-img"
           id="event"
@@ -172,6 +172,7 @@ class Center extends Component {
 }
 
 Center.propTypes = {
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
   getCenters: PropTypes.func.isRequired,
   filterCentersBy: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,

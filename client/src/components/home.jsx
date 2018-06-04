@@ -52,7 +52,7 @@ export class HomePage extends Component {
       <div className="wrapper" id="wrapper">
         <section className="intro parallex-img" id="intro">
           <div className="d-flex flex-column">
-            <Header />
+            <Header location={this.props.location.pathname} />
             <div className="jumbotron home m-auto" id="banner">
               <div className="container-fluid text-center">
                 <h2 className="d-none d-md-block display-2 font-weight-bold">
@@ -124,7 +124,8 @@ const matchDispatchToProps = dispatch =>
 HomePage.propTypes = {
   listOfCenters: PropTypes.arrayOf(PropTypes.object).isRequired,
   getCenters: PropTypes.func.isRequired,
-  history: PropTypes.objectOf(PropTypes.any).isRequired
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  location: PropTypes.objectOf(PropTypes.any).isRequired
 };
 
 export default connect(mapStateToProps, matchDispatchToProps)(HomePage);

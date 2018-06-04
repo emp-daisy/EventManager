@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
 import { logOut } from '../actions/authentication';
 /**
  *
@@ -17,10 +18,6 @@ export class Header extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {
-      activeStyle: 'nav-item active',
-      linkStyle: 'nav-item'
-    };
     this.onLogOut = this.onLogOut.bind(this);
   }
   /**
@@ -38,12 +35,12 @@ export class Header extends Component {
    * @memberof Header
    */
   render() {
-    const path = window.location.pathname;
+    const path = this.props.location;
     return (
       <nav className="navbar navbar-expand-md navbar-dark">
-        <a href="/" className="navbar-brand display-1 font-weight-bold">
+        <NavLink to="/" className="navbar-brand display-1 font-weight-bold">
           Event Manager
-        </a>
+        </NavLink>
         <button
           className="navbar-toggler"
           type="button"
@@ -58,57 +55,41 @@ export class Header extends Component {
         <div className="collapse navbar-collapse" id="navbar-content">
 
           <ul className="navbar-nav ml-auto">
-            <li
-              className={
-                path === '/' ? this.state.activeStyle : this.state.linkStyle
-              }
-            >
-              <a href="/" className="nav-item nav-link">
+            <li >
+              <NavLink to="/" exact className="nav-item nav-link">
                 Home
-              </a>
+              </NavLink>
             </li>
-            <li
-              className={
-                path.includes('centers')
-                  ? this.state.activeStyle
-                  : this.state.linkStyle
-              }
-            >
-              <a href="/centers" className="nav-item nav-link">
+            <li >
+              <NavLink to="/centers" className="nav-item nav-link">
                 Centers
-              </a>
+              </NavLink>
             </li>
             {this.props.loggedIn &&
-              <li
-                className={
-                  path.includes('dashboard')
-                    ? this.state.activeStyle
-                    : this.state.linkStyle
-                }
-              >
-                <a href="/dashboard" className="nav-item nav-link">
+              <li >
+                <NavLink to="/dashboard" className="nav-item nav-link">
                   Dashboard
-                </a>
+                </NavLink>
               </li>}
             {!this.props.loggedIn &&
-              !path.includes('login') &&
+              path !== '/login' &&
               <li className="nav-item">
-                <a href="/login" className="nav-item nav-link">
+                <NavLink to="/login" className="nav-item nav-link">
                   Login
-                </a>
+                </NavLink>
               </li>}
             {!this.props.loggedIn &&
-              !path.includes('register') &&
+              !path !== '/register' &&
               <li className="nav-item">
-                <a href="/register" className="nav-item nav-link">
+                <NavLink to="/register" className="nav-item nav-link">
                   Register
-                </a>
+                </NavLink>
               </li>}
             {this.props.loggedIn &&
               <li className="nav-item">
-                <a href="/" onClick={this.onLogOut} className="nav-item nav-link">
+                <NavLink to="/" onClick={this.onLogOut} className="nav-item nav-link">
                   Log out
-                </a>
+                </NavLink>
               </li>}
           </ul>
         </div>
@@ -127,10 +108,12 @@ const matchDispatchToProps = dispatch =>
 
 Header.defaultProps = {
   logOut: () => {},
-  loggedIn: false
+  loggedIn: false,
+  location: ''
 };
 Header.propTypes = {
   logOut: PropTypes.func,
-  loggedIn: PropTypes.bool
+  loggedIn: PropTypes.bool,
+  location: PropTypes.string
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Header);

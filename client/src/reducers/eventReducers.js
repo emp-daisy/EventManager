@@ -62,7 +62,7 @@ const events = (state = defaultState, action) => {
       break;
     case 'DELETE_EVENTS_GRANTED':
       currentState = Object.assign({}, state, {
-        isLoading: true,
+        isLoading: false,
         error: false,
         eventList: state.eventList.filter(el => el.id.toString() !== action.id.toString()),
         allEventList: state.allEventList.filter(el => el.id.toString() !== action.id.toString())
@@ -83,7 +83,7 @@ const events = (state = defaultState, action) => {
       break;
     case 'CREATE_EVENTS_GRANTED':
       currentState = Object.assign({}, state, {
-        isLoading: true,
+        isLoading: false,
         error: false,
         eventList: [...state.eventList, action.newData],
         allEventList: [...state.allEventList, action.newData]
