@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import validator from 'validator';
 import { register } from '../actions/authentication';
 import Spinner from './spinner';
-import Header from './header';
+import HeaderBlock from './header';
 import Footer from './footer';
 /**
  *
@@ -171,10 +171,10 @@ class Register extends Component {
   render() {
     const isEnabled = this.canSubmit();
     return (
-      <div className="wrapper d-flex flex-column h-100">
-        <Header />
+      <div className="inner-wrapper d-flex flex-column h-100">
+        <HeaderBlock />
         <section
-          className={'align-items-center d-flex flex-column ' +
+          className={'align-items-center flex-grow d-flex flex-column ' +
                     'flex-grow background-img justify-content-center'}
           id="register"
         >

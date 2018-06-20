@@ -243,6 +243,34 @@ export const filterCentersBy = (filterValue, searchValue) => (dispatch) => {
     });
 };
 
+export const getSingleCenters = id => (dispatch) => {
+  dispatch({
+    type: 'CLEAR_NOTIFICATION'
+  });
+  dispatch({
+    type: 'REQUEST_SINGLE_CENTERS'
+  });
+
+  return fetch(`${API_URL}centers/${id}`)
+    .then(res => res.json())
+    .then((data) => {
+      let resCenters = [];
+      if (data.val) {
+        resCenters = data.val;
+      }
+      dispatch({
+        type: 'REQUEST_SINGLE_CENTERS_GRANTED',
+        data: resCenters
+      });
+    }, () => {
+      dispatch({
+        type: 'REQUEST_SINGLE_CENTERS_FAILED',
+        msg: 'Error connecting to server...'
+      });
+      connectionError(dispatch);
+    });
+};
+
 export const getCentersOptions = () => () => fetch(`${API_URL}centers`)
   .then(res => res.json())
   .then((data) => {

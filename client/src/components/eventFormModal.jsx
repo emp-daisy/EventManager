@@ -31,7 +31,7 @@ class EventModal extends Component {
       formData: formUpdate || {
         name: '',
         description: '',
-        location: { id: '', name: '' },
+        location: this.props.center || { id: '', name: '' },
         startDate: '',
         endDate: ''
       },
@@ -199,7 +199,7 @@ class EventModal extends Component {
                   <div className="form-group">
                     <div className="input-group">
                       <span className="input-group-addon">Center Address</span>
-                      <Async
+                      { !this.props.isCreate && <Async
                         name="center-list"
                         valueKey="id"
                         labelKey="name"
@@ -212,7 +212,14 @@ class EventModal extends Component {
                         onChange={option =>
                           this.handleSelectChange(option, 'location')}
                         loadOptions={this.props.allCenters}
-                      />
+                      />}
+                      {this.props.isCreate &&
+                      <input
+                        className="form-control"
+                        type="text"
+                        disabled
+                        defaultValue={this.state.formData.location.name}
+                      />}
                     </div>
                     {this.state.errors.location.isInvalid &&
                       <span className="error">{this.state.errors.location.message}
@@ -288,6 +295,7 @@ EventModal.defaultProps = {
   handleSubmit: () => {},
   onClose: () => {},
   allCenters: () => {},
+  center: {},
   prevData: {}
 };
 EventModal.propTypes = {
@@ -295,6 +303,7 @@ EventModal.propTypes = {
   handleSubmit: PropTypes.func,
   onClose: PropTypes.func,
   allCenters: PropTypes.func,
-  prevData: PropTypes.objectOf(PropTypes.any)
+  prevData: PropTypes.objectOf(PropTypes.any),
+  center: PropTypes.objectOf(PropTypes.any)
 };
 export default EventModal;

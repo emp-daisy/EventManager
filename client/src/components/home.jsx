@@ -49,7 +49,7 @@ export class HomePage extends Component {
     const { listOfCenters } = this.props;
 
     return (
-      <div className="wrapper" id="wrapper">
+      <div >
         <section className="intro parallex-img" id="intro">
           <div className="d-flex flex-column">
             <Header location={this.props.location.pathname} />
@@ -85,7 +85,9 @@ export class HomePage extends Component {
                     id={center.id}
                     src={center.image ? center.image : undefined}
                     title={center.name}
-                    onClick={this.onCenterPageNavigate}
+                    onClick={() => {
+                      this.props.history.push(`/center/description/${center.id}`);
+                    }}
                     buttonText="View"
                   >
                     {center.location}

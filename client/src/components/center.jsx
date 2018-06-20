@@ -92,10 +92,10 @@ class Center extends Component {
     } = this.props.paginationMeta;
 
     return (
-      <div className="wrapper">
+      <div className="inner-wrapper center-page">
         <Header location={this.props.location.pathname} />
         <section
-          className="container-fluid full-height-80 background-img"
+          className="container-fluid flex-grow background-img"
           id="event"
         >
           <h2 className="mx-5 font-weight-bold text-white">Centers</h2>
@@ -133,7 +133,7 @@ class Center extends Component {
               <div className="card-deck center-deck">
                 {listOfCenters.map(center => (
                   <div
-                    className="col-sm-6 col-md-4 col-lg-3 mt-4"
+                    className="col-sm-6 col-md-4 col-lg-3 mt-4 p-0"
                     key={center.id}
                   >
                     <CardBlock
@@ -141,7 +141,9 @@ class Center extends Component {
                       src={center.image ? center.image : undefined}
                       title={center.name}
                       facilities={center.facilities}
-                      onClick={() => this.showModal(center)}
+                      onClick={() => {
+                        this.props.history.push(`/center/description/${center.id}`);
+                      }}
                       buttonText="View"
                     >
                       {center.location}, {center.state}
@@ -172,6 +174,7 @@ class Center extends Component {
 }
 
 Center.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
   getCenters: PropTypes.func.isRequired,
   filterCentersBy: PropTypes.func.isRequired,
