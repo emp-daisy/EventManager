@@ -196,14 +196,6 @@ export class CenterDetails extends Component {
                 prevData={this.state.activeModalData}
               />
             }
-            {this.state.modalAction === 'create' &&
-            <EventModal
-              isCreate
-              onClose={this.handleClose}
-              handleSubmit={this.props.createEvent}
-              center={this.props.centerDetails.id}
-            />
-            }
           </div>
         }
         {this.state.showModal && this.props.loggedIn &&

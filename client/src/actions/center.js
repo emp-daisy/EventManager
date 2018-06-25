@@ -119,31 +119,26 @@ export const createCenter = centerData => (dispatch) => {
           },
           body: JSON.stringify(centerData)
         })
-          .then(res => res)
-          .then((data) => {
-            const dataBody = data.json();
-            if (data.status === 201) {
-              dataBody.then((res) => {
+          .then(data => data.json()
+            .then((res) => {
+              if (data.status === 201) {
                 dispatch({
                   type: 'CREATE_CENTERS_GRANTED',
                   newData: res.val
                 });
-              });
-              dispatch(addNotification({
-                message: 'New Center added successful',
-                level: 'success',
-                autoDismiss: 10
-              }));
-            } else {
-              dispatch({
-                type: 'CREATE_CENTERS_FAILED',
-                msg: 'Error creating new center. TRY AGAIN LATER'
-              });
-              dataBody.then((res) => {
+                dispatch(addNotification({
+                  message: 'New Center added successful',
+                  level: 'success',
+                  autoDismiss: 10
+                }));
+              } else {
+                dispatch({
+                  type: 'CREATE_CENTERS_FAILED',
+                  msg: 'Error creating new center. TRY AGAIN LATER'
+                });
                 connectionError(dispatch, validationError(res));
-              });
-            }
-          });
+              }
+            }));
       }
       dispatch({
         type: 'CREATE_CENTERS_FAILED',
@@ -175,36 +170,34 @@ export const updateCenter = (centerData, id) => (dispatch) => {
           'Content-Type': 'application/json'
         }
       })
-        .then(res => res)
-        .then((data) => {
-          const dataBody = data.json();
-          if (data.status === 200) {
-            return dataBody.then((res) => {
+        .then(
+          data => data.json()
+            .then((res) => {
+              if (data.status === 200) {
+                dispatch({
+                  type: 'UPDATE_CENTERS_GRANTED',
+                  newData: res.val
+                });
+                dispatch(addNotification({
+                  message: 'Center update  successful',
+                  level: 'success',
+                  autoDismiss: 10
+                }));
+              }
               dispatch({
-                type: 'UPDATE_CENTERS_GRANTED',
-                newData: res.val
+                type: 'UPDATE_CENTERS_FAILED',
+                msg: 'Error updating center. TRY AGAIN LATER'
               });
-              dispatch(addNotification({
-                message: 'Center update  successful',
-                level: 'success',
-                autoDismiss: 10
-              }));
+              connectionError(dispatch, validationError(res));
+            })
+          , () => {
+            dispatch({
+              type: 'UPDATE_CENTERS_FAILED',
+              msg: 'Error updating center...'
             });
+            connectionError(dispatch);
           }
-          dispatch({
-            type: 'UPDATE_CENTERS_FAILED',
-            msg: 'Error updating center. TRY AGAIN LATER'
-          });
-          dataBody.then((res) => {
-            connectionError(dispatch, validationError(res));
-          });
-        }, () => {
-          dispatch({
-            type: 'UPDATE_CENTERS_FAILED',
-            msg: 'Error updating center...'
-          });
-          connectionError(dispatch);
-        });
+        );
     });
 };
 

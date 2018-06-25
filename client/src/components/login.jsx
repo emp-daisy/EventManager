@@ -7,14 +7,14 @@ import { login } from '../actions/authentication';
 import Spinner from './spinner';
 import HeaderBlock from './header';
 import Footer from './footer';
-import ForgottenPassword from './forgotPasswordModal';
+import ConnectedForgottenPassword from './forgotPasswordModal';
 /**
  *
  *
  * @class Login
  * @extends {Component}
  */
-class Login extends Component {
+export class Login extends Component {
   /**
    * Creates an instance of Login.
    * @param {any} props
@@ -186,7 +186,7 @@ class Login extends Component {
         <Footer />
         {this.state.showModal &&
           <div className="overlayModal">
-            <ForgottenPassword onCancel={this.onCancel} />
+            <ConnectedForgottenPassword onCancel={this.onCancel} />
           </div>}
       </div>
     );

@@ -150,7 +150,8 @@ class CenterModal extends Component {
       errors.location.isInvalid = true;
       errors.location.message = 'Address should be more than 10 characters';
     }
-    if (this.state.formData.state === null || !validator.isNumeric(this.state.formData.state.id.toString())) {
+    if (this.state.formData.state === null ||
+      !validator.isNumeric(this.state.formData.state.id.toString())) {
       errors.state.isInvalid = true;
       errors.state.message = 'Select a state from the list';
     }

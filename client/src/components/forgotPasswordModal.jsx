@@ -11,7 +11,7 @@ import { forgottenPassword } from '../actions/authentication';
  * @class ForgottenPassword
  * @extends {Component}
  */
-class ForgottenPassword extends Component {
+export class ForgottenPassword extends Component {
   /**
    * Creates an instance of Login.
    * @param {any} props

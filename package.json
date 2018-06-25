@@ -35,7 +35,10 @@
     },
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "/client/src/setup/setupTest.js"
+    ]
   },
   "nyc": {
     "include": "server",

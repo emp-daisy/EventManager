@@ -40,7 +40,6 @@ describe('HomePage Component', () => {
       }];
       expect(wrapper).toMatchSnapshot();
     });
-
     it('should run onCenterPageNavigate function', () => {
       wrapper.instance().onCenterPageNavigate();
       expect(mockProps.history.push).toHaveBeenCalled();
@@ -54,7 +53,11 @@ describe('HomePage Component', () => {
           allCenterList: []
         }
       });
-      wrapper = shallow(<ConnectedHomePage store={store} history={history} location={mockProps.location} />);
+      wrapper = shallow(<ConnectedHomePage
+        store={store}
+        history={history}
+        location={mockProps.location}
+      />);
       expect(wrapper.length).toBe(1);
     });
   });
