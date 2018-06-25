@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import Footer from './footer';
 import HeaderBlock from './header';
 import SearchBlock from './searchForm';
-import Tabs from './tabs';
-import TabContent from './tabContent';
 import { isUserAdmin } from '../actions/authentication';
-import { createEvent, nextEventPage, filterEventsBy } from '../actions/event';
-import { createCenter, getCentersOptions, filterCentersBy } from '../actions/center';
+import {
+  updateEvent,
+  deleteEvent,
+  getEventsByUser,
+  filterEventsBy
+} from '../actions/event';
+import { createCenter, getCentersOptions } from '../actions/center';
 import getStates from '../actions/states';
 import CenterModal from './centerFormModal';
 import EventModal from './eventFormModal';
+import ConfirmDelete from './confirmAlert';
 /**
  *
  *
  * @class Dashboard
  * @extends {Component}
  */
-class Dashboard extends Component {
+export class Dashboard extends Component {
   /**
    * Creates an instance of Dashboard.
    * @param {any} props
@@ -29,19 +34,21 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      searchText: '',
+      searching: false,
       activePage: 1,
       perPage: 10,
-      activeTab: 1,
       showModal: false,
       modalAction: ''
     };
     this.onChange = this.onChange.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
-    this.handleTabChange = this.handleTabChange.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
-    this.handlePageItems = this.handlePageItems.bind(this);
-    this.showSearchBar = this.showSearchBar.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+    this.onSearchReset = this.onSearchReset.bind(this);
   }
   /**
    *
@@ -51,6 +58,8 @@ class Dashboard extends Component {
   componentWillMount() {
     if (!this.props.loggedIn) {
       this.props.history.push('/login');
+    } else {
+      this.props.getEventsByUser();
     }
   }
   /**
@@ -60,27 +69,9 @@ class Dashboard extends Component {
    * @param {any} nextState
    * @memberof Dashboard
    */
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     if (!nextProps.loggedIn) {
       this.props.history.push('/login');
-    }
-    if (nextState.searchText !== this.state.searchText) {
-      this.handlePageChange(1);
-      if (this.state.activeTab === 1) {
-        this
-          .props
-          .filterEventsBy(nextState.searchText, this.props.listOfAllEvents);
-      } else {
-        this.props.filterCentersBy(
-          'all',
-          nextState.searchText,
-          this.props.listOfAllCenters
-        );
-      }
-    }
-    if (nextProps.listOfAllEvents !== this.props.listOfAllEvents ||
-      nextProps.listOfAllCenters !== this.props.listOfAllCenters) {
-      this.handlePageItems();
     }
   }
   /**
@@ -96,26 +87,32 @@ class Dashboard extends Component {
   }
   /**
    *
+   * @returns {null}  reset search action
+   * @memberof Dashboard
+   */
+  onSearchReset() {
+    this.setState({ searching: false, searchText: '' });
+    this.props.getEventsByUser();
+  }
+  /**
+   *
+   * @returns {null} search action
+   * @memberof Dashboard
+   */
+  onSearch() {
+    this.setState({ searching: true });
+    this.props.filterEventsBy(this.state.searchText);
+  }
+  /**
+   *
    * @returns {null} no return
    * @param {any} pageNumber
    * @memberof Dashboard
    */
   handlePageChange(pageNumber) {
-    this.tabList.scrollIntoView({ block: 'start', behavior: 'smooth' });
     this.setState({ activePage: pageNumber }, () => {
-      this.handlePageItems();
+      // this.handlePageItems();
     });
-  }
-  /**
-   *
-   * @returns {null} no return
-   * @param {any} tabNumber
-   * @memberof Dashboard
-   */
-  handleTabChange(tabNumber) {
-    if (tabNumber !== this.state.activeTab) {
-      this.setState({ activeTab: tabNumber, activePage: 1 });
-    }
   }
   /**
    *
@@ -129,37 +126,41 @@ class Dashboard extends Component {
   /**
    *
    * @returns {null} no return
+   * @param {any} data
+   * @param {any} tabIndex
    * @memberof Dashboard
    */
-  handleClose() {
-    this.setState({ showModal: false });
-    document.body.classList.remove('modal-open');
+  handleDelete(data) {
+    this.setState({
+      showModal: true,
+      activeModalData: data,
+      modalAction: 'delete'
+    });
+    document.body.classList.add('modal-open');
+  }
+  /**
+   *
+   * @returns {null} no return
+   * @param {any} data
+   * @param {any} tabIndex
+   * @memberof Dashboard
+   */
+  handleEdit(data) {
+    this.setState({
+      showModal: true,
+      activeModalData: data,
+      modalAction: 'edit'
+    });
+    document.body.classList.add('modal-open');
   }
   /**
    *
    * @returns {null} no return
    * @memberof Dashboard
    */
-  handlePageItems() {
-    const { activePage, perPage, activeTab } = this.state;
-    if (activeTab === 1) {
-      this.props.nextEventPage(activePage, perPage);
-    } else {
-      // this.props.nextCenterPage(activePage, perPage);
-    }
-  }
-  /**
-   *
-   * @returns {boolean} no return
-   * @memberof Dashboard
-   */
-  showSearchBar() {
-    const { activeTab } = this.state;
-    const { listOfAllEvents, listOfAllCenters } = this.props;
-    if ((activeTab === 1 && listOfAllEvents.length > 0)
-        || (activeTab === 2 && listOfAllCenters.length > 0)) {
-      return true;
-    } return false;
+  handleClose() {
+    this.setState({ showModal: false });
+    document.body.classList.remove('modal-open');
   }
   /**
    *
@@ -177,28 +178,61 @@ class Dashboard extends Component {
         >
           <div className="row align-content-center">
             <div className="col-md-8 offset-md-2">
-              <div>
-                <div className="clearfix  w-50 ml-auto">
-                  { this.showSearchBar() &&
-                    <SearchBlock onChange={this.onChange} showButton={false} />
-                  }
+              <div className="row my-3 align-items-center ">
+                {isUserAdmin() && (
+                  <div className="col-md-6">
+                    <button
+                      className="btn btn-dark border-1 text-white py-3"
+                      onClick={() => this.handleCreate()}
+                    >
+                      New Center
+                    </button>
+                  </div>
+                )}
+                <div className="col-md-6">
+                  {(this.props.listOfEvents.centers.length > 0 ||
+                    this.state.searching) && (
+                    <SearchBlock
+                      onChange={this.onChange}
+                      onFilter={this.onSearch}
+                      onReset={this.onSearchReset}
+                      disabled={this.state.searchText === ''}
+                      hideReset={this.state.searching}
+                    />
+                  )}
                 </div>
-                <Tabs role={isUserAdmin()} onChange={this.handleTabChange} />
               </div>
-              <div ref={(e) => { this.tabList = e; }}>
-                <TabContent
-                  role={isUserAdmin()}
-                  tabIndex={this.state.activeTab}
-                />
-                <button
-                  type="button"
-                  className="btn btn-dark btn-circle-float position-fixed bottom-20"
-                  onClick={this.handleCreate}
-                  title={this.state.activeTab === 1 ? 'New event' : 'New Center'}
-                  style={{ right: 0, bottom: '10vh' }}
-                >
-                  <i className="fa fa-plus" />
-                </button>
+              <div>
+                {this.props.listOfEvents.centers.map(event => (
+                  <div
+                    key={event.id}
+                    className="list-group-item mb-2 bg-black flex-column align-items-start text-white"
+                  >
+                    <div className="d-flex w-100 justify-content-between">
+                      <h5 className="mb-1">{event.name}</h5>
+                    </div>
+                    <p className="mb-1">
+                      {`${moment(event.startDate).format('MMMM Do YYYY, h:mm:ss a')} - ${moment(event.endDate).format('MMMM Do YYYY, h:mm:ss a')}`}
+                    </p>
+                    <div className="d-flex w-100 justify-content-end p-2">
+                      <div>
+                        <button
+                          type="button"
+                          className="mx-2 btn btn-dark btn-sm"
+                          onClick={() => this.handleEdit(event)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="mx-2 btn btn-sm btn-secondary"
+                          onClick={() => this.handleDelete(event)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -210,34 +244,47 @@ class Dashboard extends Component {
             innerClass="pagination justify-content-center m-4"
             activePage={this.state.activePage}
             itemsCountPerPage={this.state.perPage}
-            totalItemsCount={(this.state.activeTab === 1) ?
-            this.props.listOfEvents.length
-            :
-            this.props.listOfCenters.length}
+            totalItemsCount={this.props.listOfEvents.length}
             onChange={this.handlePageChange}
           />
         </section>
         <Footer />
-        {this.state.showModal &&
+        {this.state.showModal && (
           <div className="overlayModal">
-            {(this.state.activeTab === 1 && this.state.modalAction === 'create') &&
-            <EventModal
-              isCreate
-              onClose={this.handleClose}
-              handleSubmit={this.props.createEvent}
-              allCenters={this.props.getCentersOptions}
-            />
-            }
-            {(this.state.activeTab === 2 && this.state.modalAction === 'create') &&
+            {this.state.modalAction === 'delete' && (
+              <ConfirmDelete
+                name={this.state.activeModalData.name}
+                onConfirm={() => {
+                  this.props
+                    .deleteEvent(this.state.activeModalData.id)
+                    .then(() => {
+                      this.props.getEventsByUser();
+                    });
+                }}
+                onCancel={this.handleClose}
+              />
+            )}
+            {this.state.modalAction === 'edit' && (
+              <EventModal
+                isCreate={false}
+                onClose={this.handleClose}
+                prevData={this.state.activeModalData}
+                handleSubmit={
+                  this.props.updateEvent
+                }
+                allCenters={this.props.getCentersOptions}
+              />
+            )}
+            {this.state.modalAction === 'create' && (
               <CenterModal
                 isCreate
                 onClose={this.handleClose}
                 allStates={this.props.getStates}
                 handleSubmit={this.props.createCenter}
               />
-            }
+            )}
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -245,35 +292,35 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => ({
   loggedIn: state.user.isLoggedIn,
-  listOfEvents: state.event.eventList,
-  listOfAllEvents: state.event.allEventList,
-  listOfCenters: state.center.centerList,
-  listOfAllCenters: state.center.allCenterList
+  listOfEvents: state.event.eventList
 });
-const matchDispatchToProps = dispatch => bindActionCreators({
-  createEvent,
-  getStates,
-  createCenter,
-  getCentersOptions,
-  nextEventPage,
-  // nextCenterPage,
-  filterEventsBy,
-  filterCentersBy
-}, dispatch);
+const matchDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getStates,
+      createCenter,
+      getCentersOptions,
+      updateEvent,
+      deleteEvent,
+      getEventsByUser,
+      filterEventsBy
+    },
+    dispatch
+  );
 
 Dashboard.propTypes = {
   createCenter: PropTypes.func.isRequired,
-  createEvent: PropTypes.func.isRequired,
+  deleteEvent: PropTypes.func.isRequired,
+  filterEventsBy: PropTypes.func.isRequired,
+  updateEvent: PropTypes.func.isRequired,
+  getEventsByUser: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
-  filterCentersBy: PropTypes.func.isRequired,
-  listOfCenters: PropTypes.arrayOf(PropTypes.object).isRequired,
-  listOfAllCenters: PropTypes.arrayOf(PropTypes.object).isRequired,
-  filterEventsBy: PropTypes.func.isRequired,
-  listOfEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
-  listOfAllEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
-  nextEventPage: PropTypes.func.isRequired,
+  listOfEvents: PropTypes.objectOf(PropTypes.any).isRequired,
   getStates: PropTypes.func.isRequired,
   getCentersOptions: PropTypes.func.isRequired
 };
-export default connect(mapStateToProps, matchDispatchToProps)(Dashboard);
+export default connect(
+  mapStateToProps,
+  matchDispatchToProps
+)(Dashboard);

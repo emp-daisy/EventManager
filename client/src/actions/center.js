@@ -267,7 +267,11 @@ export const getSingleCenters = id => (dispatch) => {
 export const getCentersOptions = () => () => fetch(`${API_URL}centers`)
   .then(res => res.json())
   .then((data) => {
-    const resCenters = (data.val || []).map(center => ({
+    let result = [];
+    if (data.val && data.val.centers) {
+      result = data.val.centers;
+    }
+    const resCenters = (result).map(center => ({
       name: `${center.name}, ${center.location}, ${center.state}`,
       id: center.id
     }));

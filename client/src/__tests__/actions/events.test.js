@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
-import { deleteEvent, createEvent, updateEvent, getEventsByUser } from '../../actions/event';
+import { deleteEvent, createEvent, updateEvent, filterEventsBy, getEventsByUser } from '../../actions/event';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -243,6 +243,68 @@ describe('Event Actions', () => {
       }];
 
       return store.dispatch(deleteEvent(1)).then(() => {
+        expect(fetchMock.called()).toBe(true);
+        expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions));
+      });
+    });
+  });
+  describe('FIlter Event', () => {
+    it('it should fetch events with no return', () => {
+      fetchMock.getOnce('/v1/events/?name=eventone', {
+        body: {},
+        headers: {
+          'content-type': 'application/json'
+        }
+      });
+      const expectedActions = [{
+        type: 'CLEAR_NOTIFICATION'
+      }, {
+        type: 'REQUEST_USER_EVENTS'
+      }, {
+        type: 'REQUEST_USER_EVENTS_GRANTED',
+        data: []
+      }];
+
+      return store.dispatch(filterEventsBy('eventone')).then(() => {
+        expect(fetchMock.called()).toBe(true);
+        expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions));
+      });
+    });
+    it('it should fetch events', () => {
+      fetchMock.getOnce('/v1/events/?name=eventone', {
+        body: {
+          val: []
+        },
+        headers: {
+          'content-type': 'application/json'
+        }
+      });
+      const expectedActions = [{
+        type: 'CLEAR_NOTIFICATION'
+      }, {
+        type: 'REQUEST_USER_EVENTS'
+      }, {
+        type: 'REQUEST_USER_EVENTS_GRANTED',
+        data: []
+      }];
+
+      return store.dispatch(filterEventsBy('eventone')).then(() => {
+        expect(fetchMock.called()).toBe(true);
+        expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions));
+      });
+    });
+    it('it should fetch events with 500 error', () => {
+      fetchMock.getOnce('/v1/events/?name=eventone', Promise.reject());
+      const expectedActions = [{
+        type: 'CLEAR_NOTIFICATION'
+      }, {
+        type: 'REQUEST_USER_EVENTS'
+      }, {
+        type: 'REQUEST_USER_EVENTS_FAILED',
+        msg: 'Error connecting to server...'
+      }];
+
+      return store.dispatch(filterEventsBy('eventone')).then(() => {
         expect(fetchMock.called()).toBe(true);
         expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions));
       });

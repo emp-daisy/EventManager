@@ -457,7 +457,7 @@ describe('Centers Actions', () => {
     it('it should fetch centers', () => {
       fetchMock.getOnce('/v1/centers', {
         body: {
-          val: [{ name: 'oneItem', location: 'OneLocation', state: 'OneState' }]
+          val: { centers: [{ name: 'oneItem', location: 'OneLocation', state: 'OneState' }] }
         },
         headers: {
           'content-type': 'application/json'
