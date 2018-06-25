@@ -5,6 +5,10 @@ const defaultState = {
   success: false,
   sucessMessage: '',
   allCenterList: [],
+  singleCenter: {
+    center: {},
+    eventUrl: ''
+  },
   paginationMeta: {}
 };
 
@@ -26,6 +30,28 @@ const centers = (state = defaultState, action) => {
       });
       break;
     case 'REQUEST_CENTERS_FAILED':
+      currentState = Object.assign({}, state, {
+        isLoading: false,
+        error: true,
+        errorMessage: action.msg
+      });
+      break;
+    case 'REQUEST_SINGLE_CENTERS':
+      currentState = Object.assign({}, state, {
+        isLoading: true,
+        error: false
+      });
+      break;
+    case 'REQUEST_SINGLE_CENTERS_GRANTED':
+      currentState = Object.assign({}, state, {
+        isLoading: false,
+        error: false,
+        singleCenter: Object.assign({}, state.singleCenter, {
+          center: action.data
+        })
+      });
+      break;
+    case 'REQUEST_SINGLE_CENTERS_FAILED':
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: true,

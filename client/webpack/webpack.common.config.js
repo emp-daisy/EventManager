@@ -5,7 +5,8 @@ module.exports = {
   entry: [path.resolve(__dirname, './../src/index.jsx')],
   output: {
     path: path.resolve(__dirname, './../dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/dist'
   },
   resolve: {
     modules: ['node_modules', 'src'],
@@ -22,6 +23,7 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default'],
       Tether: 'tether'
     })
   ],
@@ -53,15 +55,15 @@ module.exports = {
         test: [/\.jpe?g$/, /\.png$/, /\.ico$/, /\.gif$/],
         loader: require.resolve('url-loader'),
         options: {
-          limit: 10000,
-          name: 'dist/asset/[name].[hash:8].[ext]'
+          limit: 1000,
+          name: '/assets/[name].[hash:8].[ext]'
         }
       },
       {
         test: /\.(woff2?|ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader',
         options: {
-          name: 'dist/fonts/[name].[ext]?[hash]',
+          name: '/fonts/[name].[ext]?[hash]',
         }
       }
     ]

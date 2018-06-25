@@ -9,18 +9,20 @@ import Home from './home';
 import Dashboard from './dashboard';
 import ResetPassword from './resetPassword';
 import Center from './center';
+import ViewCenter from './centerDetails';
 import NotFound from './notFound';
 import Notification from './flashNotification';
 import history from '../actions/history';
 
 const App = () => (
   <Router history={history}>
-    <div>
+    <div className="wrapper">
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/centers" component={Center} />
+        <Route exact path="/center/description/:id" component={ViewCenter} />
         <Route exact path="/reset/:token" component={ResetPassword} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route component={NotFound} />

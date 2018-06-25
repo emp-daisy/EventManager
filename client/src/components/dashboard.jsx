@@ -4,13 +4,13 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import Footer from './footer';
-import Header from './header';
+import HeaderBlock from './header';
 import SearchBlock from './searchForm';
 import Tabs from './tabs';
 import TabContent from './tabContent';
 import { isUserAdmin } from '../actions/authentication';
 import { createEvent, nextEventPage, filterEventsBy } from '../actions/event';
-import { createCenter, getCentersOptions, nextCenterPage, filterCentersBy } from '../actions/center';
+import { createCenter, getCentersOptions, filterCentersBy } from '../actions/center';
 import getStates from '../actions/states';
 import CenterModal from './centerFormModal';
 import EventModal from './eventFormModal';
@@ -145,7 +145,7 @@ class Dashboard extends Component {
     if (activeTab === 1) {
       this.props.nextEventPage(activePage, perPage);
     } else {
-      this.props.nextCenterPage(activePage, perPage);
+      // this.props.nextCenterPage(activePage, perPage);
     }
   }
   /**
@@ -170,7 +170,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="wrapper" id="wrapper">
-        <Header />
+        <HeaderBlock />
         <section
           className="container-fluid d-flex flex-column flex-grow background-img "
           id="dashboard"
@@ -256,7 +256,7 @@ const matchDispatchToProps = dispatch => bindActionCreators({
   createCenter,
   getCentersOptions,
   nextEventPage,
-  nextCenterPage,
+  // nextCenterPage,
   filterEventsBy,
   filterCentersBy
 }, dispatch);
@@ -272,7 +272,6 @@ Dashboard.propTypes = {
   filterEventsBy: PropTypes.func.isRequired,
   listOfEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
   listOfAllEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
-  nextCenterPage: PropTypes.func.isRequired,
   nextEventPage: PropTypes.func.isRequired,
   getStates: PropTypes.func.isRequired,
   getCentersOptions: PropTypes.func.isRequired

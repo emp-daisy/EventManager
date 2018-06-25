@@ -4,6 +4,7 @@ import fetchMock from 'fetch-mock';
 import {
   getCenters,
   createCenter,
+  getSingleCenters,
   deleteCenter, updateCenter, filterCentersBy, getCentersOptions
 } from '../../actions/center';
 
@@ -486,6 +487,69 @@ describe('Centers Actions', () => {
       return store.dispatch(getCentersOptions()).then((response) => {
         expect(fetchMock.called()).toBe(true);
         expect(response).toEqual(expectedResponse.val);
+      });
+    });
+  });
+
+  describe('Get Single Center', () => {
+    it('it should fetch centers with no return', () => {
+      fetchMock.getOnce('/v1/centers/1', {
+        body: {},
+        headers: {
+          'content-type': 'application/json'
+        }
+      });
+      const expectedActions = [{
+        type: 'CLEAR_NOTIFICATION'
+      }, {
+        type: 'REQUEST_SINGLE_CENTERS'
+      }, {
+        type: 'REQUEST_SINGLE_CENTERS_GRANTED',
+        data: []
+      }];
+
+      return store.dispatch(getSingleCenters(1)).then(() => {
+        expect(fetchMock.called()).toBe(true);
+        expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions));
+      });
+    });
+    it('it should fetch centers', () => {
+      fetchMock.getOnce('/v1/centers/1', {
+        body: {
+          val: []
+        },
+        headers: {
+          'content-type': 'application/json'
+        }
+      });
+      const expectedActions = [{
+        type: 'CLEAR_NOTIFICATION'
+      }, {
+        type: 'REQUEST_SINGLE_CENTERS'
+      }, {
+        type: 'REQUEST_SINGLE_CENTERS_GRANTED',
+        data: []
+      }];
+
+      return store.dispatch(getSingleCenters(1)).then(() => {
+        expect(fetchMock.called()).toBe(true);
+        expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions));
+      });
+    });
+    it('it should fetch centers with 500 error', () => {
+      fetchMock.getOnce('/v1/centers/1', Promise.reject());
+      const expectedActions = [{
+        type: 'CLEAR_NOTIFICATION'
+      }, {
+        type: 'REQUEST_SINGLE_CENTERS'
+      }, {
+        type: 'REQUEST_SINGLE_CENTERS_FAILED',
+        msg: 'Error connecting to server...'
+      }];
+
+      return store.dispatch(getSingleCenters(1)).then(() => {
+        expect(fetchMock.called()).toBe(true);
+        expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions));
       });
     });
   });

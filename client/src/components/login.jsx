@@ -5,16 +5,16 @@ import { bindActionCreators } from 'redux';
 import isEmail from 'validator/lib/isEmail';
 import { login } from '../actions/authentication';
 import Spinner from './spinner';
-import Header from './header';
+import HeaderBlock from './header';
 import Footer from './footer';
-import ForgottenPassword from './forgotPasswordModal';
+import ConnectedForgottenPassword from './forgotPasswordModal';
 /**
  *
  *
  * @class Login
  * @extends {Component}
  */
-class Login extends Component {
+export class Login extends Component {
   /**
    * Creates an instance of Login.
    * @param {any} props
@@ -111,8 +111,8 @@ class Login extends Component {
       this.state.email.length > 0 && this.state.password.length > 0;
 
     return (
-      <div className="wrapper d-flex flex-column h-100">
-        <Header />
+      <div className="inner-wrapper d-flex flex-column h-100">
+        <HeaderBlock />
         <section
           className={'align-items-center d-flex flex-column ' +
                   'flex-grow background-img justify-content-center'}
@@ -186,7 +186,7 @@ class Login extends Component {
         <Footer />
         {this.state.showModal &&
           <div className="overlayModal">
-            <ForgottenPassword onCancel={this.onCancel} />
+            <ConnectedForgottenPassword onCancel={this.onCancel} />
           </div>}
       </div>
     );

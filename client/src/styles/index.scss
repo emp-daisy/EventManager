@@ -10,7 +10,7 @@ body {
 }
 
 #root {
-  position: absolute;
+  // position: absolute;
   min-height: 100vh;
   width: 100vw;
   background: #343a40;
@@ -26,16 +26,20 @@ body {
   flex-direction: column;
 }
 
+.inner-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100%;
+  flex: 1 0 auto;
+}
+
 .jumbotron.home {
   position: relative;
 }
 
 .full-height {
   min-height: 100vh;
-}
-
-.full-height-80 {
-  min-height: 80vh;
 }
 
 .container-center {
@@ -86,6 +90,14 @@ body {
 #latest {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../assets/12.png) no-repeat center center fixed;
   min-height: 80vh;
+  padding: 10px 0;
+}
+
+#center-details {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background: linear-gradient(rgba(255, 255, 255, 1), #cecece80), rgba(255, 255, 255, 1) no-repeat center center fixed;
 }
 
 .intro .flex-column {
@@ -224,4 +236,50 @@ body {
 
 .Select.form-control.has-value.is-open {
   z-index: 5 !important;
+}
+
+.center-details-img-top {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  width: 100%;
+  height: 400px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.btn-floating {
+  border-radius: 100%;
+  color: #fff;
+  background: #343a40;
+  color: #fff;
+  box-shadow: 0px 17px 10px -10px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all ease-in-out 300ms;
+}
+
+.btn-floating:focus {
+  outline: none
+}
+
+.btn-floating:hover {
+  box-shadow: 0px 37px 20px -15px rgba(0, 0, 0, 0.2);
+  transform: translate(0px, -10px);
+}
+
+.btn-floating.disabled, .btn-floating.disabled:hover {
+  color: #ffffff80;
+  background: #343a4080;
+  box-shadow: none;
+  transform: none;
+}
+
+.span-floating{
+  position: fixed;
+  bottom: 10%;
+  right: 10%;
+}
+.center-details-title {
+  font-size: 2.0rem;
 }

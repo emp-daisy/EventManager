@@ -9,6 +9,10 @@ describe('Centers Reducer', () => {
       success: false,
       sucessMessage: '',
       allCenterList: [],
+      singleCenter: {
+        center: {},
+        eventUrl: ''
+      },
       paginationMeta: {}
     });
   });
@@ -75,6 +79,61 @@ describe('Centers Reducer', () => {
       error: false,
       allCenterList: actionObject.data.centers,
       paginationMeta: actionObject.data.meta.pagination
+    });
+  });
+
+  it('should create an action to get single CENTERS', () => {
+    const actionObject = {
+      type: 'REQUEST_SINGLE_CENTERS'
+    };
+    expect(centers({
+      isLoading: false,
+      error: false,
+      errorMessage: '',
+      success: false,
+      sucessMessage: '',
+      allCenterList: []
+    }, actionObject)).toMatchObject({
+      isLoading: true,
+      error: false
+    });
+  });
+
+  it('should create an action when requesting single event retrieval fails', () => {
+    const actionObject = {
+      type: 'REQUEST_SINGLE_CENTERS_FAILED',
+      msg: 'Error message'
+    };
+    expect(centers({
+      isLoading: true,
+      error: false,
+      errorMessage: '',
+      success: false,
+      sucessMessage: '',
+      allCenterList: []
+    }, actionObject)).toMatchObject({
+      isLoading: false,
+      error: true,
+      errorMessage: actionObject.msg
+    });
+  });
+
+  it('should create an action when requesting single event retrieval passes', () => {
+    const actionObject = {
+      type: 'REQUEST_SINGLE_CENTERS_GRANTED',
+      data: { }
+    };
+    expect(centers({
+      isLoading: true,
+      error: false,
+      errorMessage: '',
+      success: false,
+      sucessMessage: '',
+      allCenterList: []
+    }, actionObject)).toMatchObject({
+      isLoading: false,
+      error: false,
+      singleCenter: actionObject.data
     });
   });
 
