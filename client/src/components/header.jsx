@@ -37,7 +37,7 @@ export class Header extends Component {
   render() {
     const path = this.props.location;
     return (
-      <nav className="navbar navbar-expand-md navbar-dark">
+      <nav className="navbar navbar-expand-md navbar-dark text-center">
         <NavLink to="/" className="navbar-brand display-1 font-weight-bold">
           Event Manager
         </NavLink>

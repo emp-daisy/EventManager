@@ -98,7 +98,7 @@ class CenterModal extends Component {
         name: inputData.name,
         location: inputData.location,
         facilities: inputData.facilities.map(f => f.value).join(','),
-        states: inputData.state.id,
+        state: inputData.state.id,
         image: inputData.image,
         filesToUpload: inputData.filesToUpload
       };

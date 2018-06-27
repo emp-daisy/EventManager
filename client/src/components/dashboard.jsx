@@ -206,7 +206,7 @@ export class Dashboard extends Component {
                 {this.props.listOfEvents.centers.map(event => (
                   <div
                     key={event.id}
-                    className="list-group-item mb-2 bg-black flex-column align-items-start text-white"
+                    className="list-group-item mb-2 bg-color flex-column align-items-start text-white"
                   >
                     <div className="d-flex w-100 justify-content-between">
                       <h5 className="mb-1">{event.name}</h5>
@@ -218,7 +218,7 @@ export class Dashboard extends Component {
                       <div>
                         <button
                           type="button"
-                          className="mx-2 btn btn-dark btn-sm"
+                          className="mx-2 btn btn-sm"
                           onClick={() => this.handleEdit(event)}
                         >
                           Edit
