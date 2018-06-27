@@ -111,3 +111,36 @@ export const updateEvent = (eventData, id) => (dispatch) => {
       connectionError(dispatch);
     });
 };
+
+export const filterEventsBy = searchValue => (dispatch) => {
+  dispatch({
+    type: 'CLEAR_NOTIFICATION'
+  });
+  dispatch({
+    type: 'REQUEST_USER_EVENTS'
+  });
+
+  return fetch(`${API_URL}events/?name=${searchValue.toString().toLowerCase()}`, {
+    method: 'get',
+    headers: {
+      'x-access-token': getToken()
+    }
+  })
+    .then(res => res.json())
+    .then((data) => {
+      let resEvents = [];
+      if (data.val) {
+        resEvents = data.val;
+      }
+      dispatch({
+        type: 'REQUEST_USER_EVENTS_GRANTED',
+        data: resEvents
+      });
+    }, () => {
+      dispatch({
+        type: 'REQUEST_USER_EVENTS_FAILED',
+        msg: 'Error connecting to server...'
+      });
+      connectionError(dispatch);
+    });
+};

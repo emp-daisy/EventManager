@@ -28,7 +28,7 @@ const CardBlock = props => (
         </ul>}
       <button
         onClick={props.onClick}
-        className="btn btn-dark btn-block border-1 text-white py-3"
+        className="btn btn-dark btn-block border-1 text-white py-3 my-2"
       >
         {props.buttonText}
       </button>

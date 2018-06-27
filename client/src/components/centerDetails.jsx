@@ -135,7 +135,7 @@ export class CenterDetails extends Component {
                 </p>
                 <hr />
                 <span className="font-weight-bold">Address</span>
-                <p className="lead" >{center.location}</p>
+                <p className="lead" >{center.location}, {center.state} state</p>
                 {center.facilities && center.facilities.length > 0 &&
                 <ul className="list-inline">
                   <hr />
@@ -178,12 +178,19 @@ export class CenterDetails extends Component {
          }
         </section>
         <Footer />
-        {this.state.showModal && isUserAdmin() &&
-          <div className="overlayModal">
+        {this.state.showModal &&
+        <div className="overlayModal">
+          {isUserAdmin() &&
+          <div>
             {this.state.modalAction === 'delete' &&
             <ConfirmDelete
               name={this.state.activeModalData.name}
-              onConfirm={() => this.props.deleteCenter(this.state.activeModalData.id)}
+              onConfirm={() => {
+                this.props.deleteCenter(this.state.activeModalData.id)
+                .then(() => {
+                    this.props.history.push('/centers');
+                });
+              }}
               onCancel={this.handleClose}
             />
             }
@@ -198,16 +205,18 @@ export class CenterDetails extends Component {
             }
           </div>
         }
-        {this.state.showModal && this.props.loggedIn &&
-        <div className="overlayModal">
-          {this.state.modalAction === 'create' &&
-          <EventModal
-            isCreate
-            onClose={this.handleClose}
-            handleSubmit={this.props.createEvent}
-            center={{ id: this.props.centerDetails.id, name: this.props.centerDetails.name }}
-          />
+          {this.props.loggedIn &&
+          <div>
+            {this.state.modalAction === 'create' &&
+            <EventModal
+              isCreate
+              onClose={this.handleClose}
+              handleSubmit={this.props.createEvent}
+              center={{ id: this.props.centerDetails.id, name: this.props.centerDetails.name }}
+            />
             }
+          </div>
+        }
         </div>
         }
       </div>
@@ -241,6 +250,7 @@ CenterDetails.propTypes = {
   deleteCenter: PropTypes.func.isRequired,
   updateCenter: PropTypes.func.isRequired,
   getStates: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   loggedIn: PropTypes.bool.isRequired,
 };
 

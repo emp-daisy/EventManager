@@ -13,12 +13,6 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        CLOUDINARY_API: JSON.stringify(process.env.CLOUDINARY_API),
-        CLOUDINARY_PRESET: JSON.stringify(process.env.CLOUDINARY_PRESET)
-      },
-    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',

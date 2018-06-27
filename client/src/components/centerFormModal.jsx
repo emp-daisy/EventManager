@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import validator from 'validator';
 import { Creatable, Async } from 'react-select';
 import 'react-select/dist/react-select.css';
+import imgPlaceHolder from '../assets/placehold.it-180.png';
 /**
  *
  *
@@ -29,14 +30,16 @@ class CenterModal extends Component {
         name: this.props.prevData.name,
         description: this.props.prevData.description,
         location: this.props.prevData.location,
-        state: { id: this.props.prevData.stateId, name: this.props.prevData.state },
+        state: {
+          id: this.props.prevData.stateId,
+          name: this.props.prevData.state
+        },
         facilities: faciliesObject,
         image: this.props.prevData.image
       };
     }
     this.state = {
-      formData: formUpdate ||
-      {
+      formData: formUpdate || {
         name: '',
         description: '',
         location: '',
@@ -60,10 +63,10 @@ class CenterModal extends Component {
     this.onFileChange = this.onFileChange.bind(this);
   }
   /**
-    * @returns {null} no return
-    * @param {any} event
-    * @memberof CenterModal
-    */
+   * @returns {null} no return
+   * @param {any} event
+   * @memberof CenterModal
+   */
   onFileChange(event) {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -95,7 +98,7 @@ class CenterModal extends Component {
         name: inputData.name,
         location: inputData.location,
         facilities: inputData.facilities.map(f => f.value).join(','),
-        states: inputData.state.id,
+        state: inputData.state.id,
         image: inputData.image,
         filesToUpload: inputData.filesToUpload
       };
@@ -121,12 +124,12 @@ class CenterModal extends Component {
     });
   }
   /**
-     *
-     * @returns {null} no return
-     * @param {any} option
-     * @param {any} name
-     * @memberof CenterModal
-     */
+   *
+   * @returns {null} no return
+   * @param {any} option
+   * @param {any} name
+   * @memberof CenterModal
+   */
   handleSelectChange(option, name) {
     this.setState({
       formData: Object.assign({}, this.state.formData, {
@@ -142,16 +145,25 @@ class CenterModal extends Component {
    */
   isFormInvalid() {
     const { errors } = this.state;
-    if (!validator.isLength(this.state.formData.name, { min: 3, max: undefined })) {
+    if (
+      !validator.isLength(this.state.formData.name, { min: 3, max: undefined })
+    ) {
       errors.name.isInvalid = true;
       errors.name.message = 'Center name should be more than 3 characters';
     }
-    if (!validator.isLength(this.state.formData.location, { min: 3, max: undefined })) {
+    if (
+      !validator.isLength(this.state.formData.location, {
+        min: 3,
+        max: undefined
+      })
+    ) {
       errors.location.isInvalid = true;
       errors.location.message = 'Address should be more than 10 characters';
     }
-    if (this.state.formData.state === null ||
-      !validator.isNumeric(this.state.formData.state.id.toString())) {
+    if (
+      this.state.formData.state === null ||
+      !validator.isNumeric(this.state.formData.state.id.toString())
+    ) {
       errors.state.isInvalid = true;
       errors.state.message = 'Select a state from the list';
     }
@@ -208,9 +220,11 @@ class CenterModal extends Component {
                         defaultValue={this.state.formData.name}
                       />
                     </div>
-                    {this.state.errors.name.isInvalid &&
-                      <span className="error">{this.state.errors.location.message}
-                      </span>}
+                    {this.state.errors.name.isInvalid && (
+                      <span className="error">
+                        {this.state.errors.location.message}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -237,9 +251,11 @@ class CenterModal extends Component {
                         defaultValue={this.state.formData.location}
                       />
                     </div>
-                    {this.state.errors.location.isInvalid &&
-                      <span className="error">{this.state.errors.location.message}
-                      </span>}
+                    {this.state.errors.location.isInvalid && (
+                      <span className="error">
+                        {this.state.errors.location.message}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -254,13 +270,17 @@ class CenterModal extends Component {
                         clearable={false}
                         placeholder="Search states..."
                         value={this.state.formData.state}
-                        onChange={option => this.handleSelectChange(option, 'state')}
+                        onChange={option =>
+                          this.handleSelectChange(option, 'state')
+                        }
                         loadOptions={this.props.allStates}
                       />
                     </div>
-                    {this.state.errors.state.isInvalid &&
-                      <span className="error">{this.state.errors.state.message}
-                      </span>}
+                    {this.state.errors.state.isInvalid && (
+                      <span className="error">
+                        {this.state.errors.state.message}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <div className="input-group">
@@ -277,7 +297,9 @@ class CenterModal extends Component {
                         promptTextCreator={() => 'Add new facility'}
                         placeholder="Type and press enter"
                         value={this.state.formData.facilities}
-                        onChange={option => this.handleSelectChange(option, 'facilities')}
+                        onChange={option =>
+                          this.handleSelectChange(option, 'facilities')
+                        }
                         options={[]}
                       />
                     </div>
@@ -296,7 +318,9 @@ class CenterModal extends Component {
                             className="custom-file-input"
                             id="customFile"
                           />
-                          <span className="btn">Click to choose an image...</span>
+                          <span className="btn">
+                            Click to choose an image...
+                          </span>
                         </label>
                       </div>
                     </div>
@@ -306,21 +330,29 @@ class CenterModal extends Component {
                           this.imgPreview = e;
                         }}
                         className="img-responsive center-block"
-                        style={{ backgroundImage: 'url(https://placehold.it/180)', width: '180px', height: '180px' }}
-                        src={this.state.formData.image || 'https://placehold.it/180'}
-                        alt="preview"
+                        style={{
+                          backgroundImage: `url(${imgPlaceHolder})`,
+                          width: '180px',
+                          height: '180px'
+                        }}
+                        src={
+                          this.state.formData.image ||
+                          imgPlaceHolder
+                        }
+                        alt=""
                         id="img-preview"
                       />
                       <button
                         type="button"
                         className="btn btn-dark"
                         onClick={() => {
-                          this.imgPreview.src = undefined;
+                          this.imgPreview.src = imgPlaceHolder;
                           if (!this.props.isCreate) {
                             this.state.formData.image = null;
                           }
                         }}
-                      >Remove
+                      >
+                        Remove
                       </button>
                     </div>
                   </div>
@@ -340,7 +372,9 @@ class CenterModal extends Component {
                         type="button"
                         onClick={this.onSubmit}
                         className="btn btn-dark btn-block border-1 text-white py-3"
-                      > {this.props.isCreate ? 'Add Center' : 'Update Center'}
+                      >
+                        {' '}
+                        {this.props.isCreate ? 'Add Center' : 'Update Center'}
                       </button>
                     </div>
                   </div>

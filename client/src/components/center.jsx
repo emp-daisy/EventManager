@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Pagination from 'react-js-pagination';
 import PropTypes from 'prop-types';
-import { Header } from './header';
+import HeaderBlock from './header';
 import Footer from './footer';
 import Spinner from './spinner';
 import CardBlock from './cards';
@@ -93,7 +93,7 @@ class Center extends Component {
 
     return (
       <div className="inner-wrapper center-page">
-        <Header location={this.props.location.pathname} />
+        <HeaderBlock location={this.props.location.pathname} />
         <section
           className="container-fluid flex-grow background-img"
           id="event"
@@ -140,7 +140,6 @@ class Center extends Component {
                       id={center.id}
                       src={center.image ? center.image : undefined}
                       title={center.name}
-                      facilities={center.facilities}
                       onClick={() => {
                         this.props.history.push(`/center/description/${center.id}`);
                       }}

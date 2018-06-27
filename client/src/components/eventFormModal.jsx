@@ -22,7 +22,10 @@ class EventModal extends Component {
         id: this.props.prevData.id,
         name: this.props.prevData.name,
         description: this.props.prevData.description,
-        location: { id: this.props.prevData.location, name: this.props.prevData.Center.name },
+        location: {
+          id: this.props.prevData.location,
+          name: `${this.props.prevData.centerName}, ${this.props.prevData.centerLocation}, ${this.props.prevData.state}`
+        },
         startDate: this.props.prevData.startDate,
         endDate: this.props.prevData.endDate
       };

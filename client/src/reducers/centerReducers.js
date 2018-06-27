@@ -110,6 +110,9 @@ const centers = (state = defaultState, action) => {
         allCenterList: state.allCenterList.map((item) => {
           if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
           return item;
+        }),
+        singleCenter: Object.assign({}, state.singleCenter, {
+          center: action.newData
         })
       });
       break;

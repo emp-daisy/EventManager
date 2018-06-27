@@ -4,7 +4,7 @@ const defaultState = {
   errorMessage: '',
   success: false,
   sucessMessage: '',
-  eventList: [],
+  eventList: { centers: [], meta: {} },
   allEventList: [],
   pageItems: []
 };
@@ -43,8 +43,7 @@ const events = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: false,
-        eventList: action.data,
-        allEventList: action.data
+        eventList: action.data
       });
       break;
     case 'REQUEST_USER_EVENTS_FAILED':
@@ -64,8 +63,8 @@ const events = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: false,
-        eventList: state.eventList.filter(el => el.id.toString() !== action.id.toString()),
-        allEventList: state.allEventList.filter(el => el.id.toString() !== action.id.toString())
+        // eventList: state.eventList.filter(el => el.id.toString() !== action.id.toString()),
+        // allEventList: state.allEventList.filter(el => el.id.toString() !== action.id.toString())
       });
       break;
     case 'DELETE_EVENTS_FAILED':
@@ -106,13 +105,11 @@ const events = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: true,
         error: false,
-        eventList: state.eventList.map((item) => {
-          if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
-          return item;
-        }),
-        allEventList: state.allEventList.map((item) => {
-          if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
-          return item;
+        eventList: Object.assign({}, state.eventList, {
+          centers: state.eventList.centers.map((item) => {
+            if (item.id === action.newData.id) { return Object.assign({}, item, action.newData); }
+            return item;
+          })
         })
       });
       break;

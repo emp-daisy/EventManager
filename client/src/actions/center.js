@@ -1,6 +1,6 @@
 import {
   API_URL,
-  CLOUDINARY_API_URL,
+  CLOUDINARY_API,
   CLOUDINARY_PRESET
 } from '../store/setupStore';
 import { getToken } from './authentication';
@@ -14,19 +14,15 @@ const uploadToCloudinary = (file) => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_PRESET);
-  return fetch(CLOUDINARY_API_URL, {
+  return fetch(CLOUDINARY_API, {
     method: 'post',
-    headers: {
-      'Content-Type': 'application/json'
-    },
     body: formData
   })
-    .then((res) => {
-      if (res.status === 200) {
-        const resData = res.json();
-        return resData.secure_url;
+    .then(response => response.json())
+    .then((data) => {
+      if (data.secure_url !== '') {
+        return data.secure_url;
       }
-      return null;
     })
     .catch(() => null);
 };
@@ -183,12 +179,13 @@ export const updateCenter = (centerData, id) => (dispatch) => {
                   level: 'success',
                   autoDismiss: 10
                 }));
+              } else {
+                dispatch({
+                  type: 'UPDATE_CENTERS_FAILED',
+                  msg: 'Error updating center. TRY AGAIN LATER'
+                });
+                connectionError(dispatch, validationError(res));
               }
-              dispatch({
-                type: 'UPDATE_CENTERS_FAILED',
-                msg: 'Error updating center. TRY AGAIN LATER'
-              });
-              connectionError(dispatch, validationError(res));
             })
           , () => {
             dispatch({
@@ -267,7 +264,11 @@ export const getSingleCenters = id => (dispatch) => {
 export const getCentersOptions = () => () => fetch(`${API_URL}centers`)
   .then(res => res.json())
   .then((data) => {
-    const resCenters = (data.val || []).map(center => ({
+    let result = [];
+    if (data.val && data.val.centers) {
+      result = data.val.centers;
+    }
+    const resCenters = (result).map(center => ({
       name: `${center.name}, ${center.location}, ${center.state}`,
       id: center.id
     }));
