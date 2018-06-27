@@ -18,12 +18,11 @@ const uploadToCloudinary = (file) => {
     method: 'post',
     body: formData
   })
-    .then((res) => {
-      if (res.status === 200) {
-        const resData = res.json();
-        return resData.secure_url;
+    .then(response => response.json())
+    .then((data) => {
+      if (data.secure_url !== '') {
+        return data.secure_url;
       }
-      return null;
     })
     .catch(() => null);
 };

@@ -140,7 +140,6 @@ class Center extends Component {
                       id={center.id}
                       src={center.image ? center.image : undefined}
                       title={center.name}
-                      facilities={center.facilities}
                       onClick={() => {
                         this.props.history.push(`/center/description/${center.id}`);
                       }}
