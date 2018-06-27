@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { resetPassword, isResetTokenValid } from '../actions/authentication';
-import Header from './header';
+import HeaderBlock from './header';
 import Footer from './footer';
 import Spinner from './spinner';
 
@@ -70,7 +70,7 @@ class ResetPassword extends Component {
 
     return (
       <div className="wrapper d-flex flex-column h-100">
-        <Header />
+        <HeaderBlock />
         <section
           className="align-items-center d-flex flex-column flex-grow background-img justify-content-center"
           id="reset"

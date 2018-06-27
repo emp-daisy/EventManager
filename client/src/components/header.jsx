@@ -37,7 +37,7 @@ export class Header extends Component {
   render() {
     const path = this.props.location;
     return (
-      <nav className="navbar navbar-expand-md navbar-dark">
+      <nav className="navbar navbar-expand-md navbar-dark text-center">
         <NavLink to="/" className="navbar-brand display-1 font-weight-bold">
           Event Manager
         </NavLink>
@@ -71,15 +71,15 @@ export class Header extends Component {
                   Dashboard
                 </NavLink>
               </li>}
-            {!this.props.loggedIn &&
-              path !== '/login' &&
+            {(!this.props.loggedIn &&
+              path !== '/login') &&
               <li className="nav-item">
                 <NavLink to="/login" className="nav-item nav-link">
                   Login
                 </NavLink>
               </li>}
-            {!this.props.loggedIn &&
-              !path !== '/register' &&
+            {(!this.props.loggedIn &&
+              !path !== '/register') &&
               <li className="nav-item">
                 <NavLink to="/register" className="nav-item nav-link">
                   Register
@@ -108,12 +108,12 @@ const matchDispatchToProps = dispatch =>
 
 Header.defaultProps = {
   logOut: () => {},
-  loggedIn: false,
+  // loggedIn: false,
   location: ''
 };
 Header.propTypes = {
   logOut: PropTypes.func,
-  loggedIn: PropTypes.bool,
+  loggedIn: PropTypes.bool.isRequired,
   location: PropTypes.string
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Header);

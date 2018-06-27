@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 import Spinner from '../../components/spinner';
 
-describe('Footer Component', () => {
+describe('Spinner Component', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallow(<Spinner />);

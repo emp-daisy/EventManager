@@ -3,10 +3,10 @@ import { Router } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
 import 'bootstrap';
 import '../styles/index.scss';
-import Login from './login';
+import ConnectedLogin from './login';
 import Register from './register';
 import Home from './home';
-import Dashboard from './dashboard';
+import ConnectedDashboard from './dashboard';
 import ResetPassword from './resetPassword';
 import Center from './center';
 import ViewCenter from './centerDetails';
@@ -20,11 +20,11 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
+        <Route exact path="/login" component={ConnectedLogin} />
         <Route exact path="/centers" component={Center} />
         <Route exact path="/center/description/:id" component={ViewCenter} />
         <Route exact path="/reset/:token" component={ResetPassword} />
-        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/dashboard" component={ConnectedDashboard} />
         <Route component={NotFound} />
       </Switch>
       <Route component={Notification} />

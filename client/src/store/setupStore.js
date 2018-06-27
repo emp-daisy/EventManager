@@ -5,8 +5,7 @@ import rootReducer from '../reducers/rootReducer';
 
 export const API_URL = '/v1/';
 
-export const { CLOUDINARY_PRESET } = process.env;
-export const CLOUDINARY_API_URL = process.env.CLOUDINARY_API;
+export const { CLOUDINARY_PRESET, CLOUDINARY_API } = process.env;
 
 const loggerMiddleware = createLogger();
 

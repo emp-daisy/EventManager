@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import Footer from './footer';
-import { Header } from './header';
+import HeaderBlock from './header';
 import CardBlock from './cards';
 import { getCenters } from '../actions/center';
 /**
@@ -52,7 +52,7 @@ export class HomePage extends Component {
       <div >
         <section className="intro parallex-img" id="intro">
           <div className="d-flex flex-column">
-            <Header location={this.props.location.pathname} />
+            <HeaderBlock location={this.props.location.pathname} />
             <div className="jumbotron home m-auto" id="banner">
               <div className="container-fluid text-center">
                 <h2 className="d-none d-md-block display-2 font-weight-bold">

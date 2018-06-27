@@ -8,7 +8,7 @@ describe('Events Reducer', () => {
       errorMessage: '',
       success: false,
       sucessMessage: '',
-      eventList: [],
+      eventList: { centers: [], meta: {} },
       allEventList: [],
       pageItems: []
     });
@@ -200,9 +200,7 @@ describe('Events Reducer', () => {
       pageItems: []
     }, actionObject)).toMatchObject({
       isLoading: false,
-      error: false,
-      eventList: [],
-      allEventList: []
+      error: false
     });
   });
 
@@ -322,20 +320,17 @@ describe('Events Reducer', () => {
       errorMessage: '',
       success: false,
       sucessMessage: '',
-      eventList: [{
-        id: 111,
-        name: 'Test event'
-      }],
-      allEventList: [{
-        id: 111,
-        name: 'Test event'
-      }],
+      eventList: {
+        centers: [{
+          id: 111,
+          name: 'Test event'
+        }]
+      },
       pageItems: []
     }, actionObject)).toMatchObject({
       isLoading: true,
       error: false,
-      eventList: [actionObject.newData],
-      allEventList: [actionObject.newData]
+      eventList: { centers: [actionObject.newData] }
     });
   });
 
@@ -353,10 +348,12 @@ describe('Events Reducer', () => {
       errorMessage: '',
       success: false,
       sucessMessage: '',
-      eventList: [{
-        id: 123,
-        name: 'Test event'
-      }],
+      eventList: {
+        centers: [{
+          id: 123,
+          name: 'Test event'
+        }]
+      },
       allEventList: [{
         id: 123,
         name: 'Test event'
@@ -365,10 +362,12 @@ describe('Events Reducer', () => {
     }, actionObject)).toMatchObject({
       isLoading: true,
       error: false,
-      eventList: [{
-        id: 123,
-        name: 'Test event'
-      }],
+      eventList: {
+        centers: [{
+          id: 123,
+          name: 'Test event'
+        }]
+      },
       allEventList: [{
         id: 123,
         name: 'Test event'
