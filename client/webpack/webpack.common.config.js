@@ -1,8 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const dotenv = require('dotenv');
-
-const env = dotenv.config().parsed;
 
 module.exports = {
   entry: [path.resolve(__dirname, './../src/index.jsx')],
@@ -16,12 +13,6 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        CLOUDINARY_API: JSON.stringify(env.CLOUDINARY_API),
-        CLOUDINARY_PRESET: JSON.stringify(env.CLOUDINARY_PRESET)
-      },
-    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
