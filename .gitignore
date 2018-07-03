@@ -7,3 +7,6 @@
 /client/public/temp
 .DS_Store
 __snapshots__
+e2e/reports
+e2e/screenshots
+selenium-debug.log

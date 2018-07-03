@@ -149,12 +149,14 @@ export class CenterDetails extends Component {
                 {isUserAdmin() &&
                 <div>
                   <button
+                    id="btnEditCenter"
                     onClick={() => this.handleEdit(center)}
                     className="btn btn-dark btn-lg border-1 text-white p-3 m-2"
                   >
                 Update
                   </button>
                   <button
+                    id="btnDelCenter"
                     onClick={() => this.handleDelete(center)}
                     className="btn btn-danger btn-lg border-1 text-white p-3 m-2"
                   >
@@ -168,6 +170,7 @@ export class CenterDetails extends Component {
                   {...(this.props.loggedIn ? {} : popover)}
                 >
                   <button
+                    id="btnAddEvent"
                     onClick={() => this.handleCreate()}
                     className={`btn-lg btn-floating ${(this.props.loggedIn) ? '' : 'disabled'}`}
                   ><i className="fa fa-plus" />

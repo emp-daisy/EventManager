@@ -16,7 +16,7 @@ export const getEventsByUser = () => (dispatch) => {
     .then((data) => {
       const resEvents = (data.val)
         ? data.val
-        : [];
+        : { centers: [], meta: {} };
 
       dispatch({ type: 'REQUEST_USER_EVENTS_GRANTED', data: resEvents });
     }, () => {
