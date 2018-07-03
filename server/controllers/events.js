@@ -5,9 +5,7 @@ import moment from 'moment';
 import sequelize from 'sequelize';
 import model from '../models';
 import sendEmail from '../middleware/email';
-import PaginationMeta, {
-  handleQuery
-} from './pagination';
+import PaginationMeta, { handleQuery } from './pagination';
 /**
  * Get event by id
  * @param {int} id
@@ -96,7 +94,7 @@ const findAllEvent = (req, res) => {
         limit,
         offset,
         page,
-        url: `${req.protocol}://${req.headers.host}${req.path}`,
+        url: `${req.protocol}://${req.headers.host}${req.baseUrl}${req.path}`,
         searchQuery
       };
 
@@ -232,7 +230,7 @@ const findEventByCenter = (req, res) => {
         limit,
         offset,
         page,
-        url: `${req.protocol}://${req.headers.host}${req.path}`,
+        url: `${req.protocol}://${req.headers.host}${req.baseUrl}${req.path}`,
         searchQuery
       };
 

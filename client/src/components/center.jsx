@@ -76,8 +76,10 @@ class Center extends Component {
    * @param {any} pageNumber
    * @memberof Events
    */
-  handlePageChange() {
+  handlePageChange(pageNumber) {
     this.cardList.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    const { limit } = this.props.paginationMeta;
+    this.props.getCenters(pageNumber, limit);
   }
   /**
    *
@@ -150,7 +152,7 @@ class Center extends Component {
                   </div>
                 ))}
               </div>
-              {pages.length > 1 && (
+              {(pages && pages > 1) && (
                 <Pagination
                   hideDisabled
                   className="justify-content-center"
