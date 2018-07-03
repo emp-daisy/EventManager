@@ -4,7 +4,7 @@ const defaultState = {
   errorMessage: '',
   success: false,
   sucessMessage: '',
-  eventList: { centers: [], meta: {} },
+  eventList: { centers: [], meta: { pagination: {} } },
   allEventList: [],
   pageItems: []
 };

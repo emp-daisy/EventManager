@@ -27,7 +27,8 @@ const uploadToCloudinary = (file) => {
     .catch(() => null);
 };
 
-export const getCenters = () => (dispatch) => {
+export const getCenters = (pageNumber = 1, limit = 10) => (dispatch) => {
+  const offset = ((pageNumber - 1) * limit);
   dispatch({
     type: 'CLEAR_NOTIFICATION'
   });
@@ -35,10 +36,13 @@ export const getCenters = () => (dispatch) => {
     type: 'REQUEST_CENTERS'
   });
 
-  return fetch(`${API_URL}centers`)
+  return fetch(`${API_URL}centers/?limit=${limit}&offset=${offset}`)
     .then(res => res.json())
     .then((data) => {
-      let resCenters = [];
+      let resCenters = {
+        centers: [],
+        meta: { pagination: {} }
+      };
       if (data.val) {
         resCenters = data.val;
       }

@@ -3,9 +3,7 @@
  */
 import sequelize from 'sequelize';
 import model from '../models';
-import PaginationMeta, {
-  handleQuery
-} from './pagination';
+import PaginationMeta, { handleQuery } from './pagination';
 
 const getCenter = id => model.Centers
   .findOne({
@@ -133,7 +131,7 @@ const findAllCenter = (req, res) => {
         limit,
         offset,
         page,
-        url: `${req.protocol}://${req.headers.host}${req.path}`
+        url: `${req.protocol}://${req.headers.host}${req.baseUrl}${req.path}`
       };
       res.status(200).json({
         val: {
