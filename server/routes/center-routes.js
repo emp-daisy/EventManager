@@ -8,9 +8,7 @@ import {
   deleteCenter,
   getStates
 } from '../controllers/centers';
-import authenticationToken, {
-  isAdmin
-} from '../middleware/auth';
+import authenticationToken, { isAdmin } from '../middleware/auth';
 import { validateCenter, validateId } from '../middleware/validator';
 
 const centerRouter = express.Router();
