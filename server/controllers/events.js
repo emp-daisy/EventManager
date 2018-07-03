@@ -128,12 +128,12 @@ const findOneEvent = (req, res) => {
     .findOne({
       where: {
         id: parseInt(id, 10),
-        startDate: {
-          [sequelize.Op.gte]: moment()
-        },
-        endDate: {
-          [sequelize.Op.gte]: moment()
-        }
+        // startDate: {
+        //   [sequelize.Op.gte]: moment()
+        // },
+        // endDate: {
+        //   [sequelize.Op.gte]: moment()
+        // }
       },
       attributes: [
         'id',
@@ -156,7 +156,7 @@ const findOneEvent = (req, res) => {
     .then((result) => {
       if (result === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
             msg: 'Event not found'
           });
@@ -356,7 +356,7 @@ const preUpdate = (req, res, next) => {
     .then((result) => {
       if (result === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
             msg: 'Event not found'
           });
@@ -507,7 +507,7 @@ const deleteEvent = (req, res) => {
     .then((result) => {
       if (result === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
             msg: 'Event not found'
           });

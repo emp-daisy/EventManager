@@ -405,7 +405,7 @@ describe('Center API Testing', () => {
             expect(res)
               .to
               .be
-              .status(400);
+              .status(404);
             expect(res.body.msg)
               .to
               .equal('Center not found');
@@ -456,7 +456,7 @@ describe('Center API Testing', () => {
             expect(res)
               .to
               .have
-              .status(400);
+              .status(404);
             expect(res.body.msg)
               .to
               .equal('Center not found');
@@ -576,7 +576,7 @@ describe('Center API Testing', () => {
             expect(res)
               .to
               .have
-              .status(400);
+              .status(404);
             expect(res.body.msg)
               .to
               .equal('Center not found');

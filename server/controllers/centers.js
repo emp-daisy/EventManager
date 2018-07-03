@@ -50,7 +50,7 @@ const findOneCenter = (req, res) => {
   return getCenter(id)
     .then((result) => {
       if (result === null) {
-        return res.status(400).json({
+        return res.status(404).json({
           msg: 'Center not found'
         });
       }
@@ -197,7 +197,7 @@ const preUpdate = (req, res, next) => {
   return getCenter(id)
     .then((result) => {
       if (result === null) {
-        return res.status(400).json({
+        return res.status(404).json({
           msg: 'Center not found'
         });
       }
@@ -282,7 +282,7 @@ const deleteCenter = (req, res) => {
   return getCenter(id)
     .then((result) => {
       if (result === null) {
-        return res.status(400).json({
+        return res.status(404).json({
           msg: 'Center not found'
         });
       }
