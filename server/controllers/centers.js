@@ -87,16 +87,34 @@ const findAllCenter = (req, res) => {
     name: {
       [sequelize.Op.iLike]: `%${name}%`
     },
-    location: {
-      [sequelize.Op.iLike]: `%${location}%`
-    }
+    [sequelize.Op.or]: [
+      {
+        location: {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      },
+      {
+        '$State.name$': {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      }
+    ]
   } : {
     name: {
       [sequelize.Op.iLike]: `%${name}%`
     },
-    location: {
-      [sequelize.Op.iLike]: `%${location}%`
-    },
+    [sequelize.Op.or]: [
+      {
+        location: {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      },
+      {
+        '$State.name$': {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      }
+    ],
     facilities: {
       [sequelize.Op.overlap]: facilities
     }
@@ -116,8 +134,14 @@ const findAllCenter = (req, res) => {
       ],
       include: [{
         attributes: [],
-        model: model.States
-      }]
+        model: model.States,
+        // where: {
+        //   name: {
+        //     [sequelize.Op.iLike]: `%${location}%`
+        //   },
+        // }
+      }
+      ]
     })
     .then((result) => {
       const {

@@ -64,7 +64,7 @@ const authentication = (state = defaultState, action) => {
       });
       break;
     case 'CLEAR_MESSAGE':
-      currentState = Object.assign({}, state, { success: false });
+      currentState = Object.assign({}, state, { error: false });
       break;
     case 'INC_TIMER':
       currentState = Object.assign({}, state, { countDown: action.time });

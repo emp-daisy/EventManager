@@ -115,7 +115,7 @@ export class CenterDetails extends Component {
     return (
       <div className="inner-wrapper">
 
-        {this.props.loading && <Spinner />}
+        {(this.props.centerLoading || this.props.eventLoading) && <Spinner />}
 
         <HeaderBlock />
         <section className="d-flex flex-column justify-content-center align-items-center flex-grow" id="center-details">
@@ -226,7 +226,8 @@ export class CenterDetails extends Component {
 
 const mapStateToProps = state => ({
   centerDetails: state.center.singleCenter.center,
-  loading: state.center.isLoading,
+  centerLoading: state.center.isLoading,
+  eventLoading: state.event.isLoading,
   loggedIn: state.user.isLoggedIn,
 });
 const matchDispatchToProps = dispatch =>
@@ -246,7 +247,8 @@ CenterDetails.propTypes = {
   createEvent: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   centerDetails: PropTypes.objectOf(PropTypes.any).isRequired,
-  loading: PropTypes.bool.isRequired,
+  centerLoading: PropTypes.bool.isRequired,
+  eventLoading: PropTypes.bool.isRequired,
   deleteCenter: PropTypes.func.isRequired,
   updateCenter: PropTypes.func.isRequired,
   getStates: PropTypes.func.isRequired,

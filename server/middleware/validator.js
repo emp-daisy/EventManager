@@ -11,12 +11,12 @@ import moment from 'moment';
 const registerValidation = () => {
   Validator.register(
     'customDate',
-    value => moment(value, ['DD-MM-YYYY', 'DD/MM/YYYY', moment.ISO_8601], true).isValid(),
+    value => moment(value, ['DD-MM-YYYY HH:mm', 'DD-MM-YYYY', 'DD/MM/YYYY', moment.ISO_8601], true).isValid(),
     'The :attribute is not a valid date in correct format'
   );
   Validator.register(
     'futureDate',
-    value => moment(value, ['DD-MM-YYYY', 'DD/MM/YYYY', moment.ISO_8601], true).isAfter(moment()),
+    value => moment(value, ['DD-MM-YYYY HH:mm', 'DD-MM-YYYY', 'DD/MM/YYYY', moment.ISO_8601], true).isAfter(moment()),
     'The :attribute is not a future date'
   );
 };

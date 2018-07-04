@@ -226,3 +226,8 @@ export const logOut = () => (dispatch) => {
   removeToken();
   dispatch({ type: 'LOGOUT_USER' });
 };
+
+export const clearNotification = () => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
+  dispatch({ type: 'CLEAR_MESSAGE' });
+};
