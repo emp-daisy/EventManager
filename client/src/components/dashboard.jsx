@@ -5,6 +5,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import Footer from './footer';
+import Spinner from './spinner';
 import HeaderBlock from './header';
 import SearchBlock from './searchForm';
 import { isUserAdmin } from '../actions/authentication';
@@ -175,6 +176,9 @@ export class Dashboard extends Component {
     } = this.props.listOfEvents.meta.pagination;
     return (
       <div className="wrapper" id="wrapper">
+
+        {(this.props.centerLoading || this.props.eventLoading) && <Spinner />}
+
         <HeaderBlock />
         <section
           className="container-fluid d-flex flex-column flex-grow background-img "
@@ -221,6 +225,9 @@ export class Dashboard extends Component {
                     </div>
                     <p className="mb-1">
                       {`${moment(event.startDate).format('MMMM Do YYYY, h:mm:ss a')} - ${moment(event.endDate).format('MMMM Do YYYY, h:mm:ss a')}`}
+                    </p>
+                    <p className="mb-1">
+                      {`${event.centerName}, ${event.centerLocation}, ${event.state}`}
                     </p>
                     <div className="d-flex w-100 justify-content-end p-2">
                       <div>
@@ -300,7 +307,9 @@ export class Dashboard extends Component {
 
 const mapStateToProps = state => ({
   loggedIn: state.user.isLoggedIn,
-  listOfEvents: state.event.eventList
+  listOfEvents: state.event.eventList,
+  centerLoading: state.center.isLoading,
+  eventLoading: state.event.isLoading
 });
 const matchDispatchToProps = dispatch =>
   bindActionCreators(
@@ -321,6 +330,8 @@ Dashboard.propTypes = {
   deleteEvent: PropTypes.func.isRequired,
   filterEventsBy: PropTypes.func.isRequired,
   updateEvent: PropTypes.func.isRequired,
+  centerLoading: PropTypes.bool.isRequired,
+  eventLoading: PropTypes.bool.isRequired,
   getEventsByUser: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,

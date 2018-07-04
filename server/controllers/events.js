@@ -298,7 +298,7 @@ const createEvent = (req, res) => {
           }
         })
         .then((doesExist) => {
-          if (doesExist === null) {
+          if (doesExist !== null) {
             return res
               .status(400)
               .json({
@@ -403,7 +403,7 @@ const updateEvent = (req, res) => {
       }
     })
     .then((result) => {
-      if (result !== null) {
+      if (result === null) {
         return res
           .status(404)
           .json({

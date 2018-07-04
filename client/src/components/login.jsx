@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import isEmail from 'validator/lib/isEmail';
-import { login } from '../actions/authentication';
+import { login, clearNotification } from '../actions/authentication';
 import Spinner from './spinner';
 import HeaderBlock from './header';
 import Footer from './footer';
@@ -39,6 +39,7 @@ export class Login extends Component {
    * @memberof Login
    */
   componentWillMount() {
+    this.props.clearNotification();
     if (this.props.loggedIn) {
       this.props.history.push('/dashboard');
     }
@@ -202,7 +203,8 @@ const mapStateToProps = state => ({
 const matchDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      login
+      login,
+      clearNotification
     },
     dispatch
   );
@@ -213,6 +215,7 @@ Login.propTypes = {
   alert: PropTypes.bool.isRequired,
   alertMessage: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,
+  clearNotification: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Login);
