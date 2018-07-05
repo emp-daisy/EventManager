@@ -180,10 +180,6 @@ class Register extends Component {
         >
           <div className="col-md-6 col-12 text-center align-items-center">
             <h2 className="text-white text-center">REGISTER</h2>
-            {this.props.success &&
-              <div className="alert alert-info">
-                Redirecting in {this.props.counter}&nbsp;second{this.props.counter > 1 && 's'}...
-              </div>}
             <form
               ref={(e) => {
                 this.form = e;
@@ -304,7 +300,6 @@ Register.propTypes = {
   loading: PropTypes.bool.isRequired,
   success: PropTypes.bool.isRequired,
   register: PropTypes.func.isRequired,
-  history: PropTypes.objectOf(PropTypes.any).isRequired,
-  counter: PropTypes.number.isRequired
+  history: PropTypes.objectOf(PropTypes.any).isRequired
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Register);
