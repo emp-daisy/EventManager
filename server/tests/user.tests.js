@@ -504,6 +504,15 @@ describe('User API Testing', () => {
     });
 
     describe('Delete User', () => {
+      before(() => {
+        model.Users.update({
+          isAdmin: false
+        }, {
+          where: {
+            email: user.email
+          }
+        });
+      });
       it('Returns the error message when trying to delete another user', (done) => {
         chai
           .request(app)

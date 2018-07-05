@@ -198,7 +198,7 @@ export class Dashboard extends Component {
                   </div>
                 )}
                 <div className="col-md-6">
-                  {(this.props.listOfEvents.centers.length > 0 ||
+                  {(this.props.listOfEvents.events.length > 0 ||
                     this.state.searching) && (
                     <SearchBlock
                       onChange={this.onChange}
@@ -215,7 +215,7 @@ export class Dashboard extends Component {
                 this.eCardList = e;
               }}
               >
-                {this.props.listOfEvents.centers.map(event => (
+                {this.props.listOfEvents.events.map(event => (
                   <div
                     key={event.id}
                     className="list-group-item mb-2 bg-color flex-column align-items-start text-white"

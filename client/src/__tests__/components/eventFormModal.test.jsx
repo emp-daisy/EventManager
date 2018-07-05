@@ -46,7 +46,7 @@ describe('Event Modal Component', () => {
       wrapper.instance().handleSelectChange(option, 'location');
       expect(wrapper.state().formData.location).toEqual(option);
     });
-    it('should run onSubmit function', () => {
+    it.skip('should run onSubmit function', () => {
       const event = {
         preventDefault: () => {}
       };

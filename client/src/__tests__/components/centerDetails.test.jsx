@@ -96,6 +96,9 @@ describe('Center Details Component', () => {
           isLoading: false,
           singleCenter: { center: {} }
         },
+        event: {
+          isloading: false
+        },
         user: {
           isLoggedIn: true
         }

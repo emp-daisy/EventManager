@@ -18,7 +18,7 @@ describe('Event Actions', () => {
 
   describe('FETCH EVENT', () => {
     it('it should fetch events with no return', () => {
-      fetchMock.getOnce('/v1/events', {
+      fetchMock.getOnce('/v1/events/?limit=10&offset=0', {
         body: {},
         headers: {
           'content-type': 'application/json'
@@ -30,7 +30,7 @@ describe('Event Actions', () => {
         type: 'REQUEST_USER_EVENTS'
       }, {
         type: 'REQUEST_USER_EVENTS_GRANTED',
-        data: []
+        data: { events: [], meta: { pagination: {} } }
       }];
 
       return store.dispatch(getEventsByUser()).then(() => {
@@ -39,9 +39,9 @@ describe('Event Actions', () => {
       });
     });
     it('it should fetch events', () => {
-      fetchMock.getOnce('/v1/events', {
+      fetchMock.getOnce('/v1/events/?limit=10&offset=0', {
         body: {
-          val: []
+          val: { events: [], meta: { pagination: {} } }
         },
         headers: {
           'content-type': 'application/json'
@@ -53,7 +53,7 @@ describe('Event Actions', () => {
         type: 'REQUEST_USER_EVENTS'
       }, {
         type: 'REQUEST_USER_EVENTS_GRANTED',
-        data: []
+        data: { events: [], meta: { pagination: {} } }
       }];
 
       return store.dispatch(getEventsByUser()).then(() => {
@@ -62,7 +62,7 @@ describe('Event Actions', () => {
       });
     });
     it('it should fetch events with 500 error', () => {
-      fetchMock.getOnce('/v1/events', Promise.reject());
+      fetchMock.getOnce('/v1/events/?limit=10&offset=0', Promise.reject());
       const expectedActions = [{
         type: 'CLEAR_NOTIFICATION'
       }, {

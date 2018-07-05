@@ -102,7 +102,7 @@ const findAllEvent = (req, res) => {
         .status(200)
         .json({
           val: {
-            centers: rows,
+            events: rows,
             meta: PaginationMeta(meta)
           },
           msg: 'Events returned'
@@ -238,7 +238,7 @@ const findEventByCenter = (req, res) => {
         .status(200)
         .json({
           val: {
-            centers: rows,
+            events: rows,
             meta: PaginationMeta(meta)
           },
           msg: 'Events returned'
@@ -300,7 +300,7 @@ const createEvent = (req, res) => {
         .then((doesExist) => {
           if (doesExist !== null) {
             return res
-              .status(400)
+              .status(409)
               .json({
                 msg: 'Center already booked for this period'
               });
@@ -439,7 +439,7 @@ const updateEvent = (req, res) => {
         .then((doesExist) => {
           if (doesExist !== null) {
             return res
-              .status(400)
+              .status(409)
               .json({
                 msg: 'Center already booked for this period'
               });

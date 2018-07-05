@@ -25,7 +25,7 @@ describe('Centers Actions', () => {
 
   describe('FETCH EVENT', () => {
     it('it should fetch centers with no return', () => {
-      fetchMock.getOnce('/v1/centers', {
+      fetchMock.getOnce('/v1/centers/?limit=10&offset=0', {
         body: {},
         headers: {
           'content-type': 'application/json'
@@ -37,7 +37,7 @@ describe('Centers Actions', () => {
         type: 'REQUEST_CENTERS'
       }, {
         type: 'REQUEST_CENTERS_GRANTED',
-        data: []
+        data: { centers: [], meta: { pagination: {} } }
       }];
 
       return store.dispatch(getCenters()).then(() => {
@@ -46,7 +46,7 @@ describe('Centers Actions', () => {
       });
     });
     it('it should fetch centers', () => {
-      fetchMock.getOnce('/v1/centers', {
+      fetchMock.getOnce('/v1/centers/?limit=10&offset=0', {
         body: {
           val: []
         },
@@ -69,7 +69,7 @@ describe('Centers Actions', () => {
       });
     });
     it('it should fetch centers with 500 error', () => {
-      fetchMock.getOnce('/v1/centers', Promise.reject());
+      fetchMock.getOnce('/v1/centers/?limit=10&offset=0', Promise.reject());
       const expectedActions = [{
         type: 'CLEAR_NOTIFICATION'
       }, {
