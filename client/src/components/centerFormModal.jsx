@@ -363,6 +363,7 @@ class CenterModal extends Component {
                         className="btn btn-block border-1 text-black py-3 btn-light btn-block"
                         data-dismiss="modal"
                         onClick={this.props.onClose}
+                        id="btnCancelCenter"
                       >
                         Cancel
                       </button>
@@ -371,9 +372,9 @@ class CenterModal extends Component {
                       <button
                         type="button"
                         onClick={this.onSubmit}
+                        id="btnNewCenter"
                         className="btn btn-dark btn-block border-1 text-white py-3"
                       >
-                        {' '}
                         {this.props.isCreate ? 'Add Center' : 'Update Center'}
                       </button>
                     </div>

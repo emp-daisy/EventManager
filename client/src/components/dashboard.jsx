@@ -192,6 +192,7 @@ export class Dashboard extends Component {
                     <button
                       className="btn btn-dark border-1 text-white py-3"
                       onClick={() => this.handleCreate()}
+                      id="newCenter"
                     >
                       New Center
                     </button>
