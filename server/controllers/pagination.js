@@ -17,11 +17,14 @@ const paginationMeta = (meta) => {
 
   const searchQueryString = (searchQuery !== '' && searchQuery.length > 0) ? `&${searchQuery}` : '';
 
+  const prevOffset = ((data.offset - data.limit) > 0) ? data.offset - data.limit : 0;
+  const nextOffset = data.offset + data.limit;
+
   data.pages = Math.ceil(data.total / data.limit);
   data.page = data.page > data.pages ? data.pages : data.page;
-  data.previous = data.page !== 1 ? `${url}?limit=${data.limit}&offset=${data.offset - data.limit}${searchQueryString}` : undefined;
+  data.previous = data.page !== 1 ? `${url}?limit=${data.limit}&offset=${prevOffset}${searchQueryString}` : undefined;
   data.current = `${url}?limit=${data.limit}&offset=${data.offset}${searchQueryString}`;
-  data.next = data.page === data.pages ? undefined : `${url}?limit=${data.limit}&offset=${data.offset + data.limit}${searchQueryString}`;
+  data.next = data.page === data.pages ? undefined : `${url}?limit=${data.limit}&offset=${nextOffset}${searchQueryString}`;
 
   return {
     pagination: data

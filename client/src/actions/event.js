@@ -2,11 +2,12 @@ import { API_URL } from '../store/setupStore';
 import { getToken } from './authentication';
 import { addNotification, connectionError, validationError } from './notify';
 
-export const getEventsByUser = () => (dispatch) => {
+export const getEventsByUser = (pageNumber = 1, limit = 10) => (dispatch) => {
+  const offset = ((pageNumber - 1) * limit);
   dispatch({ type: 'CLEAR_NOTIFICATION' });
   dispatch({ type: 'REQUEST_USER_EVENTS' });
 
-  return fetch(`${API_URL}events`, {
+  return fetch(`${API_URL}events/?limit=${limit}&offset=${offset}`, {
     method: 'get',
     headers: {
       'x-access-token': getToken()
@@ -16,7 +17,7 @@ export const getEventsByUser = () => (dispatch) => {
     .then((data) => {
       const resEvents = (data.val)
         ? data.val
-        : { centers: [], meta: {} };
+        : { centers: [], meta: { pagination: {} } };
 
       dispatch({ type: 'REQUEST_USER_EVENTS_GRANTED', data: resEvents });
     }, () => {

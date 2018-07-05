@@ -36,8 +36,6 @@ export class Dashboard extends Component {
     this.state = {
       searchText: '',
       searching: false,
-      activePage: 1,
-      perPage: 10,
       showModal: false,
       modalAction: ''
     };
@@ -110,9 +108,9 @@ export class Dashboard extends Component {
    * @memberof Dashboard
    */
   handlePageChange(pageNumber) {
-    this.setState({ activePage: pageNumber }, () => {
-      // this.handlePageItems();
-    });
+    this.eCardList.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    const { limit } = this.props.listOfEvents.meta.pagination;
+    this.props.getEventsByUser(pageNumber, limit);
   }
   /**
    *
@@ -169,6 +167,12 @@ export class Dashboard extends Component {
    * @memberof Dashboard
    */
   render() {
+    const {
+      page,
+      limit,
+      total,
+      pages
+    } = this.props.listOfEvents.meta.pagination;
     return (
       <div className="wrapper" id="wrapper">
         <HeaderBlock />
@@ -203,7 +207,11 @@ export class Dashboard extends Component {
                   )}
                 </div>
               </div>
-              <div>
+              <div
+                ref={(e) => {
+                this.eCardList = e;
+              }}
+              >
                 {this.props.listOfEvents.centers.map(event => (
                   <div
                     key={event.id}
@@ -237,17 +245,19 @@ export class Dashboard extends Component {
               </div>
             </div>
           </div>
+          {pages && pages > 1 && (
           <Pagination
             hideDisabled
             className="justify-content-center"
             linkClass="page-link"
             itemClass="page-item"
             innerClass="pagination justify-content-center m-4"
-            activePage={this.state.activePage}
-            itemsCountPerPage={this.state.perPage}
-            totalItemsCount={this.props.listOfEvents.length}
+            activePage={page}
+            itemsCountPerPage={limit}
+            totalItemsCount={total}
             onChange={this.handlePageChange}
           />
+            )}
         </section>
         <Footer />
         {this.state.showModal && (
@@ -270,9 +280,7 @@ export class Dashboard extends Component {
                 isCreate={false}
                 onClose={this.handleClose}
                 prevData={this.state.activeModalData}
-                handleSubmit={
-                  this.props.updateEvent
-                }
+                handleSubmit={this.props.updateEvent}
                 allCenters={this.props.getCentersOptions}
               />
             )}
