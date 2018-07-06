@@ -23,7 +23,7 @@ describe('Center Modal Component', () => {
     });
     it('should render create button', () => {
       const createBtn = wrapper.findWhere(x => x.text() === 'Add Center');
-      expect(createBtn).toHaveLength(1);
+      expect(createBtn).not.toHaveLength(0);
     });
     it('should render update button', () => {
       const addMockProps = {
@@ -31,7 +31,7 @@ describe('Center Modal Component', () => {
       };
       wrapper = shallow(<CenterModal {...mockProps} {...addMockProps} />);
       const updateBtn = wrapper.findWhere(x => x.text() === 'Update Center');
-      expect(updateBtn).toHaveLength(1);
+      expect(updateBtn).not.toHaveLength(0);
     });
     it('should run handleChange function', () => {
       const event = {

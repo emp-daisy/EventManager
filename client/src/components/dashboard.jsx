@@ -234,12 +234,14 @@ export class Dashboard extends Component {
                       <div>
                         <button
                           type="button"
+                          id="btnEditEvent"
                           className="mx-2 btn btn-sm"
                           onClick={() => this.handleEdit(event)}
                         >
                           Edit
                         </button>
                         <button
+                          id="btnDelEvent"
                           className="mx-2 btn btn-sm btn-secondary"
                           onClick={() => this.handleDelete(event)}
                         >

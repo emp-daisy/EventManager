@@ -18,7 +18,9 @@ const mockProps = {
   history,
   listOfEvents: { events: [], meta: { pagination: {} } },
   getStates: jest.fn(),
-  getCentersOptions: jest.fn()
+  getCentersOptions: jest.fn(),
+  eventLoading: false,
+  centerLoading: false
 };
 
 describe('Dashboard Component', () => {
@@ -95,7 +97,7 @@ describe('Dashboard Component', () => {
       const store = mockStore({
         event: {
           eventList: { events: [], meta: { pagination: {} } },
-          isloading: false
+          isLoading: false
         },
         center: {
           isLoading: false
