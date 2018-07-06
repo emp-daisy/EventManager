@@ -101,12 +101,6 @@
             "type": "string",
             "format": "password",
             "required": true
-          },
-          {
-            "in": "formData",
-            "name": "isAdmin",
-            "type": "boolean",
-            "required": false
           }
         ],
         "responses": {
@@ -122,11 +116,192 @@
         }
       }
     },
+    "/centers": {
+      "get": {
+        "tags": ["Centers"],
+        "summary": "Gets all center",
+        "description": "gets all center in the database.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Centers"],
+        "summary": "Creates a center",
+        "description": "Creates a new center and stores to the database.",
+        "parameters": [{
+          "in": "formData",
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Center name"
+        },
+        {
+          "in": "formData",
+          "name": "location",
+          "type": "string",
+          "required": true,
+          "description": "Address"
+        },
+        {
+          "in": "formData",
+          "name": "facilities",
+          "type": "string",
+          "required": true,
+          "description": "comma seprated string"
+        },
+        {
+          "in": "formData",
+          "name": "state",
+          "type": "integer",
+          "required": true,
+          "description": "State id (1-35)"
+        },
+        {
+          "in": "formData",
+          "name": "image",
+          "type": "string",
+          "description": "Image url"
+        }],
+        "security": [{
+          "UserToken": []
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/centers/{id}": {
+      "get": {
+        "tags": ["Centers"],
+        "summary": "gets a single center",
+        "description": "gets a center and adds to the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The center to retrieve by ID."
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Centers"],
+        "summary": "Modifies a center",
+        "description": "modifies a center and saves it to the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The center to update."
+        }, {
+          "in": "formData",
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Center name"
+        },
+        {
+          "in": "formData",
+          "name": "location",
+          "type": "string",
+          "required": true,
+          "description": "Address"
+        },
+        {
+          "in": "formData",
+          "name": "facilities",
+          "type": "string",
+          "required": true,
+          "description": "comma seprated string"
+        },
+        {
+          "in": "formData",
+          "name": "state",
+          "type": "integer",
+          "required": true,
+          "description": "State id (1-35)"
+        },
+        {
+          "in": "formData",
+          "name": "image",
+          "type": "string",
+          "description": "Image url"
+        }],
+        "security": [{
+          "UserToken": []
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Centers"],
+        "summary": "Delete a center",
+        "description": "Delete an existing center from the database.",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "description": "The center to delete."
+        }],
+        "security": [{
+          "UserToken": []
+        }],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
     "/events": {
       "get": {
         "tags": ["Events"],
         "summary": "Get all events event",
         "description": "Get all events in the database.",
+        "security": [{
+          "UserToken": []
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -144,12 +319,32 @@
         "summary": "Creates a new event",
         "description": "Creates a new events and stores it to the database.",
         "parameters": [{
-          "name": "event",
-          "in": "body",
-          "description": "The event to create.",
-          "schema": {
-            "$ref": "#/definitions/Event"
-          }
+          "in": "formData",
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description":"Event name"
+        },
+        {
+          "in": "formData",
+          "name": "location",
+          "type": "integer",
+          "required": true,
+          "description":"ID of existing center"
+        },
+        {
+          "in": "formData",
+          "name": "startDate",
+          "type": "string",
+          "required": true,
+          "description":"Date format (DD-MM-YYYY)"
+        },
+        {
+          "in": "formData",
+          "name": "endDate",
+          "type": "string",
+          "required": true,
+          "description":"Date format (DD-MM-YYYY)"
         }],
         "security": [{
           "UserToken": []
@@ -200,12 +395,32 @@
           "type": "integer",
           "description": "The event id to update."
         }, {
-          "name": "event",
-          "in": "body",
-          "description": "The changes to make.",
-          "schema": {
-            "$ref": "#/definitions/Event"
-          }
+          "in": "formData",
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description":"Event name"
+        },
+        {
+          "in": "formData",
+          "name": "location",
+          "type": "integer",
+          "required": true,
+          "description":"ID of existing center"
+        },
+        {
+          "in": "formData",
+          "name": "startDate",
+          "type": "string",
+          "required": true,
+          "description":"Date format (DD-MM-YYYY)"
+        },
+        {
+          "in": "formData",
+          "name": "endDate",
+          "type": "string",
+          "required": true,
+          "description":"Date format (DD-MM-YYYY)"
         }],
         "security": [{
           "UserToken": []
@@ -247,132 +462,6 @@
           }
         }
       }
-    },
-    "/centers": {
-      "get": {
-        "tags": ["Centers"],
-        "summary": "Gets all center",
-        "description": "gets all center in the database.",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": ["Centers"],
-        "summary": "Creates a center",
-        "description": "Creates a new center and stores to the database.",
-        "parameters": [{
-          "name": "center",
-          "in": "body",
-          "description": "The center to create.",
-          "schema": {
-            "$ref": "#/definitions/Center"
-          }
-        }],
-        "security": [{
-          "UserToken": []
-        }],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      }
-    },
-    "centers/{id}": {
-      "get": {
-        "tags": ["Centers"],
-        "summary": "gets a single center",
-        "description": "gets a center and adds to the database.",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "type": "integer",
-          "description": "The center to retrieve by ID."
-        }],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Centers"],
-        "summary": "Modifies a center",
-        "description": "modifies a center and saves it to the database.",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "type": "integer",
-          "description": "The center to update."
-        }, {
-          "name": "center",
-          "in": "body",
-          "description": "The changes to make.",
-          "schema": {
-            "$ref": "#/definitions/Center"
-          }
-        }],
-        "security": [{
-          "UserToken": []
-        }],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Centers"],
-        "summary": "Delete a center",
-        "description": "Delete an existing center from the database.",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "type": "integer",
-          "description": "The center to delete."
-        }],
-        "security": [{
-          "UserToken": []
-        }],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -395,9 +484,6 @@
           "type": "string"
         },
         "endDate": {
-          "type": "string"
-        },
-        "image": {
           "type": "string"
         }
       }
