@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const ConfirmDelete = props => (
   <div
     className="modal text-center d-block"
-    id="addCenter"
+    id="confirmModal"
     data-backdrop="static"
     data-keyboard="false"
   >
@@ -24,12 +24,14 @@ const ConfirmDelete = props => (
         <div className="modal-footer">
           <button
             type="button"
+            id="btnAccept"
             onClick={() => { props.onConfirm(); props.onCancel(); }}
             className="btn btn-danger btn-block border-1 text-white py-3"
           >Yes
           </button>
           <button
             type="button"
+            id="btnReject"
             onClick={props.onCancel}
             className="btn btn-dark btn-block border-1 text-white py-3"
           >No

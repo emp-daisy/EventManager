@@ -158,7 +158,7 @@ class EventModal extends Component {
     return (
       <div
         className="modal text-center d-block"
-        id="addCenter"
+        id="eventModalForm"
         data-backdrop="static"
         data-keyboard="false"
       >
@@ -232,6 +232,7 @@ class EventModal extends Component {
                     <div className="input-group">
                       <span className="input-group-addon">Start Date</span>
                       <input
+                        id="startDate"
                         className="form-control"
                         type="datetime-local"
                         placeholder="Start Date"
@@ -249,6 +250,7 @@ class EventModal extends Component {
                     <div className="input-group">
                       <span className="input-group-addon">End Date</span>
                       <input
+                        id="endDate"
                         className="form-control"
                         type="datetime-local"
                         placeholder="End Date"
@@ -266,6 +268,7 @@ class EventModal extends Component {
                     <div className="form-group col col-md-6">
                       <button
                         type="button"
+                        id="btnCancelEvent"
                         className="btn btn-block border-1 text-black py-3 btn-light btn-block"
                         data-dismiss="modal"
                         onClick={this.props.onClose}
@@ -276,6 +279,7 @@ class EventModal extends Component {
                     <div className="form-group col col-md-6">
                       <button
                         type="button"
+                        id="btnAcceptEvent"
                         onClick={this.onSubmit}
                         className="btn btn-dark btn-block border-1 text-white py-3"
                       >

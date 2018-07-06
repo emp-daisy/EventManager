@@ -89,6 +89,13 @@ export const login = (email, password) => (dispatch) => {
                     'Content-Type': 'application/x-www-form-urlencoded'
                   },
                   body: payload
+                }).then(() => {
+                  dispatch({ type: 'CLEAR_NOTIFICATION' });
+                  dispatch(addNotification({
+                    message: 'Check email to verify',
+                    level: 'success',
+                    autoDismiss: 20
+                  }));
                 });
               }
             }

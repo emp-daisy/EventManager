@@ -41,7 +41,7 @@ export class ForgottenPassword extends Component {
     this.setState({ errors }, () => {
       if (!this.state.errors.email) {
         this.props.forgottenPassword(this.state.email);
-        // this.props.onCancel();
+        this.props.onCancel();
       }
     });
   }

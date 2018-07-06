@@ -87,7 +87,7 @@ export class Header extends Component {
               </li>}
             {this.props.loggedIn &&
               <li className="nav-item">
-                <NavLink to="/" onClick={this.onLogOut} className="nav-item nav-link">
+                <NavLink to="/login" onClick={this.onLogOut} className="nav-item nav-link">
                   Log out
                 </NavLink>
               </li>}

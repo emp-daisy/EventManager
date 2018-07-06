@@ -62,9 +62,6 @@ class Register extends Component {
     if (nextProps.loggedIn) {
       this.props.history.push('/dashboard');
     }
-    if (this.props.success) {
-      this.form.reset();
-    }
   }
   /**
    *
@@ -94,7 +91,9 @@ class Register extends Component {
         password: this.state.password,
         passwordconfirm: this.state.passwordconfirm
       };
-      this.props.register(value);
+      this.props.register(value).then(() => {
+        this.form.reset();
+      });
     }
   }
   /**
