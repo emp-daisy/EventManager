@@ -50,7 +50,7 @@ const findOneCenter = (req, res) => {
   return getCenter(id)
     .then((result) => {
       if (result === null) {
-        return res.status(400).json({
+        return res.status(404).json({
           msg: 'Center not found'
         });
       }
@@ -87,16 +87,34 @@ const findAllCenter = (req, res) => {
     name: {
       [sequelize.Op.iLike]: `%${name}%`
     },
-    location: {
-      [sequelize.Op.iLike]: `%${location}%`
-    }
+    [sequelize.Op.or]: [
+      {
+        location: {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      },
+      {
+        '$State.name$': {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      }
+    ]
   } : {
     name: {
       [sequelize.Op.iLike]: `%${name}%`
     },
-    location: {
-      [sequelize.Op.iLike]: `%${location}%`
-    },
+    [sequelize.Op.or]: [
+      {
+        location: {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      },
+      {
+        '$State.name$': {
+          [sequelize.Op.iLike]: `%${location}%`
+        }
+      }
+    ],
     facilities: {
       [sequelize.Op.overlap]: facilities
     }
@@ -116,8 +134,14 @@ const findAllCenter = (req, res) => {
       ],
       include: [{
         attributes: [],
-        model: model.States
-      }]
+        model: model.States,
+        // where: {
+        //   name: {
+        //     [sequelize.Op.iLike]: `%${location}%`
+        //   },
+        // }
+      }
+      ]
     })
     .then((result) => {
       const {
@@ -197,7 +221,7 @@ const preUpdate = (req, res, next) => {
   return getCenter(id)
     .then((result) => {
       if (result === null) {
-        return res.status(400).json({
+        return res.status(404).json({
           msg: 'Center not found'
         });
       }
@@ -282,7 +306,7 @@ const deleteCenter = (req, res) => {
   return getCenter(id)
     .then((result) => {
       if (result === null) {
-        return res.status(400).json({
+        return res.status(404).json({
           msg: 'Center not found'
         });
       }

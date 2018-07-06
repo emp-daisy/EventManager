@@ -221,7 +221,7 @@ describe('Authentication Reducer', () => {
       sucessMessage: '',
       countDown: 0
     }, actionObject)).toMatchObject({
-      success: false
+      error: false
     });
   });
 });

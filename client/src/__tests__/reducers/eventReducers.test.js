@@ -8,7 +8,7 @@ describe('Events Reducer', () => {
       errorMessage: '',
       success: false,
       sucessMessage: '',
-      eventList: { centers: [], meta: {} },
+      eventList: { events: [], meta: { pagination: {} } },
       allEventList: [],
       pageItems: []
     });
@@ -261,7 +261,6 @@ describe('Events Reducer', () => {
     }, actionObject)).toMatchObject({
       isLoading: false,
       error: false,
-      eventList: [actionObject.newData],
       allEventList: [actionObject.newData]
     });
   });
@@ -328,7 +327,7 @@ describe('Events Reducer', () => {
       },
       pageItems: []
     }, actionObject)).toMatchObject({
-      isLoading: true,
+      isLoading: false,
       error: false,
       eventList: { centers: [actionObject.newData] }
     });
@@ -360,7 +359,7 @@ describe('Events Reducer', () => {
       }],
       pageItems: []
     }, actionObject)).toMatchObject({
-      isLoading: true,
+      isLoading: false,
       error: false,
       eventList: {
         centers: [{

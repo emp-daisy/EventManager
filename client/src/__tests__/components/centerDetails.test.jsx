@@ -12,12 +12,17 @@ const mockProps = {
   match: {
     params: { id: 1 }
   },
+  history: {
+    push: jest.fn()
+  },
   centerDetails: { id: 1 },
   loading: false,
   deleteCenter: jest.fn(),
   updateCenter: jest.fn(),
   getStates: jest.fn(),
   loggedIn: true,
+  eventLoading: false,
+  centerLoading: false
 };
 
 describe('Center Details Component', () => {
@@ -95,6 +100,9 @@ describe('Center Details Component', () => {
           allCenterList: [],
           isLoading: false,
           singleCenter: { center: {} }
+        },
+        event: {
+          isLoading: false
         },
         user: {
           isLoggedIn: true

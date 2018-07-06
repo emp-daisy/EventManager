@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import validator from 'validator';
-import { register } from '../actions/authentication';
+import { register, clearNotification } from '../actions/authentication';
 import Spinner from './spinner';
 import HeaderBlock from './header';
 import Footer from './footer';
@@ -47,6 +47,7 @@ class Register extends Component {
    * @memberof Register
    */
   componentWillMount() {
+    this.props.clearNotification();
     if (this.props.loggedIn) {
       this.props.history.push('/dashboard');
     }
@@ -60,9 +61,6 @@ class Register extends Component {
   componentWillUpdate(nextProps) {
     if (nextProps.loggedIn) {
       this.props.history.push('/dashboard');
-    }
-    if (this.props.success) {
-      this.form.reset();
     }
   }
   /**
@@ -93,7 +91,9 @@ class Register extends Component {
         password: this.state.password,
         passwordconfirm: this.state.passwordconfirm
       };
-      this.props.register(value);
+      this.props.register(value).then(() => {
+        this.form.reset();
+      });
     }
   }
   /**
@@ -290,7 +290,8 @@ const mapStateToProps = state => ({
 const matchDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      register
+      register,
+      clearNotification
     },
     dispatch
   );
@@ -300,6 +301,7 @@ Register.propTypes = {
   loading: PropTypes.bool.isRequired,
   success: PropTypes.bool.isRequired,
   register: PropTypes.func.isRequired,
+  clearNotification: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired
 };
 export default connect(mapStateToProps, matchDispatchToProps)(Register);

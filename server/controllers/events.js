@@ -102,7 +102,7 @@ const findAllEvent = (req, res) => {
         .status(200)
         .json({
           val: {
-            centers: rows,
+            events: rows,
             meta: PaginationMeta(meta)
           },
           msg: 'Events returned'
@@ -128,12 +128,12 @@ const findOneEvent = (req, res) => {
     .findOne({
       where: {
         id: parseInt(id, 10),
-        startDate: {
-          [sequelize.Op.gte]: moment()
-        },
-        endDate: {
-          [sequelize.Op.gte]: moment()
-        }
+        // startDate: {
+        //   [sequelize.Op.gte]: moment()
+        // },
+        // endDate: {
+        //   [sequelize.Op.gte]: moment()
+        // }
       },
       attributes: [
         'id',
@@ -156,7 +156,7 @@ const findOneEvent = (req, res) => {
     .then((result) => {
       if (result === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
             msg: 'Event not found'
           });
@@ -238,7 +238,7 @@ const findEventByCenter = (req, res) => {
         .status(200)
         .json({
           val: {
-            centers: rows,
+            events: rows,
             meta: PaginationMeta(meta)
           },
           msg: 'Events returned'
@@ -259,61 +259,77 @@ const createEvent = (req, res) => {
   const data = req.body;
   data.startDate = moment(data.startDate, ['DD-MM-YYYYTHH:mm', 'DD-MM-YYYY HH:mm', 'DD-MM-YYYY']).format();
   data.endDate = moment(data.endDate, ['DD-MM-YYYYTHH:mm', 'DD-MM-YYYY HH:mm', 'DD-MM-YYYY']).format();
-  model
-    .Events
+
+  return model.Centers
     .findOne({
       where: {
-        location: parseInt(data.location, 10),
-        [sequelize.Op.or]: [{
-          startDate: {
-            [sequelize.Op.between]: [data.startDate, data.endDate]
-          }
-        }, {
-          endDate: {
-            [sequelize.Op.between]: [data.startDate, data.endDate]
-          }
-        }, {
-          startDate: {
-            [sequelize.Op.lte]: data.startDate
-          },
-          endDate: {
-            [sequelize.Op.gte]: data.endDate
-          }
-        }]
+        id: parseInt(data.location, 10)
       }
     })
-    .then((doesExist) => {
-      if (doesExist !== null) {
+    .then((locRes) => {
+      if (locRes === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
-            msg: 'Center already booked for this period'
+            msg: 'Location does not exist'
           });
       }
       model
         .Events
-        .create({
-          name: data.name,
-          location: parseInt(data.location, 10),
-          startDate: data.startDate,
-          endDate: data.endDate,
-          createdBy: parseInt(req.verified.id, 10),
-          image: data.image
+        .findOne({
+          where: {
+            location: parseInt(data.location, 10),
+            [sequelize.Op.or]: [{
+              startDate: {
+                [sequelize.Op.between]: [data.startDate, data.endDate]
+              }
+            }, {
+              endDate: {
+                [sequelize.Op.between]: [data.startDate, data.endDate]
+              }
+            }, {
+              startDate: {
+                [sequelize.Op.lte]: data.startDate
+              },
+              endDate: {
+                [sequelize.Op.gte]: data.endDate
+              }
+            }]
+          }
         })
-        .then(value => getEvent(value.id))
-        .then(result => res
-          .status(201)
-          .json({
-            val: result,
-            msg: 'Event added successfully'
-          }));
-    })
-    .catch((error) => {
-      res
-        .status(500)
-        .send({
-          msg: 'Server Error',
-          error
+        .then((doesExist) => {
+          if (doesExist !== null) {
+            return res
+              .status(409)
+              .json({
+                msg: 'Center already booked for this period'
+              });
+          }
+          model
+            .Events
+            .create({
+              name: data.name,
+              location: parseInt(data.location, 10),
+              startDate: data.startDate,
+              endDate: data.endDate,
+              createdBy: parseInt(req.verified.id, 10),
+              image: data.image
+            })
+            .then(value => getEvent(value.id))
+            .then(result => res
+              .status(201)
+              .json({
+                val: result,
+                msg: 'Event added successfully'
+              }));
+        })
+        .catch((error) => {
+          res
+            .status(500)
+            .send({
+              msg: 'Server Error',
+              error
+            });
         });
     });
 };
@@ -340,7 +356,7 @@ const preUpdate = (req, res, next) => {
     .then((result) => {
       if (result === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
             msg: 'Event not found'
           });
@@ -380,68 +396,82 @@ const updateEvent = (req, res) => {
     name,
     image
   } = req.body;
-
-  return model
-    .Events
+  model.Centers
     .findOne({
       where: {
-        location,
-        [sequelize.Op.or]: [{
-          startDate: {
-            [sequelize.Op.between]: [startDate, endDate]
-          }
-        }, {
-          endDate: {
-            [sequelize.Op.between]: [startDate, endDate]
-          }
-        }, {
-          startDate: {
-            [sequelize.Op.lte]: startDate
-          },
-          endDate: {
-            [sequelize.Op.gte]: endDate
-          }
-        }],
-        [sequelize.Op.not]: {
-          id
-        }
+        id: parseInt(location, 10)
       }
     })
-    .then((doesExist) => {
-      if (doesExist !== null) {
+    .then((result) => {
+      if (result === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
-            msg: 'Center already booked for this period'
+            msg: 'Location does not exist'
           });
       }
       return model
         .Events
-        .update({
-          name,
-          location,
-          image,
-          startDate,
-          endDate
-        }, {
+        .findOne({
           where: {
-            id
+            location,
+            [sequelize.Op.or]: [{
+              startDate: {
+                [sequelize.Op.between]: [startDate, endDate]
+              }
+            }, {
+              endDate: {
+                [sequelize.Op.between]: [startDate, endDate]
+              }
+            }, {
+              startDate: {
+                [sequelize.Op.lte]: startDate
+              },
+              endDate: {
+                [sequelize.Op.gte]: endDate
+              }
+            }],
+            [sequelize.Op.not]: {
+              id
+            }
           }
         })
-        .then((value) => {
-          if (value > 0) {
-            return getEvent(id)
-              .then((resp) => {
-                if (resp) {
-                  return res
-                    .status(200)
-                    .json({
-                      val: resp,
-                      msg: 'Event updated successfully'
-                    });
-                }
+        .then((doesExist) => {
+          if (doesExist !== null) {
+            return res
+              .status(409)
+              .json({
+                msg: 'Center already booked for this period'
               });
           }
+          return model
+            .Events
+            .update({
+              name,
+              location,
+              image,
+              startDate,
+              endDate
+            }, {
+              where: {
+                id
+              }
+            })
+            .then((value) => {
+              if (value > 0) {
+                return getEvent(id)
+                  .then((resp) => {
+                    if (resp) {
+                      return res
+                        .status(200)
+                        .json({
+                          val: resp,
+                          msg: 'Event updated successfully'
+                        });
+                    }
+                  });
+              }
+            });
         });
     })
     .catch(error => res.status(500).send({
@@ -477,7 +507,7 @@ const deleteEvent = (req, res) => {
     .then((result) => {
       if (result === null) {
         return res
-          .status(400)
+          .status(404)
           .json({
             msg: 'Event not found'
           });

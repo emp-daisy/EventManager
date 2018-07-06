@@ -72,6 +72,7 @@ export class HomePage extends Component {
             </div>
           </div>
         </section>
+        {listOfCenters.length > 0 &&
         <section className="latest parallex-img" id="latest">
           <h3 className="text-white p-2">Latest Centers</h3>
           {listOfCenters.length > 0 && (
@@ -106,6 +107,7 @@ export class HomePage extends Component {
             </div>
           )}
         </section>
+      }
         <Footer />
       </div>
     );

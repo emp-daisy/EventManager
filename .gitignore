@@ -10,3 +10,4 @@ __snapshots__
 e2e/reports
 e2e/screenshots
 selenium-debug.log
+dist

@@ -20,9 +20,10 @@ const uploadToCloudinary = (file) => {
   })
     .then(response => response.json())
     .then((data) => {
-      if (data.secure_url !== '') {
+      if (data.secure_url && data.secure_url !== '') {
         return data.secure_url;
       }
+      return null;
     })
     .catch(() => null);
 };

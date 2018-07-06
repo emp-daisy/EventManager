@@ -17,7 +17,7 @@ export const getEventsByUser = (pageNumber = 1, limit = 10) => (dispatch) => {
     .then((data) => {
       const resEvents = (data.val)
         ? data.val
-        : { centers: [], meta: { pagination: {} } };
+        : { events: [], meta: { pagination: {} } };
 
       dispatch({ type: 'REQUEST_USER_EVENTS_GRANTED', data: resEvents });
     }, () => {

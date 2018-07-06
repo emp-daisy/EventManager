@@ -107,8 +107,8 @@ class CenterModal extends Component {
       } else {
         this.props.handleSubmit(data, inputData.id);
       }
+      this.props.onClose();
     }
-    this.props.onClose();
   }
   /**
    *
@@ -196,7 +196,7 @@ class CenterModal extends Component {
     return (
       <div
         className="modal text-center d-block"
-        id="addCenter"
+        id="centerModalForm"
         data-backdrop="static"
         data-keyboard="false"
       >
@@ -372,7 +372,7 @@ class CenterModal extends Component {
                       <button
                         type="button"
                         onClick={this.onSubmit}
-                        id="btnNewCenter"
+                        id="btnAcceptCenter"
                         className="btn btn-dark btn-block border-1 text-white py-3"
                       >
                         {this.props.isCreate ? 'Add Center' : 'Update Center'}

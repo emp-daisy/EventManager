@@ -11,6 +11,7 @@ const mockProps = {
   alert: false,
   alertMessage: 'PropTypes.string.isRequired',
   login: jest.fn(),
+  clearNotification: jest.fn(),
   history: {
     push: jest.fn()
   },

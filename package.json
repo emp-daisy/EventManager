@@ -5,12 +5,16 @@
   "main": "app.js",
   "author": "Jessica",
   "license": "ISC",
+  "engines": {
+    "node": "8.9.1",
+    "npm": "5.5.1"
+  },
   "scripts": {
     "test:db:init": "psql -U postgres -c 'drop database db_events_test;' && psql -c 'create database db_events_test;' -U postgres",
     "migrate": "sequelize db:migrate",
     "seed": "sequelize db:seed:all",
     "undo:migrate": "sequelize db:migrate:undo:all",
-    "start": "npm run build:client && npm run start:server",
+    "start": "npm run build:client && npm run build:server && node dist/app.js",
     "test": "npm run test:server",
     "e2e": "npm run test:db && nightwatch  --config e2e/nightwatch.conf.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -22,6 +26,7 @@
     "test:local:server": "npm run test:db:init && nyc --reporter=lcov --reporter=html --reporter=text mocha --exit ./server/tests/*.tests.js --compilers js:babel-register || ECHO.",
     "test:server": "nyc --reporter=lcov --reporter=html --reporter=text mocha --exit ./server/tests/*.tests.js --compilers js:babel-register || ECHO.",
     "start:server": "babel-watch server/app.js",
+    "build:server": "babel server --out-dir dist -s  --copy-files",
     "build:client": "webpack --config client/webpack/webpack.config.js",
     "client:dev": "webpack --watch --config client/webpack/webpack.dev.config.js",
     "dev": "concurrently \"npm run client:dev\" \"npm run start:server\"",

@@ -4,7 +4,7 @@ const defaultState = {
   errorMessage: '',
   success: false,
   sucessMessage: '',
-  eventList: { centers: [], meta: { pagination: {} } },
+  eventList: { events: [], meta: { pagination: {} } },
   allEventList: [],
   pageItems: []
 };
@@ -84,7 +84,7 @@ const events = (state = defaultState, action) => {
       currentState = Object.assign({}, state, {
         isLoading: false,
         error: false,
-        eventList: [...state.eventList, action.newData],
+        // eventList: [...state.eventList, action.newData],
         allEventList: [...state.allEventList, action.newData]
       });
       break;
@@ -103,7 +103,7 @@ const events = (state = defaultState, action) => {
       break;
     case 'UPDATE_EVENTS_GRANTED':
       currentState = Object.assign({}, state, {
-        isLoading: true,
+        isLoading: false,
         error: false,
         eventList: Object.assign({}, state.eventList, {
           centers: state.eventList.centers.map((item) => {

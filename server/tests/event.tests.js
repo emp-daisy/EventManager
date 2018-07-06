@@ -165,7 +165,7 @@ describe('Event API Testing', () => {
             done();
           });
       });
-      it('Returns 404 for already booked center', (done) => {
+      it('Returns 409 for already booked center', (done) => {
         chai
           .request(app)
           .post(`/v1/events/?token=${adminToken}`)
@@ -185,7 +185,7 @@ describe('Event API Testing', () => {
             expect(res)
               .to
               .be
-              .status(400);
+              .status(409);
             expect(res.body.msg)
               .to
               .equal('Center already booked for this period');
@@ -377,7 +377,7 @@ describe('Event API Testing', () => {
             expect(res)
               .to
               .be
-              .status(400);
+              .status(404);
             expect(res.body.msg)
               .to
               .equal('Event not found');
@@ -448,7 +448,7 @@ describe('Event API Testing', () => {
             expect(res)
               .to
               .have
-              .status(400);
+              .status(404);
             expect(res.body.msg)
               .to
               .equal('Event not found');
@@ -534,7 +534,7 @@ describe('Event API Testing', () => {
             expect(res)
               .to
               .have
-              .status(400);
+              .status(409);
             expect(res.body.msg)
               .to
               .equal('Center already booked for this period');
@@ -597,7 +597,7 @@ describe('Event API Testing', () => {
             expect(res)
               .to
               .have
-              .status(400);
+              .status(404);
             expect(res.body.msg)
               .to
               .equal('Event not found');

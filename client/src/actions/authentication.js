@@ -89,6 +89,13 @@ export const login = (email, password) => (dispatch) => {
                     'Content-Type': 'application/x-www-form-urlencoded'
                   },
                   body: payload
+                }).then(() => {
+                  dispatch({ type: 'CLEAR_NOTIFICATION' });
+                  dispatch(addNotification({
+                    message: 'Check email to verify',
+                    level: 'success',
+                    autoDismiss: 20
+                  }));
                 });
               }
             }
@@ -225,4 +232,9 @@ export const resetPassword = (credientials, token) => (dispatch) => {
 export const logOut = () => (dispatch) => {
   removeToken();
   dispatch({ type: 'LOGOUT_USER' });
+};
+
+export const clearNotification = () => (dispatch) => {
+  dispatch({ type: 'CLEAR_NOTIFICATION' });
+  dispatch({ type: 'CLEAR_MESSAGE' });
 };
